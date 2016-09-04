@@ -42,6 +42,7 @@ func runServer(c *gin.Context) {
 
 	// Open the file and create a buffer
 	filePtr, _ := os.Open("C:\\Users\\Brandon\\Desktop\\files\\file1.txt")
+	defer filePtr.Close()
 	buffer := bufio.NewReader(filePtr)
 
 	for {
@@ -52,7 +53,6 @@ func runServer(c *gin.Context) {
 		}
 
 		filePart := &Message{Type: "part", File: "files\\file1.txt", Length: length - 1, Body: string(part)}
-		log.Printf("\n\nLENGTH = %+v", filePart.Length)
 		conn.WriteJSON(filePart)
 	}
 
