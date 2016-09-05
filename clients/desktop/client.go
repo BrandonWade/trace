@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/url"
 
@@ -27,16 +28,27 @@ func main() {
 	var buffer bytes.Buffer
 
 	for {
-		message := &Message{}
-		conn.ReadJSON(message)
+		// message := &Message{}
+		// conn.ReadJSON(message)
+		t, contents, err := conn.ReadMessage()
+		if err != nil {
+			break
+		}
 
-		if message.Type == "part" {
-			contents := message.Body[:message.Length]
-			buffer.WriteString(contents)
-		} else if message.Type == "done" {
+		if t == websocket.BinaryMessage {
+			log.Println("PART RECEIVED")
+			// 	data := message.Body[:message.Length]
+			// 	contents, _ := base64.RawStdEncoding.DecodeString(data)
+			buffer.WriteString(string(contents))
+		} else if t == websocket.CloseGoingAway {
+			log.Println("CLOSE RECEIVED")
 			break
 		}
 	}
 
-	log.Printf("%+v", buffer.String())
+	data := []byte(buffer.String())
+	_ = ioutil.WriteFile("C:\\Users\\Brandon\\Desktop\\files\\output.mp3", data, 0644)
+	conn.Close()
+
+	// log.Printf("%+v", buffer.String())
 }
