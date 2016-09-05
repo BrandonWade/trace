@@ -2,9 +2,9 @@ package main
 
 import (
 	"bytes"
+	"encoding/base64"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"net/url"
 
 	"github.com/gorilla/websocket"
@@ -26,29 +26,22 @@ func main() {
 	}
 
 	var buffer bytes.Buffer
+	done := false
 
-	for {
-		// message := &Message{}
-		// conn.ReadJSON(message)
-		t, contents, err := conn.ReadMessage()
-		if err != nil {
-			break
-		}
+	for !done {
+		message := &Message{}
+		conn.ReadJSON(message)
 
-		if t == websocket.BinaryMessage {
-			log.Println("PART RECEIVED")
-			// 	data := message.Body[:message.Length]
-			// 	contents, _ := base64.RawStdEncoding.DecodeString(data)
-			buffer.WriteString(string(contents))
-		} else if t == websocket.CloseGoingAway {
-			log.Println("CLOSE RECEIVED")
-			break
+		switch message.Type {
+		case "part":
+			body := message.Body[:message.Length]
+			data, _ := base64.RawStdEncoding.DecodeString(body)
+			buffer.WriteString(string(data))
+		case "done":
+			data := []byte(buffer.String())
+			_ = ioutil.WriteFile("C:\\Users\\Brandon\\Desktop\\files\\output.mp3", data, 0644)
+			conn.Close()
+			done = true
 		}
 	}
-
-	data := []byte(buffer.String())
-	_ = ioutil.WriteFile("C:\\Users\\Brandon\\Desktop\\files\\output.mp3", data, 0644)
-	conn.Close()
-
-	// log.Printf("%+v", buffer.String())
 }
