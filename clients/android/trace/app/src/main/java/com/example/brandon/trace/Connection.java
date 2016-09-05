@@ -7,6 +7,10 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+
 import de.tavendo.autobahn.WebSocketConnection;
 import de.tavendo.autobahn.WebSocketException;
 import de.tavendo.autobahn.WebSocketHandler;
@@ -18,12 +22,12 @@ public class Connection extends AsyncTask<Void, Void, Void> {
     Context context;
     WebSocketConnection conn;
     Gson gson;
-    StringBuilder file;
+    ByteArrayOutputStream file;
 
     public Connection(Context context) {
         this.context = context;
         this.gson = new Gson();
-        this.file = new StringBuilder();
+        this.file = new ByteArrayOutputStream();
     }
 
     @Override
@@ -31,7 +35,7 @@ public class Connection extends AsyncTask<Void, Void, Void> {
         conn = new WebSocketConnection();
 
         try {
-            conn.connect("ws://192.168.0.10:8080", new WebSocketHandler() {
+            conn.connect("ws://192.168.0.11:8080", new WebSocketHandler() {
                 @Override
                 public void onOpen() {
                     super.onOpen();
@@ -51,14 +55,16 @@ public class Connection extends AsyncTask<Void, Void, Void> {
                     Message message = gson.fromJson(payload, Message.class);
                     String type = message.Type;
                     switch (type) {
-                        case "part":
-                            int bound = Math.min(message.Body.length(), message.Length);
-                            String contents = message.Body.substring(0, bound);
-                            file.append(contents);
+                        case Message.TYPE_PART:
+                            try {
+                                file.write(message.extractBody());
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
                             break;
-                        case "done":
-                            Log.i("Trace", file.toString());
-                            Toast.makeText(context, "DONE", Toast.LENGTH_SHORT).show();
+                        case Message.TYPE_DONE:
+                            saveFile(message.File);
                             break;
                     }
                 }
@@ -68,5 +74,22 @@ public class Connection extends AsyncTask<Void, Void, Void> {
         }
 
         return null;
+    }
+
+    // Write a file to disk
+    public void saveFile(String fileName) {
+        try {
+            File[] storageDirs = context.getExternalMediaDirs();
+            File dir = storageDirs[1];
+            File f = new File(dir, fileName);
+            FileOutputStream outputStream = new FileOutputStream(f);
+
+            outputStream.write(file.toByteArray());
+            outputStream.flush();
+            outputStream.close();
+            Toast.makeText(context, "SAVED - " + f.getAbsolutePath(), Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

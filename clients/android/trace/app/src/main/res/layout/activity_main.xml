@@ -20,7 +20,7 @@
     <TextView
         android:layout_width="350dp"
         android:layout_height="match_parent"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Large Text"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Ready."
         android:id="@+id/textView" />
 </LinearLayout>
