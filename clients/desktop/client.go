@@ -39,7 +39,7 @@ func main() {
 			buffer.WriteString(string(data))
 		case "done":
 			data := []byte(buffer.String())
-			_ = ioutil.WriteFile("C:\\Users\\Brandon\\Desktop\\files\\output.mp3", data, 0644)
+			_ = ioutil.WriteFile("C:\\Users\\Brandon\\Desktop\\files\\output.m4a", data, 0644)
 			conn.Close()
 			done = true
 		}
