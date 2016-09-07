@@ -2,12 +2,20 @@ package main
 
 import (
 	"bufio"
+	"encoding/base64"
 	"log"
 	"os"
+	"sync"
 
+	"github.com/BrandonWade/trace/lib"
 	"github.com/gin-gonic/gin"
-	"github.com/gorilla/websocket"
 )
+
+// The number of goroutines to complete
+var waitGroup sync.WaitGroup
+
+// The list of new files to send to the client
+var newFiles []lib.File
 
 func main() {
 	g := gin.Default()
@@ -15,47 +23,84 @@ func main() {
 	g.Run(":8080")
 }
 
-// Message ...
-type Message struct {
-	Type   string
-	File   string
-	Length int
-	Body   string
+func runServer(c *gin.Context) {
+	conn := lib.NewConnection()
+	defer conn.Close()
+
+	// Open the Connection
+	conn.Open(c)
+
+	// TODO: Use a real dir
+	dir := "C:\\Users\\Brandon\\Desktop\\files"
+
+	newFiles = []lib.File{}
+	clientFiles := make(map[string]bool)
+	done := false
+
+	// Get a list of file names from the client
+	for !done {
+		message := conn.Read()
+
+		switch message.Type {
+		case lib.New:
+			clientFiles[message.File] = true
+		case lib.Done:
+			done = true
+		}
+	}
+
+	// Get a list of local files
+	localFiles := lib.Scan(dir)
+
+	// Compare the local and client files to build a naive one-way diff
+	for file := range localFiles {
+		if !clientFiles[file] {
+			newFiles = append(newFiles, localFiles[file])
+		}
+	}
+
+	waitGroup.Add(len(newFiles))
+
+	countMessage := &lib.Message{Type: lib.Count, File: "", Length: len(newFiles), Body: ""}
+	conn.Write(countMessage)
+
+	for _, file := range newFiles {
+		go sendFile(file, conn)
+	}
+
+	// Wait for all files to finish sending
+	waitGroup.Wait()
 }
 
-func runServer(c *gin.Context) {
-	var conn *websocket.Conn
-
-	req := c.Request
-	res := c.Writer
-
-	var upgrader = websocket.Upgrader{
-		ReadBufferSize:  1024,
-		WriteBufferSize: 1024,
-	}
-
-	conn, err := upgrader.Upgrade(res, req, nil)
-	if err != nil {
-		log.Println("Failed to create websocket.")
-		log.Println(err)
-	}
-
-	// Open the file and create a buffer
-	filePtr, _ := os.Open("C:\\Users\\Brandon\\Desktop\\files\\file1.txt")
+// SendFile - sends a file to the client
+func sendFile(file lib.File, conn *lib.Connection) {
+	filePtr, _ := os.Open(file.Path)
 	defer filePtr.Close()
+
+	// Notify the client of the new file
+	newMessage := &lib.Message{Type: lib.New, File: file.RelPath, Length: 0, Body: ""}
+	log.Printf("Sending file %s...", file.Name)
+	conn.Write(newMessage)
+
 	buffer := bufio.NewReader(filePtr)
 
 	for {
-		part := make([]byte, 2048)
-		length, err := buffer.Read(part)
+		buff := make([]byte, lib.BufferSize)
+		_, err := buffer.Read(buff)
 		if err != nil {
 			break
 		}
 
-		filePart := &Message{Type: "part", File: "files\\file1.txt", Length: length - 1, Body: string(part)}
-		conn.WriteJSON(filePart)
+		// Encode the data segment and send it
+		body := base64.RawStdEncoding.EncodeToString(buff)
+		message := &lib.Message{Type: "part", File: file.RelPath, Length: len(body), Body: body}
+		conn.Write(message)
 	}
 
-	doneMessage := &Message{Type: "done", File: "files\\file1.txt", Length: 0, Body: ""}
-	conn.WriteJSON(doneMessage)
+	// Send a done message
+	message := &lib.Message{Type: "done", File: file.RelPath, Length: 0, Body: ""}
+	conn.Write(message)
+
+	// Indicate that this file has been segment
+	waitGroup.Done()
 }

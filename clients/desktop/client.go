@@ -43,9 +43,7 @@ func main() {
 	// The number of files received
 	receivedFiles := 0
 
-	var buffer bytes.Buffer
 	done := false
-
 	for !done {
 		message := conn.Read()
 
@@ -59,7 +57,7 @@ func main() {
 		case lib.Part:
 			body := message.Body[:message.Length]
 			data, _ := base64.RawStdEncoding.DecodeString(body)
-			buffer.WriteString(string(data))
+			newFiles[message.File].WriteString(string(data))
 		case lib.Done:
 			if message.File != "" {
 				receivedFiles++
@@ -78,7 +76,6 @@ func main() {
 
 // WriteFile - write the completed file to disk
 func writeFile(base, path string, contents *bytes.Buffer) {
-	// TODO: Implement me / port over trace-client method
 	defer waitGroup.Done()
 
 	// Create any directories needed
@@ -89,10 +86,7 @@ func writeFile(base, path string, contents *bytes.Buffer) {
 		log.Println(err)
 	}
 
+	// Write the data to disk
 	data := []byte(contents.String())
 	ioutil.WriteFile(base+path, data, 0700)
-
-	// OLD WAY FOR A SINGLE FILE
-	// data := []byte(buffer.String())
-	// _ = ioutil.WriteFile("C:\\Users\\Brandon\\Desktop\\files\\"+message.File, data, 0644)
 }
