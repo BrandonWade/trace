@@ -6,15 +6,21 @@ import android.util.Base64;
  * Created by Brandon on 9/3/2016.
  */
 public class Message {
-    public static final String TYPE_PART = "part";
-    public static final String TYPE_DONE = "done";
+    public static final String NEW = "new";
+    public static final String COUNT = "count";
+    public static final String PART = "part";
+    public static final String DONE = "done";
 
     public String Type;
     public String File;
     public int Length;
     public String Body;
 
-    public Message() {
+    public Message(String Type, String File, int Length, String Body) {
+        this.Type = Type;
+        this.File = File;
+        this.Length = Length;
+        this.Body = Body;
     }
 
     // Retrieve and decode the message body
