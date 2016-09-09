@@ -5,6 +5,7 @@ import (
 	"encoding/base64"
 	"log"
 	"os"
+	"strings"
 	"sync"
 
 	"github.com/BrandonWade/trace/lib"
@@ -43,7 +44,8 @@ func runServer(c *gin.Context) {
 
 		switch message.Type {
 		case lib.New:
-			clientFiles[message.File] = true
+			relPath := strings.Replace(message.File, "/", "\\", -1)
+			clientFiles[relPath] = true
 		case lib.Done:
 			done = true
 		}

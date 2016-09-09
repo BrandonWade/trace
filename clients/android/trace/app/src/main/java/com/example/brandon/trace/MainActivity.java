@@ -26,7 +26,6 @@ public class MainActivity extends AppCompatActivity {
     }
 }
 
-// TODO: Send list of files on WS connection
 // - Consider converting Connection AsyncTask to Thread
 // - Consider converting WriteFileTask to use Futures & Executor instead of AsyncTask
 
