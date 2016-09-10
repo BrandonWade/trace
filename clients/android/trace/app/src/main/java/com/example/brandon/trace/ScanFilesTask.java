@@ -28,7 +28,7 @@ public class ScanFilesTask extends AsyncTask<Void, Void, List<File>> {
     @Override
     protected void onPostExecute(List<File> files) {
         Connection conn = new Connection(context, dir, files);
-        conn.execute();
+        conn.run();
     }
 
     private List<File> getFiles(File parentDir) {

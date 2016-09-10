@@ -18,7 +18,7 @@ import de.tavendo.autobahn.WebSocketHandler;
 /**
  * Created by Brandon on 9/4/2016.
  */
-public class Connection extends AsyncTask<Void, Void, Void> {
+public class Connection extends Thread {
     private Context context;
     private String dir;
     private List<File> files;
@@ -35,8 +35,7 @@ public class Connection extends AsyncTask<Void, Void, Void> {
         this.fileContents = new HashMap<>();
     }
 
-    @Override
-    protected Void doInBackground(Void... params) {
+    public void run() {
         conn = new WebSocketConnection();
 
         try {
@@ -84,8 +83,6 @@ public class Connection extends AsyncTask<Void, Void, Void> {
         } catch (WebSocketException e) {
             e.printStackTrace();
         }
-
-        return null;
     }
 
     private void sendFileList(WebSocketConnection conn) {
