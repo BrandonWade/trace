@@ -2,6 +2,7 @@ package com.example.brandon.trace;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
@@ -17,12 +18,14 @@ public class WriteFileTask extends AsyncTask<Void, Void, Void> {
     String path;
     String fileName;
     ByteArrayOutputStream contents;
+    TextView messages;
 
-    public WriteFileTask(Context context, String path, String fileName, ByteArrayOutputStream contents) {
+    public WriteFileTask(Context context, String path, String fileName, ByteArrayOutputStream contents, TextView messages) {
         this.context = context;
         this.path = path;
         this.fileName = fileName;
         this.contents = contents;
+        this.messages = messages;
     }
 
     @Override
@@ -51,6 +54,7 @@ public class WriteFileTask extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
+        messages.setText(fileName + " saved to disk.\n" + messages.getText());
         Toast.makeText(context, "SAVED - " + path + fileName, Toast.LENGTH_SHORT).show();
     }
 }

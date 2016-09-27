@@ -2,6 +2,7 @@ package com.example.brandon.trace;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -26,13 +27,15 @@ public class Connection extends Thread {
     private Gson gson;
     private HashMap<String, ByteArrayOutputStream> fileContents;
     private int numFiles;
+    private TextView messages;
 
-    public Connection(Context context, String dir, List<File> files) {
+    public Connection(Context context, String dir, List<File> files, TextView messages) {
         this.context = context;
         this.dir = dir;
         this.files = files;
         this.gson = new Gson();
         this.fileContents = new HashMap<>();
+        this.messages = messages;
     }
 
     public void run() {
@@ -44,13 +47,15 @@ public class Connection extends Thread {
                 public void onOpen() {
                     super.onOpen();
                     sendFileList(conn);
-                    Toast.makeText(context, "OPEN", Toast.LENGTH_SHORT).show();
+                    messages.setText("Connected to server.\n" + messages.getText());
+//                    Toast.makeText(context, "OPEN", Toast.LENGTH_SHORT).show();
                 }
 
                 @Override
                 public void onClose(int code, String reason) {
                     super.onClose(code, reason);
-                    Toast.makeText(context, "CLOSE - " + reason, Toast.LENGTH_LONG).show();
+                    messages.setText("Disconnected from server.\n" + messages.getText());
+//                    Toast.makeText(context, "CLOSE - " + reason, Toast.LENGTH_LONG).show();
                 }
 
                 @Override
@@ -74,7 +79,8 @@ public class Connection extends Thread {
                             }
                             break;
                         case Message.DONE:
-                            WriteFileTask writeFile = new WriteFileTask(context, dir, message.File, fileContents.get(message.File));
+                            messages.setText("File " + message.File + " received.\n" + messages.getText());
+                            WriteFileTask writeFile = new WriteFileTask(context, dir, message.File, fileContents.get(message.File), messages);
                             writeFile.execute();
                             break;
                     }

@@ -2,6 +2,7 @@ package com.example.brandon.trace;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.widget.TextView;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -14,10 +15,12 @@ public class ScanFilesTask extends AsyncTask<Void, Void, List<File>> {
 
     private Context context;
     private String dir;
+    private TextView messages;
 
-    public ScanFilesTask(Context context, String dir) {
+    public ScanFilesTask(Context context, String dir, TextView messages) {
         this.context = context;
         this.dir = dir;
+        this.messages = messages;
     }
 
     @Override
@@ -27,7 +30,7 @@ public class ScanFilesTask extends AsyncTask<Void, Void, List<File>> {
 
     @Override
     protected void onPostExecute(List<File> files) {
-        Connection conn = new Connection(context, dir, files);
+        Connection conn = new Connection(context, dir, files, messages);
         conn.run();
     }
 
