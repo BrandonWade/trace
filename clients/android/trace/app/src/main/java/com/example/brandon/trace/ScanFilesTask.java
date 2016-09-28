@@ -15,12 +15,10 @@ public class ScanFilesTask extends AsyncTask<Void, Void, List<File>> {
 
     private Context context;
     private String dir;
-    private TextView messages;
 
-    public ScanFilesTask(Context context, String dir, TextView messages) {
+    public ScanFilesTask(Context context, String dir) {
         this.context = context;
         this.dir = dir;
-        this.messages = messages;
     }
 
     @Override
@@ -30,7 +28,7 @@ public class ScanFilesTask extends AsyncTask<Void, Void, List<File>> {
 
     @Override
     protected void onPostExecute(List<File> files) {
-        Connection conn = new Connection(context, dir, files, messages);
+        Connection conn = new Connection(context, dir, files);
         conn.run();
     }
 

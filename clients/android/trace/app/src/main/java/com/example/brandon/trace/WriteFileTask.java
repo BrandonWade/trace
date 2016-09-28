@@ -2,7 +2,6 @@ package com.example.brandon.trace;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
@@ -14,18 +13,16 @@ import java.io.FileOutputStream;
  * Created by Brandon on 9/8/2016.
  */
 public class WriteFileTask extends AsyncTask<Void, Void, Void> {
-    Context context;
-    String path;
-    String fileName;
-    ByteArrayOutputStream contents;
-    TextView messages;
+    private Context context;
+    private String path;
+    private String fileName;
+    private ByteArrayOutputStream contents;
 
-    public WriteFileTask(Context context, String path, String fileName, ByteArrayOutputStream contents, TextView messages) {
+    public WriteFileTask(Context context, String path, String fileName, ByteArrayOutputStream contents) {
         this.context = context;
         this.path = path;
         this.fileName = fileName;
         this.contents = contents;
-        this.messages = messages;
     }
 
     @Override
@@ -54,7 +51,6 @@ public class WriteFileTask extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
-        messages.setText(fileName + " saved to disk.\n" + messages.getText());
         Toast.makeText(context, "SAVED - " + path + fileName, Toast.LENGTH_SHORT).show();
     }
 }

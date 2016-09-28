@@ -1,17 +1,23 @@
 package com.example.brandon.trace;
 
-import android.support.v7.app.AppCompatActivity;
+import android.app.ListActivity;
 import android.os.Bundle;
-import android.widget.TextView;
+import android.widget.ArrayAdapter;
 
-public class MainActivity extends AppCompatActivity {
+import java.util.ArrayList;
+
+public class MainActivity extends ListActivity {
+
+    public static ArrayList<String> fileList = new ArrayList<>();
+    public static ArrayAdapter<String> fileListAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        TextView messages = (TextView)findViewById(R.id.textView);
+        fileListAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, fileList);
+        setListAdapter(fileListAdapter);
 
         // TODO: Use a real dir
         String dir = "/storage/6463-6331/Android/media/com.example.brandon.trace";
@@ -20,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
 //        File dir = storageDirs[1];
 //        File f = new File(dir, fileName);
 
-        ScanFilesTask scanFiles = new ScanFilesTask(getApplicationContext(), dir, messages);
+        ScanFilesTask scanFiles = new ScanFilesTask(getApplicationContext(), dir);
         scanFiles.execute();
     }
 }

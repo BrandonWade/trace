@@ -27,15 +27,13 @@ public class Connection extends Thread {
     private Gson gson;
     private HashMap<String, ByteArrayOutputStream> fileContents;
     private int numFiles;
-    private TextView messages;
 
-    public Connection(Context context, String dir, List<File> files, TextView messages) {
+    public Connection(Context context, String dir, List<File> files) {
         this.context = context;
         this.dir = dir;
         this.files = files;
         this.gson = new Gson();
         this.fileContents = new HashMap<>();
-        this.messages = messages;
     }
 
     public void run() {
@@ -47,15 +45,13 @@ public class Connection extends Thread {
                 public void onOpen() {
                     super.onOpen();
                     sendFileList(conn);
-                    messages.setText("Connected to server.\n" + messages.getText());
-//                    Toast.makeText(context, "OPEN", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "OPEN", Toast.LENGTH_SHORT).show();
                 }
 
                 @Override
                 public void onClose(int code, String reason) {
                     super.onClose(code, reason);
-                    messages.setText("Disconnected from server.\n" + messages.getText());
-//                    Toast.makeText(context, "CLOSE - " + reason, Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "CLOSE - " + reason, Toast.LENGTH_LONG).show();
                 }
 
                 @Override
@@ -67,6 +63,8 @@ public class Connection extends Thread {
                     switch (type) {
                         case Message.NEW:
                             fileContents.put(message.File, new ByteArrayOutputStream());
+                            MainActivity.fileList.add(message.File);
+                            MainActivity.fileListAdapter.notifyDataSetChanged();
                             break;
                         case Message.COUNT:
                             numFiles = message.Length;
@@ -79,8 +77,7 @@ public class Connection extends Thread {
                             }
                             break;
                         case Message.DONE:
-                            messages.setText("File " + message.File + " received.\n" + messages.getText());
-                            WriteFileTask writeFile = new WriteFileTask(context, dir, message.File, fileContents.get(message.File), messages);
+                            WriteFileTask writeFile = new WriteFileTask(context, dir, message.File, fileContents.get(message.File));
                             writeFile.execute();
                             break;
                     }
