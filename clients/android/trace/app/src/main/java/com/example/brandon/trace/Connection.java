@@ -63,7 +63,9 @@ public class Connection extends Thread {
                     switch (type) {
                         case Message.NEW:
                             fileContents.put(message.File, new ByteArrayOutputStream());
-                            MainActivity.fileList.add(message.File);
+
+                            FileListItem newFile = new FileListItem(message.File, "Ready");
+                            MainActivity.fileList.add(newFile);
                             MainActivity.fileListAdapter.notifyDataSetChanged();
                             break;
                         case Message.COUNT:
