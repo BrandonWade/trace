@@ -8,17 +8,17 @@ import java.util.ArrayList;
 
 public class MainActivity extends ListActivity {
 
-    public static ArrayList<FileListItem> fileList = new ArrayList<>();
-    public static FileListItemAdapter fileListAdapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        fileListAdapter = new FileListItemAdapter(this, R.layout.file_list_row, fileList);
+        FileUtils.fileList = new ArrayList<>();
+        FileUtils.fileListAdapter = new FileListItemAdapter(this, R.layout.file_list_row, FileUtils.fileList);
         ListView list = (ListView)findViewById(android.R.id.list);
-        list.setAdapter(fileListAdapter);
+        list.setAdapter(FileUtils.fileListAdapter);
 
         // TODO: Use a real dir
         String dir = "/storage/6463-6331/Android/media/com.example.brandon.trace";

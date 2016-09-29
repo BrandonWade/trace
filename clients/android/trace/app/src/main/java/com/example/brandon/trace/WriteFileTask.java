@@ -26,6 +26,12 @@ public class WriteFileTask extends AsyncTask<Void, Void, Void> {
     }
 
     @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+        FileUtils.setFileStatus(fileName, FileUtils.STATUS_SAVING);
+    }
+
+    @Override
     protected Void doInBackground(Void... params) {
         try {
             String name = fileName.replaceAll("\\\\", "/");
@@ -51,6 +57,6 @@ public class WriteFileTask extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
-        Toast.makeText(context, "SAVED - " + path + fileName, Toast.LENGTH_SHORT).show();
+        FileUtils.setFileStatus(fileName, FileUtils.STATUS_COMPLETE);
     }
 }

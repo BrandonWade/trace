@@ -1,19 +1,7 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
-
-    <!--<ImageView-->
-        <!--tools:ignore="ContentDescription"-->
-        <!--android:id="@+id/row_icon"-->
-        <!--android:layout_width="55dp"-->
-        <!--android:layout_height="55dp"-->
-        <!--android:layout_marginLeft="5dp"-->
-        <!--android:layout_marginTop="5dp"-->
-        <!--android:layout_marginRight="5dp"-->
-        <!--android:layout_marginBottom="5dp"-->
-        <!--android:layout_alignParentLeft="true" />-->
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -24,11 +12,11 @@
             android:id="@+id/row_main_text"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:textSize="18sp"
+            android:textSize="16sp"
             android:ellipsize="end"
             android:maxLines="1"
             android:layout_marginTop="10dp"
-            android:layout_marginLeft="70dp" />
+            android:layout_marginLeft="15dp" />
 
         <TextView
             android:id="@+id/row_sub_text"
@@ -38,7 +26,7 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:layout_marginBottom="10dp"
-            android:layout_marginLeft="70dp" />
+            android:layout_marginLeft="15dp" />
 
     </LinearLayout>
 

@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -35,7 +34,6 @@ public class FileListItemAdapter extends ArrayAdapter<FileListItem> {
             holder = new FileListItemHolder();
             convertView = inflater.inflate(R.layout.file_list_row, null);
 
-//            holder.icon = (ImageView)convertView.findViewById(R.id.row_icon);
             holder.mainText = (TextView)convertView.findViewById(R.id.row_main_text);
             holder.subText = (TextView)convertView.findViewById(R.id.row_sub_text);
 
@@ -45,7 +43,6 @@ public class FileListItemAdapter extends ArrayAdapter<FileListItem> {
         }
 
         FileListItem file = files.get(position);
-//        holder.icon.setImageBitmap(file.getIcon());
         holder.mainText.setText(file.fileName);
         holder.subText.setText(file.status);
 
@@ -53,7 +50,6 @@ public class FileListItemAdapter extends ArrayAdapter<FileListItem> {
     }
 
     private static class FileListItemHolder {
-//        ImageView icon;
         TextView mainText;
         TextView subText;
     }

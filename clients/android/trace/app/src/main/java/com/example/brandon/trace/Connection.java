@@ -1,8 +1,6 @@
 package com.example.brandon.trace;
 
 import android.content.Context;
-import android.os.AsyncTask;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -62,16 +60,16 @@ public class Connection extends Thread {
                     String type = message.Type;
                     switch (type) {
                         case Message.NEW:
-                            fileContents.put(message.File, new ByteArrayOutputStream());
+                            FileUtils.addFile(message.File);
 
-                            FileListItem newFile = new FileListItem(message.File, "Ready");
-                            MainActivity.fileList.add(newFile);
-                            MainActivity.fileListAdapter.notifyDataSetChanged();
+                            fileContents.put(message.File, new ByteArrayOutputStream());
                             break;
                         case Message.COUNT:
                             numFiles = message.Length;
                             break;
                         case Message.PART:
+                            FileUtils.setFileStatus(message.File, FileUtils.STATUS_DOWNLOADING);
+
                             try {
                                 fileContents.get(message.File).write(message.extractBody());
                             } catch (Exception e) {
@@ -79,6 +77,8 @@ public class Connection extends Thread {
                             }
                             break;
                         case Message.DONE:
+                            FileUtils.setFileStatus(message.File, FileUtils.STATUS_DOWNLOADED);
+
                             WriteFileTask writeFile = new WriteFileTask(context, dir, message.File, fileContents.get(message.File));
                             writeFile.execute();
                             break;
