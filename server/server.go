@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"encoding/base64"
 	"log"
+	"math"
 	"os"
 	"strings"
 	"sync"
@@ -80,8 +81,10 @@ func sendFile(file lib.File, conn *lib.Connection) {
 	defer filePtr.Close()
 
 	// Notify the client of the new file
-	newMessage := &lib.Message{Type: lib.New, File: file.RelPath, Length: 0, Body: ""}
-	log.Printf("Sending file %s...", file.Name)
+	fileSize := file.File.Size()
+	numParts := math.Ceil(float64(fileSize) / float64(lib.BufferSize))
+	newMessage := &lib.Message{Type: lib.New, File: file.RelPath, Length: int(numParts), Body: ""}
+	log.Printf("NEWMESSAGE = %+v", newMessage)
 	conn.Write(newMessage)
 
 	buffer := bufio.NewReader(filePtr)
