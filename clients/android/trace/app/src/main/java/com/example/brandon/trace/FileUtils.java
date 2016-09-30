@@ -9,11 +9,10 @@ import java.util.ArrayList;
 public class FileUtils {
 
     public static final String STATUS_NONE = "";
-    public static final String STATUS_DOWNLOADED = "Downloaded.";
-    public static final String STATUS_COMPLETE = "Complete.";
-
-    public static final String STATUS_DOWNLOADING = "Downloading...";
-    public static final String STATUS_SAVING = "Saving...";
+    public static final String STATUS_DOWNLOADING = "Downloading";
+    public static final String STATUS_DOWNLOADED = "Downloaded";
+    public static final String STATUS_SAVING = "Saving";
+    public static final String STATUS_COMPLETE = "Complete";
 
     public static ArrayList<FileListItem> fileList;
     public static FileListItemAdapter fileListAdapter;
