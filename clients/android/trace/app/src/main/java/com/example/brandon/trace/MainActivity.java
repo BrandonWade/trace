@@ -2,8 +2,11 @@ package com.example.brandon.trace;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+<<<<<<< HEAD
 import android.view.Menu;
 import android.view.MenuInflater;
+=======
+>>>>>>> d09d279ec3404556f00b69d7a4d0d6bc65c168f0
 
 public class MainActivity extends AppCompatActivity {
 
