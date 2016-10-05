@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Trace</string>
+    <string name="menu_sync">Sync</string>
+    <string name="menu_settings">Settings</string>
 </resources>
