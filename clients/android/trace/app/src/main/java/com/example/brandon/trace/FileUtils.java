@@ -1,5 +1,7 @@
 package com.example.brandon.trace;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 
 /**
@@ -27,8 +29,8 @@ public class FileUtils {
         return null;
     }
 
-    public static void addFile(String fileName) {
-        FileListItem file = new FileListItem(fileName, STATUS_NONE);
+    public static void addFile(String fileName, int fileSize) {
+        FileListItem file = new FileListItem(fileName, fileSize, STATUS_NONE);
         fileList.add(file);
         fileListAdapter.notifyDataSetChanged();
     }
@@ -36,6 +38,18 @@ public class FileUtils {
     public static void setFileStatus(String fileName, String status) {
         FileListItem file = findByName(fileName);
         file.status = status;
+        fileListAdapter.notifyDataSetChanged();
+    }
+
+    public static void updateFileProgress(String fileName) {
+        FileListItem file = findByName(fileName);
+        file.progress++;
+        fileListAdapter.notifyDataSetChanged();
+    }
+
+    public static void toggleFileProgress(String fileName) {
+        FileListItem file = findByName(fileName);
+        file.showProgress = !file.showProgress;
         fileListAdapter.notifyDataSetChanged();
     }
 }

@@ -2,10 +2,12 @@ package com.example.brandon.trace;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -36,6 +38,7 @@ public class FileListItemAdapter extends ArrayAdapter<FileListItem> {
 
             holder.mainText = (TextView)convertView.findViewById(R.id.row_main_text);
             holder.subText = (TextView)convertView.findViewById(R.id.row_sub_text);
+            holder.progress = (ProgressBar)convertView.findViewById(R.id.row_progress);
 
             convertView.setTag(holder);
         } else {
@@ -43,8 +46,14 @@ public class FileListItemAdapter extends ArrayAdapter<FileListItem> {
         }
 
         FileListItem file = files.get(position);
+        int progress = (int)(100 * ((double)file.progress / (double)file.size));
         holder.mainText.setText(file.fileName);
         holder.subText.setText(file.status);
+        holder.progress.setProgress(progress);
+
+        if (!file.showProgress) {
+            holder.progress.setVisibility(View.INVISIBLE);
+        }
 
         return convertView;
     }
@@ -52,5 +61,6 @@ public class FileListItemAdapter extends ArrayAdapter<FileListItem> {
     private static class FileListItemHolder {
         TextView mainText;
         TextView subText;
+        ProgressBar progress;
     }
 }
