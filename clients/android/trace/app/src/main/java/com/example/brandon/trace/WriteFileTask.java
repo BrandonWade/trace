@@ -1,28 +1,27 @@
 package com.example.brandon.trace;
 
-import android.content.Context;
 import android.os.AsyncTask;
-import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.HashMap;
 
 
 /**
  * Created by Brandon on 9/8/2016.
  */
 public class WriteFileTask extends AsyncTask<Void, Void, Void> {
-    private Context context;
     private String path;
     private String fileName;
+    private HashMap<String, ByteArrayOutputStream> files;
     private ByteArrayOutputStream contents;
 
-    public WriteFileTask(Context context, String path, String fileName, ByteArrayOutputStream contents) {
-        this.context = context;
+    public WriteFileTask(String path, String fileName, HashMap<String, ByteArrayOutputStream> files) {
         this.path = path;
         this.fileName = fileName;
-        this.contents = contents;
+        this.files = files;
+        this.contents = files.get(fileName);
     }
 
     @Override
@@ -47,6 +46,7 @@ public class WriteFileTask extends AsyncTask<Void, Void, Void> {
             outputStream.write(contents.toByteArray());
             outputStream.flush();
             outputStream.close();
+            contents.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -58,5 +58,8 @@ public class WriteFileTask extends AsyncTask<Void, Void, Void> {
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
         FileUtils.setFileStatus(fileName, FileUtils.STATUS_COMPLETE);
+        FileUtils.toggleFileProgress(fileName);
+
+        files.put(fileName, null);
     }
 }

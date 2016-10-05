@@ -1,24 +1,16 @@
 package com.example.brandon.trace;
 
-import android.app.ListActivity;
 import android.os.Bundle;
-import android.widget.ListView;
+import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
 
-import java.util.ArrayList;
-
-public class MainActivity extends ListActivity {
-
-
+public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        FileUtils.fileList = new ArrayList<>();
-        FileUtils.fileListAdapter = new FileListItemAdapter(this, R.layout.file_list_row, FileUtils.fileList);
-        ListView list = (ListView)findViewById(android.R.id.list);
-        list.setAdapter(FileUtils.fileListAdapter);
 
         // TODO: Use a real dir
         String dir = "/storage/6463-6331/Android/media/com.example.brandon.trace";
@@ -29,5 +21,12 @@ public class MainActivity extends ListActivity {
 
         ScanFilesTask scanFiles = new ScanFilesTask(getApplicationContext(), dir);
         scanFiles.execute();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main, menu);
+        return true;
     }
 }

@@ -18,13 +18,14 @@ import de.tavendo.autobahn.WebSocketHandler;
  * Created by Brandon on 9/4/2016.
  */
 public class Connection extends Thread {
+
     private Context context;
     private String dir;
     private List<File> files;
     private WebSocketConnection conn;
     private Gson gson;
-    private HashMap<String, ByteArrayOutputStream> fileContents;
-    private int numFiles;
+    public HashMap<String, ByteArrayOutputStream> fileContents;
+    public int numFiles;
 
     public Connection(Context context, String dir, List<File> files) {
         this.context = context;
@@ -60,7 +61,8 @@ public class Connection extends Thread {
                     String type = message.Type;
                     switch (type) {
                         case Message.NEW:
-                            FileUtils.addFile(message.File);
+                            FileUtils.addFile(message.File, message.Length);
+                            FileUtils.toggleFileProgress(message.File);
 
                             fileContents.put(message.File, new ByteArrayOutputStream());
                             break;
@@ -69,6 +71,7 @@ public class Connection extends Thread {
                             break;
                         case Message.PART:
                             FileUtils.setFileStatus(message.File, FileUtils.STATUS_DOWNLOADING);
+                            FileUtils.updateFileProgress(message.File);
 
                             try {
                                 fileContents.get(message.File).write(message.extractBody());
@@ -79,7 +82,7 @@ public class Connection extends Thread {
                         case Message.DONE:
                             FileUtils.setFileStatus(message.File, FileUtils.STATUS_DOWNLOADED);
 
-                            WriteFileTask writeFile = new WriteFileTask(context, dir, message.File, fileContents.get(message.File));
+                            WriteFileTask writeFile = new WriteFileTask(dir, message.File, fileContents);
                             writeFile.execute();
                             break;
                     }
