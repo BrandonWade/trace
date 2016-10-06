@@ -1,7 +1,5 @@
 package com.example.brandon.trace;
 
-import android.util.Log;
-
 import java.util.ArrayList;
 
 /**

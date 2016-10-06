@@ -44,13 +44,12 @@ public class Connection extends Thread {
                 public void onOpen() {
                     super.onOpen();
                     sendFileList(conn);
-                    Toast.makeText(context, "OPEN", Toast.LENGTH_SHORT).show();
                 }
 
                 @Override
                 public void onClose(int code, String reason) {
                     super.onClose(code, reason);
-                    Toast.makeText(context, "CLOSE - " + reason, Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "Sync complete.", Toast.LENGTH_SHORT).show();
                 }
 
                 @Override
