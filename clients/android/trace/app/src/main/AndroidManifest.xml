@@ -20,6 +20,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ConnectionActivity"
+            android:label="@string/menu_connection"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".SettingsActivity"
+            android:label="@string/menu_settings"
+            android:parentActivityName=".MainActivity" />
     </application>
 
 </manifest>

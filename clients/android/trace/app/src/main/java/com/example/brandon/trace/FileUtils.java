@@ -5,7 +5,6 @@ import java.util.ArrayList;
 /**
  * Created by Brandon on 9/28/2016.
  */
-
 public class FileUtils {
 
     public static final String STATUS_NONE = "";

@@ -8,6 +8,10 @@
         android:title="@string/menu_sync"
         app:showAsAction="ifRoom"/>
 
+    <item android:id="@+id/action_connection"
+        android:title="@string/menu_connection"
+        app:showAsAction="never"/>
+
     <item android:id="@+id/action_settings"
         android:title="@string/menu_settings"
         app:showAsAction="never"/>

@@ -1,6 +1,7 @@
 package com.example.brandon.trace;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -36,10 +37,13 @@ public class Connection extends Thread {
     }
 
     public void run() {
+        SharedPreferences preferences = context.getSharedPreferences(Storage.PREFERENCES_FILE, Context.MODE_PRIVATE);
+        String address = preferences.getString(Storage.SERVER_ADDRESS_KEY, "");
+
         conn = new WebSocketConnection();
 
         try {
-            conn.connect("ws://192.168.0.11:8080", new WebSocketHandler() {
+            conn.connect("ws://" + address, new WebSocketHandler() {
                 @Override
                 public void onOpen() {
                     super.onOpen();
@@ -49,7 +53,7 @@ public class Connection extends Thread {
                 @Override
                 public void onClose(int code, String reason) {
                     super.onClose(code, reason);
-                    Toast.makeText(context, "Sync complete.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, R.string.message_sync_complete, Toast.LENGTH_SHORT).show();
                 }
 
                 @Override

@@ -11,7 +11,6 @@ import java.util.ArrayList;
 /**
  * Created by Brandon on 10/1/2016.
  */
-
 public class FileListFragment extends ListFragment {
 
     @Override
