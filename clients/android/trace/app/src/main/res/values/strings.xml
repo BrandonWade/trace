@@ -10,6 +10,8 @@
 
     <string name="desc_set_address">Enter the server address and port that the client will be connecting to:</string>
     <string name="desc_set_directory">Enter the directory that will be used to store incoming files:</string>
+    <string name="desc_need_permissions">Trace needs permission to read and write files to storage.</string>
 
-    <string name="button_set_address">Set</string>
+    <string name="button_set">Set</string>
+    <string name="button_ok">OK</string>
 </resources>

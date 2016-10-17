@@ -3,7 +3,7 @@ package com.example.brandon.trace;
 import java.util.ArrayList;
 
 /**
- * Created by Brandon on 9/28/2016.
+ * Contains utility functions for updating the file display.
  */
 public class FileUtils {
 

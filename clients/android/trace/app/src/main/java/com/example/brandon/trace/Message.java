@@ -3,7 +3,7 @@ package com.example.brandon.trace;
 import android.util.Base64;
 
 /**
- * Created by Brandon on 9/3/2016.
+ * Message class used to send & receive information via a Connection.
  */
 public class Message {
     public static final String NEW = "new";

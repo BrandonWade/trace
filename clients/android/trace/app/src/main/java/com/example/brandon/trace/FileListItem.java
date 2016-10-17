@@ -1,7 +1,7 @@
 package com.example.brandon.trace;
 
 /**
- * Created by Brandon on 9/27/2016.
+ * Represents an item in a list of files.
  */
 
 public class FileListItem {

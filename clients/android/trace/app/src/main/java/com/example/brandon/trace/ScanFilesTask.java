@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Brandon on 9/9/2016.
+ * Asynchronously scans files in a specified directory.
  */
 public class ScanFilesTask extends AsyncTask<Void, Void, List<File>> {
 

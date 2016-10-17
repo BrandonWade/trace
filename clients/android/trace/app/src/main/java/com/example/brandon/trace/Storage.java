@@ -1,10 +1,12 @@
 package com.example.brandon.trace;
 
 /**
- * Created by Brandon on 10/8/2016.
+ * Contains various constants related to file storage.
  */
 
 public class Storage {
+    // Permissions Code
+    public static int PERMISSIONS_READ_WRITE = 1;
 
     // SharedPreferences file names
     public static String PREFERENCES_FILE = "PREFERENCES_FILE";

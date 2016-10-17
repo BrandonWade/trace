@@ -16,7 +16,7 @@ import de.tavendo.autobahn.WebSocketException;
 import de.tavendo.autobahn.WebSocketHandler;
 
 /**
- * Created by Brandon on 9/4/2016.
+ * Contains a WebSocket connection running on a separate thread.
  */
 public class Connection extends Thread {
 

@@ -13,9 +13,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 /**
- * Created by Brandon on 9/27/2016.
+ * Adapter used to inflate a list of files.
  */
-
 public class FileListItemAdapter extends ArrayAdapter<FileListItem> {
 
     private LayoutInflater inflater;

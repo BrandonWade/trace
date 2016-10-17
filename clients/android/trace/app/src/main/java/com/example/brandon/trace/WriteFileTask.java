@@ -9,7 +9,7 @@ import java.util.HashMap;
 
 
 /**
- * Created by Brandon on 9/8/2016.
+ * Asynchronously writes received files to storage.
  */
 public class WriteFileTask extends AsyncTask<Void, Void, Void> {
     private String path;

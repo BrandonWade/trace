@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 
 /**
- * Created by Brandon on 10/1/2016.
+ * Fragment containing a list of files.
  */
 public class FileListFragment extends ListFragment {
 
