@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
 
         SharedPreferences preferences = getSharedPreferences(Storage.PREFERENCES_FILE, MODE_PRIVATE);
         dir = preferences.getString(Storage.STORAGE_DIRECTORY_KEY, "");
+        Connection.address = preferences.getString(Storage.SERVER_ADDRESS_KEY, "");
 
         // Used to retrieve an external dir
 //        File[] storageDirs = getApplicationContext().getExternalMediaDirs();
@@ -38,6 +39,11 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main, menu);
+
+        MenuItem syncButton = menu.findItem(R.id.action_sync);
+        ServerStatusCheck serverStatusCheck = new ServerStatusCheck(this, syncButton);
+        serverStatusCheck.run();
+
         return true;
     }
 

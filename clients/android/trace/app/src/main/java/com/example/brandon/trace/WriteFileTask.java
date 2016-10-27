@@ -1,6 +1,7 @@
 package com.example.brandon.trace;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -36,7 +37,7 @@ public class WriteFileTask extends AsyncTask<Void, Void, Void> {
             String name = fileName.replaceAll("\\\\", "/");
             File file = new File(path, name);
 
-            // Create any folders needed as listed in the file
+            // Create any folders needed as listed in the file path
             String fullPath = file.getAbsolutePath();
             File folders = new File(fullPath.substring(0, fullPath.lastIndexOf("/")));
             folders.mkdirs();
@@ -59,6 +60,7 @@ public class WriteFileTask extends AsyncTask<Void, Void, Void> {
         super.onPostExecute(aVoid);
         FileUtils.setFileStatus(fileName, FileUtils.STATUS_COMPLETE);
         FileUtils.toggleFileProgress(fileName);
+        FileUtils.fileListAdapter.notifyDataSetChanged();
 
         files.put(fileName, null);
     }

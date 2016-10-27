@@ -22,8 +22,14 @@ public class FileListFragment extends ListFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        FileUtils.fileList = new ArrayList<>();
-        FileUtils.fileListAdapter = new FileListItemAdapter(getActivity().getApplicationContext(), R.layout.file_list_row, FileUtils.fileList);
+        if (FileUtils.fileList == null) {
+            FileUtils.fileList = new ArrayList<>();
+        }
+
+        if (FileUtils.fileListAdapter == null) {
+            FileUtils.fileListAdapter = new FileListItemAdapter(getActivity().getApplicationContext(), R.layout.file_list_row, FileUtils.fileList);
+        }
+
         setListAdapter(FileUtils.fileListAdapter);
     }
 }

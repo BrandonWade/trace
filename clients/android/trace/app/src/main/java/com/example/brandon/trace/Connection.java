@@ -24,7 +24,10 @@ public class Connection extends Thread {
     private String dir;
     private List<File> files;
     private WebSocketConnection conn;
+    private ProgressUpdaterTask progressUpdaterTask;
     private Gson gson;
+
+    public static String address;
     public HashMap<String, ByteArrayOutputStream> fileContents;
     public int numFiles;
 
@@ -34,11 +37,12 @@ public class Connection extends Thread {
         this.files = files;
         this.gson = new Gson();
         this.fileContents = new HashMap<>();
+        this.progressUpdaterTask = new ProgressUpdaterTask();
     }
 
     public void run() {
         SharedPreferences preferences = context.getSharedPreferences(Storage.PREFERENCES_FILE, Context.MODE_PRIVATE);
-        String address = preferences.getString(Storage.SERVER_ADDRESS_KEY, "");
+        address = preferences.getString(Storage.SERVER_ADDRESS_KEY, "");
 
         conn = new WebSocketConnection();
 
@@ -48,12 +52,14 @@ public class Connection extends Thread {
                 public void onOpen() {
                     super.onOpen();
                     sendFileList(conn);
+                    progressUpdaterTask.run();
                 }
 
                 @Override
                 public void onClose(int code, String reason) {
                     super.onClose(code, reason);
                     Toast.makeText(context, R.string.message_sync_complete, Toast.LENGTH_SHORT).show();
+                    progressUpdaterTask.complete();
                 }
 
                 @Override

@@ -16,26 +16,28 @@ type File struct {
 }
 
 // Scan - Walk a directory and add all files to a map
-func Scan(dir string) map[string]File {
+func Scan(dir string, ignoreDirs []string) map[string]File {
 	fileMap := make(map[string]File)
 
 	filepath.Walk(dir, func(path string, file os.FileInfo, err error) error {
-		if !file.IsDir() {
-			extension := ""
-			dotPos := strings.LastIndex(file.Name(), ".")
+		if !Contains(path, ignoreDirs) {
+			if !file.IsDir() {
+				extension := ""
+				dotPos := strings.LastIndex(file.Name(), ".")
 
-			if dotPos != -1 {
-				extension = string(file.Name()[dotPos:])
+				if dotPos != -1 {
+					extension = string(file.Name()[dotPos:])
+				}
+
+				newFile := File{}
+				newFile.Path = path
+				newFile.RelPath = strings.Replace(path, dir, "", -1)
+				newFile.Name = file.Name()
+				newFile.Extension = extension
+				newFile.File = file
+
+				fileMap[newFile.RelPath] = newFile
 			}
-
-			newFile := File{}
-			newFile.Path = path
-			newFile.RelPath = strings.Replace(path, dir, "", -1)
-			newFile.Name = file.Name()
-			newFile.Extension = extension
-			newFile.File = file
-
-			fileMap[newFile.RelPath] = newFile
 		}
 
 		return nil
@@ -55,4 +57,15 @@ func Diff(source, destination map[string]File) []File {
 	}
 
 	return files
+}
+
+// Contains - Check whether a given string is in an array of strings
+func Contains(key string, values []string) bool {
+	for _, value := range values {
+		if key == value || strings.Contains(value, key) || strings.Contains(key, value) {
+			return true
+		}
+	}
+
+	return false
 }
