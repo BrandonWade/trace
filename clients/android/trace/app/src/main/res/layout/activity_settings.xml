@@ -18,6 +18,7 @@
         android:text="@string/desc_set_directory" />
 
     <LinearLayout
+        android:id="@+id/storage_directory_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/storage_directory_label"
@@ -37,6 +38,38 @@
             android:layout_weight="2"
             android:text="@string/button_set"
             android:onClick="setStorageDirectory" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/max_connections_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/storage_directory_layout"
+        android:labelFor="@+id/max_connections_slider"
+        android:text="@string/desc_set_max_connections"
+        android:layout_marginTop="50dp" />
+
+    <LinearLayout
+        android:id="@+id/max_connections_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/max_connections_label"
+        android:weightSum="10">
+
+        <SeekBar
+            android:id="@+id/max_connections_slider"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:max="10"
+            android:layout_weight="9" />
+
+        <TextView
+            android:id="@+id/connections_label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:labelFor="@+id/max_connections_slider"
+            android:layout_weight="1" />
 
     </LinearLayout>
 
