@@ -61,7 +61,7 @@
             android:id="@+id/max_connections_slider"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:max="10"
+            android:max="9"
             android:layout_weight="9" />
 
         <TextView
