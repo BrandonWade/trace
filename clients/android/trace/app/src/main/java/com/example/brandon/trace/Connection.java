@@ -5,15 +5,18 @@ import android.content.SharedPreferences;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.neovisionaries.ws.client.WebSocket;
+import com.neovisionaries.ws.client.WebSocketAdapter;
+import com.neovisionaries.ws.client.WebSocketExtension;
+import com.neovisionaries.ws.client.WebSocketFactory;
+import com.neovisionaries.ws.client.WebSocketFrame;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
-
-import de.tavendo.autobahn.WebSocketConnection;
-import de.tavendo.autobahn.WebSocketException;
-import de.tavendo.autobahn.WebSocketHandler;
+import java.util.Map;
 
 /**
  * Contains a WebSocket connection running on a separate thread.
@@ -23,7 +26,7 @@ public class Connection extends Thread {
     private Context context;
     private String dir;
     private List<File> files;
-    private WebSocketConnection conn;
+    private WebSocket conn;
     private ProgressUpdaterTask progressUpdaterTask;
     private Gson gson;
 
@@ -44,72 +47,67 @@ public class Connection extends Thread {
         SharedPreferences preferences = context.getSharedPreferences(Storage.PREFERENCES_FILE, Context.MODE_PRIVATE);
         address = preferences.getString(Storage.SERVER_ADDRESS_KEY, "");
 
-        conn = new WebSocketConnection();
-
         try {
-            conn.connect("ws://" + address, new WebSocketHandler() {
-                @Override
-                public void onOpen() {
-                    super.onOpen();
-                    sendFileList(conn);
-                    progressUpdaterTask.run();
-                }
+            conn = new WebSocketFactory()
+                    .setConnectionTimeout(5000)
+                    .createSocket("ws://" + address)
+                    .addListener(new WebSocketAdapter() {
+                        public void onConnected(WebSocket websocket, Map<String, List<String>> headers) throws Exception {
+                            sendFileList(conn);
+                            progressUpdaterTask.run();
+                        }
 
-                @Override
-                public void onClose(int code, String reason) {
-                    super.onClose(code, reason);
-                    Toast.makeText(context, R.string.message_sync_complete, Toast.LENGTH_SHORT).show();
-                    progressUpdaterTask.complete();
-                }
+                        public void onDisconnected(WebSocket websocket, WebSocketFrame serverCloseFrame, WebSocketFrame clientCloseFrame, boolean closedByServer) throws Exception {
+                            progressUpdaterTask.complete();
+                        }
 
-                @Override
-                public void onTextMessage(String payload) {
-                    super.onTextMessage(payload);
+                        public void onTextMessage(WebSocket websocket, String m) {
+                            Message message = gson.fromJson(m, Message.class);
+                            String type = message.Type;
+                            switch (type) {
+                                case Message.NEW:
+                                    FileUtils.addFile(message.File, message.Length);
+                                    FileUtils.toggleFileProgress(message.File);
 
-                    Message message = gson.fromJson(payload, Message.class);
-                    String type = message.Type;
-                    switch (type) {
-                        case Message.NEW:
-                            FileUtils.addFile(message.File, message.Length);
-                            FileUtils.toggleFileProgress(message.File);
+                                    fileContents.put(message.File, new ByteArrayOutputStream());
+                                    break;
+                                case Message.COUNT:
+                                    numFiles = message.Length;
+                                    break;
+                                case Message.PART:
+                                    FileUtils.setFileStatus(message.File, FileUtils.STATUS_DOWNLOADING);
+                                    FileUtils.updateFileProgress(message.File);
 
-                            fileContents.put(message.File, new ByteArrayOutputStream());
-                            break;
-                        case Message.COUNT:
-                            numFiles = message.Length;
-                            break;
-                        case Message.PART:
-                            FileUtils.setFileStatus(message.File, FileUtils.STATUS_DOWNLOADING);
-                            FileUtils.updateFileProgress(message.File);
+                                    try {
+                                        fileContents.get(message.File).write(message.extractBody());
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                    break;
+                                case Message.DONE:
+                                    FileUtils.setFileStatus(message.File, FileUtils.STATUS_DOWNLOADED);
 
-                            try {
-                                fileContents.get(message.File).write(message.extractBody());
-                            } catch (Exception e) {
-                                e.printStackTrace();
+                                    WriteFileTask writeFile = new WriteFileTask(dir, message.File, fileContents);
+                                    writeFile.execute();
+                                    break;
                             }
-                            break;
-                        case Message.DONE:
-                            FileUtils.setFileStatus(message.File, FileUtils.STATUS_DOWNLOADED);
-
-                            WriteFileTask writeFile = new WriteFileTask(dir, message.File, fileContents);
-                            writeFile.execute();
-                            break;
-                    }
-                }
-            });
-        } catch (WebSocketException e) {
+                        }
+                    })
+                    .addExtension(WebSocketExtension.PERMESSAGE_DEFLATE)
+                    .connectAsynchronously();
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void sendFileList(WebSocketConnection conn) {
+    private void sendFileList(WebSocket conn) {
         for (File file : files) {
             String relPath = file.getAbsolutePath().replace(dir, "");
             Message message = new Message(Message.NEW, relPath, 0, "");
-            conn.sendTextMessage(gson.toJson(message));
+            conn.sendText(gson.toJson(message));
         }
 
         Message doneMessage = new Message(Message.DONE, "", 0, "");
-        conn.sendTextMessage(gson.toJson(doneMessage));
+        conn.sendText(gson.toJson(doneMessage));
     }
 }
