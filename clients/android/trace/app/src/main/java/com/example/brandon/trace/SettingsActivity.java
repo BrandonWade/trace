@@ -10,8 +10,6 @@ import android.widget.TextView;
 
 public class SettingsActivity extends AppCompatActivity {
 
-    private int numConnections = 1;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,13 +24,13 @@ public class SettingsActivity extends AppCompatActivity {
 
         final TextView numConnectionsLabel = (TextView)findViewById(R.id.connections_label);
         final SeekBar maxConnectionsBar = (SeekBar)findViewById(R.id.max_connections_slider);
-        numConnectionsLabel.setText(String.valueOf(numConnections));
+        numConnectionsLabel.setText(String.valueOf(ControlConnection.numConnections));
 
         maxConnectionsBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                numConnections = (progress + 1);
-                numConnectionsLabel.setText(String.valueOf(numConnections));
+                ControlConnection.numConnections = (progress + 1);
+                numConnectionsLabel.setText(String.valueOf(ControlConnection.numConnections));
             }
 
             @Override

@@ -3,11 +3,13 @@ package com.example.brandon.trace;
 import android.util.Base64;
 
 /**
- * Message class used to send & receive information via a Connection.
+ * Message class used to send & receive information via a ControlConnection.
  */
 public class Message {
     public static final String NEW = "new";
     public static final String COUNT = "count";
+    public static final String LIST = "list";
+    public static final String LIST_COMPLETE = "list_complete";
     public static final String PART = "part";
     public static final String DONE = "done";
 

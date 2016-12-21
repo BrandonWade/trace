@@ -7,6 +7,12 @@ const (
 	// Count - used when sending the number of files
 	Count = "count"
 
+	// List - used when sending the file as part of a list
+	List = "list"
+
+	// ListComplete - when receiving the last item in a list
+	ListComplete = "list_complete"
+
 	// Part - used when sending a segment of a file
 	Part = "part"
 

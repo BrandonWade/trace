@@ -1,28 +1,23 @@
 package com.example.brandon.trace;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.util.HashMap;
-
 
 /**
- * Asynchronously writes received files to storage.
+ * Asynchronously writes a received file to storage.
  */
 public class WriteFileTask extends AsyncTask<Void, Void, Void> {
     private String path;
     private String fileName;
-    private HashMap<String, ByteArrayOutputStream> files;
     private ByteArrayOutputStream contents;
 
-    public WriteFileTask(String path, String fileName, HashMap<String, ByteArrayOutputStream> files) {
+    public WriteFileTask(String path, String fileName, ByteArrayOutputStream contents) {
         this.path = path;
         this.fileName = fileName;
-        this.files = files;
-        this.contents = files.get(fileName);
+        this.contents = contents;
     }
 
     @Override
@@ -61,7 +56,5 @@ public class WriteFileTask extends AsyncTask<Void, Void, Void> {
         FileUtils.setFileStatus(fileName, FileUtils.STATUS_COMPLETE);
         FileUtils.toggleFileProgress(fileName);
         FileUtils.fileListAdapter.notifyDataSetChanged();
-
-        files.put(fileName, null);
     }
 }

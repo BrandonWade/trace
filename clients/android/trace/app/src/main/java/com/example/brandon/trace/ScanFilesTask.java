@@ -1,8 +1,8 @@
 package com.example.brandon.trace;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -27,7 +27,7 @@ public class ScanFilesTask extends AsyncTask<Void, Void, List<File>> {
     }
 
     private List<File> getFiles(File parentDir) {
-        ArrayList<File> files = new ArrayList<>();
+        List<File> files = new ArrayList<>();
         File[] parentDirFiles = parentDir.listFiles();
 
         for (File file : parentDirFiles) {
@@ -43,7 +43,15 @@ public class ScanFilesTask extends AsyncTask<Void, Void, List<File>> {
 
     @Override
     protected void onPostExecute(List<File> files) {
-        Connection conn = new Connection(context, dir, files);
-        conn.run();
+        List<String> paths = new ArrayList<>();
+        for (File file : files) {
+            paths.add(file.getAbsolutePath());
+        }
+
+        SharedPreferences preferences = context.getSharedPreferences(Storage.PREFERENCES_FILE, Context.MODE_PRIVATE);
+        String address = preferences.getString(Storage.SERVER_ADDRESS_KEY, "");
+
+        ControlConnection conn = new ControlConnection(context, dir, address, paths);
+        conn.start();
     }
 }

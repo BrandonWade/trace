@@ -27,7 +27,6 @@ public class MainActivity extends AppCompatActivity {
 
         SharedPreferences preferences = getSharedPreferences(Storage.PREFERENCES_FILE, MODE_PRIVATE);
         dir = preferences.getString(Storage.STORAGE_DIRECTORY_KEY, "");
-        Connection.address = preferences.getString(Storage.SERVER_ADDRESS_KEY, "");
 
         // Used to retrieve an external dir
 //        File[] storageDirs = getApplicationContext().getExternalMediaDirs();

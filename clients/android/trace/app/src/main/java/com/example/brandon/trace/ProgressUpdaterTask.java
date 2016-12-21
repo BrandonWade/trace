@@ -1,6 +1,7 @@
 package com.example.brandon.trace;
 
 import android.os.Handler;
+import android.os.Looper;
 
 
 /**
@@ -14,7 +15,7 @@ public class ProgressUpdaterTask extends Thread {
     public static long uiUpdatePeriod = 300;
 
     public ProgressUpdaterTask() {
-        this.redrawHandler = new Handler();
+        this.redrawHandler = new Handler(Looper.getMainLooper());
     }
 
     private Runnable updateUI = new Runnable() {
