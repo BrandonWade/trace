@@ -1,6 +1,8 @@
 package com.example.brandon.trace;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.MenuItem;
 
@@ -34,7 +36,7 @@ public class ServerStatusCheck extends Thread {
            @Override
            public void run() {
                try {
-                   URL url = new URL("http://" + Connection.address + "/ping");
+                   URL url = new URL("http://192.168.0.9:8080/ping");
                    HttpURLConnection statusConnection = (HttpURLConnection) url.openConnection();
                    statusConnection.setConnectTimeout(timeout);
 

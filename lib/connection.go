@@ -4,25 +4,23 @@ import (
 	"fmt"
 	"log"
 	"net/url"
-	"sync"
 
 	"github.com/gin-gonic/gin"
 
 	"github.com/gorilla/websocket"
 )
 
-// BufferSice - read / write buffer size
+// BufferSize - read / write buffer size
 const BufferSize = 4096
 
 // Connection - used to read from a websocket
 type Connection struct {
-	Conn  *websocket.Conn
-	Mutex *sync.RWMutex
+	Conn *websocket.Conn
 }
 
 // NewConnection - initializes a Connection object
 func NewConnection() *Connection {
-	return &Connection{Mutex: new(sync.RWMutex)}
+	return &Connection{}
 }
 
 // Open - opens a Connection
@@ -57,9 +55,6 @@ func (c *Connection) Dial(host string) {
 
 // Read - reads from a Connection
 func (c *Connection) Read() *Message {
-	c.Mutex.RLock()
-	defer c.Mutex.RUnlock()
-
 	message := &Message{}
 	c.Conn.ReadJSON(message)
 
@@ -68,9 +63,6 @@ func (c *Connection) Read() *Message {
 
 // Write - writes to a Connection
 func (c *Connection) Write(message *Message) {
-	c.Mutex.Lock()
-	defer c.Mutex.Unlock()
-
 	c.Conn.WriteJSON(message)
 }
 

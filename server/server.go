@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"encoding/base64"
+	"log"
 	"math"
 	"net/http"
 	"os"
@@ -19,9 +20,13 @@ var waitGroup sync.WaitGroup
 // The list of new files to send to the client
 var newFiles []lib.File
 
+// TODO: Use real dir
+var dir = "C:\\Users\\Brandon\\Music"
+
 func main() {
 	g := gin.Default()
 	g.GET("/", runServer)
+	g.GET("/file", sendFile)
 	g.GET("/ping", handlePing)
 	g.Run(":8080")
 }
@@ -34,7 +39,6 @@ func runServer(c *gin.Context) {
 	conn.Open(c)
 
 	// TODO: Use real dirs
-	dir := "C:\\Users\\Brandon\\Music"
 	ignoreDirs := []string{
 		"C:\\Users\\Brandon\\Music\\Playlists",
 		"C:\\Users\\Brandon\\Music\\iTunes\\Album Artwork",
@@ -58,7 +62,7 @@ func runServer(c *gin.Context) {
 		message := conn.Read()
 
 		switch message.Type {
-		case lib.New:
+		case lib.List:
 			relPath := strings.Replace(message.File, "/", "\\", -1)
 			clientFiles[relPath] = true
 		case lib.Done:
@@ -81,23 +85,36 @@ func runServer(c *gin.Context) {
 	countMessage := &lib.Message{Type: lib.Count, File: "", Length: len(newFiles), Body: ""}
 	conn.Write(countMessage)
 
+	// Send the list of new files to the client
 	for _, file := range newFiles {
-		go sendFile(file, conn)
+		message := &lib.Message{Type: lib.List, File: file.RelPath, Length: 1, Body: ""}
+		conn.Write(message)
 	}
 
-	// Wait for all files to finish sending
-	waitGroup.Wait()
+	// Indicate the end of the list of new files
+	message := &lib.Message{Type: lib.ListComplete, File: "", Length: -1, Body: ""}
+	conn.Write(message)
 }
 
 // SendFile - sends a file to the client
-func sendFile(file lib.File, conn *lib.Connection) {
-	filePtr, _ := os.Open(file.Path)
+func sendFile(c *gin.Context) {
+	conn := lib.NewConnection()
+	defer conn.Close()
+
+	conn.Open(c)
+	fileMessage := conn.Read()
+	fileName := fileMessage.File
+	log.Printf("MESSAGE RECEIVED = %+v", fileMessage)
+
+	filePtr, _ := os.Open(dir + fileName)
 	defer filePtr.Close()
 
 	// Notify the client of the new file
-	fileSize := file.File.Size()
+	fileStat, _ := filePtr.Stat()
+	fileSize := fileStat.Size()
 	numParts := math.Ceil(float64(fileSize) / float64(lib.BufferSize))
-	newMessage := &lib.Message{Type: lib.New, File: file.RelPath, Length: int(numParts), Body: ""}
+
+	newMessage := &lib.Message{Type: lib.New, File: fileName, Length: int(numParts), Body: ""}
 	conn.Write(newMessage)
 
 	buffer := bufio.NewReader(filePtr)
@@ -111,15 +128,15 @@ func sendFile(file lib.File, conn *lib.Connection) {
 
 		// Encode the data segment and send it
 		body := base64.RawStdEncoding.EncodeToString(buff)
-		message := &lib.Message{Type: "part", File: file.RelPath, Length: len(body), Body: body}
+		message := &lib.Message{Type: lib.Part, File: fileName, Length: len(body), Body: body}
 		conn.Write(message)
 	}
 
 	// Send a done message
-	message := &lib.Message{Type: "done", File: file.RelPath, Length: 0, Body: ""}
+	message := &lib.Message{Type: lib.Done, File: fileName, Length: 0, Body: ""}
 	conn.Write(message)
 
-	// Indicate that this file has been segment
+	// Indicate that this file has been sent
 	waitGroup.Done()
 }
 
