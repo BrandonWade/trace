@@ -57,7 +57,6 @@ public class ControlConnection extends Thread {
                         }
 
                         public void onTextMessage(WebSocket websocket, String m) {
-                            Log.i("@@@", "CONTROL CONNECTION - " + m);
                             Message message = gson.fromJson(m, Message.class);
                             String type = message.Type;
                             switch (type) {
@@ -68,7 +67,7 @@ public class ControlConnection extends Thread {
                                     newFiles.add(message.File);
                                     break;
                                 case Message.LIST_COMPLETE:
-                                    FileDownloadManager fdm = new FileDownloadManager(context, newFiles);
+                                    FileDownloadManager fdm = new FileDownloadManager(context, newFiles, dir);
                                     fdm.start();
                                     break;
                             }

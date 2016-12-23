@@ -3,7 +3,6 @@ package main
 import (
 	"bufio"
 	"encoding/base64"
-	"log"
 	"math"
 	"net/http"
 	"os"
@@ -104,7 +103,6 @@ func sendFile(c *gin.Context) {
 	conn.Open(c)
 	fileMessage := conn.Read()
 	fileName := fileMessage.File
-	log.Printf("MESSAGE RECEIVED = %+v", fileMessage)
 
 	filePtr, _ := os.Open(dir + fileName)
 	defer filePtr.Close()
