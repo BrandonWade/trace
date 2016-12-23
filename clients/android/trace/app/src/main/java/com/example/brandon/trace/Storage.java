@@ -14,6 +14,4 @@ public class Storage {
     // SharedPreferences key names
     public static String SERVER_ADDRESS_KEY = "SERVER_ADDRESS";
     public static String STORAGE_DIRECTORY_KEY = "STORAGE_DIRECTORY";
-
-    public static String dir;
 }

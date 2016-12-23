@@ -2,13 +2,8 @@ package com.example.brandon.trace;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Semaphore;
-
-import static com.example.brandon.trace.Storage.dir;
 
 /**
  * Creates connections to the server to download a list of files.
@@ -17,12 +12,12 @@ public class FileDownloadManager extends Thread {
 
     private Context context;
     private List<String> files;
-    private List<FileConnection> fileConnections;
+    private String dir;
 
-    public FileDownloadManager(Context context, List<String> files) {
+    public FileDownloadManager(Context context, List<String> files, String dir) {
         this.context = context;
         this.files = files;
-        fileConnections = new ArrayList<>();
+        this.dir = dir;
     }
 
     public void run() {
@@ -41,7 +36,6 @@ public class FileDownloadManager extends Thread {
                 FileConnection conn = new FileConnection(lock, route, dir, files.get(i));
                 conn.start();
 
-                fileConnections.add(conn);
                 i++;
             } catch (InterruptedException e) {
                 e.printStackTrace();

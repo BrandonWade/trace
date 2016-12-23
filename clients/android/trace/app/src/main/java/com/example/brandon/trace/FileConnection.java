@@ -59,7 +59,6 @@ public class FileConnection extends Thread {
                         }
 
                         public void onTextMessage(WebSocket websocket, String m) {
-                            Log.i("@@@", "FILE CONNECTION - " + m);
                             Message message = gson.fromJson(m, Message.class);
                             String type = message.Type;
                             switch (type) {
@@ -78,7 +77,6 @@ public class FileConnection extends Thread {
                                     }
                                     break;
                                 case Message.DONE:
-                                    Log.i("@@@", "DONE MESSAGE RECEIVED");
                                     FileUtils.setFileStatus(message.File, FileUtils.STATUS_DOWNLOADED);
 
                                     WriteFileTask writeFile = new WriteFileTask(dir, message.File, fileContents);
@@ -96,6 +94,7 @@ public class FileConnection extends Thread {
     public void sendFile(WebSocket conn) {
         String relPath = file.replace(dir, "");
         Message message = new Message(Message.NEW, relPath, 0, "");
-        conn.sendText(gson.toJson(message));
+        String x = gson.toJson(message);
+        conn.sendText(x);
     }
 }
