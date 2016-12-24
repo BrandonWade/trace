@@ -1,7 +1,6 @@
 package com.example.brandon.trace;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.google.gson.Gson;
 import com.neovisionaries.ws.client.WebSocket;
@@ -27,6 +26,7 @@ public class ControlConnection extends Thread {
     private List<String> newFiles;
     private WebSocket conn;
     private Gson gson;
+    private ProgressUpdaterTask progressUpdater;
 
     public static int numConnections = 1;
     public int numFiles;
@@ -38,9 +38,12 @@ public class ControlConnection extends Thread {
         this.files = files;
         this.newFiles = new ArrayList<>();
         this.gson = new Gson();
+        this.progressUpdater = new ProgressUpdaterTask();
     }
 
     public void run() {
+        progressUpdater.run();
+
         try {
             conn = new WebSocketFactory()
                     .setConnectionTimeout(5000)

@@ -8,7 +8,7 @@ public class Storage {
     // Permissions Code
     public static int PERMISSIONS_READ_WRITE = 1;
 
-    // SharedPreferences file names
+    // SharedPreferences file name
     public static String PREFERENCES_FILE = "PREFERENCES_FILE";
 
     // SharedPreferences key names
