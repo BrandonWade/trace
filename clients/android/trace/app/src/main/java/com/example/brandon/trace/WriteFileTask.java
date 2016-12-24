@@ -55,6 +55,5 @@ public class WriteFileTask extends AsyncTask<Void, Void, Void> {
         super.onPostExecute(aVoid);
         FileUtils.setFileStatus(fileName, FileUtils.STATUS_COMPLETE);
         FileUtils.toggleFileProgress(fileName);
-        FileUtils.fileListAdapter.notifyDataSetChanged();
     }
 }

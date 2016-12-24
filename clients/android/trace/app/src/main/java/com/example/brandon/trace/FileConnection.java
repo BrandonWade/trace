@@ -27,7 +27,6 @@ public class FileConnection extends Thread {
     private WebSocket conn;
     private Gson gson;
     private ByteArrayOutputStream fileContents;
-    private ProgressUpdaterTask progressUpdaterTask;
 
     public FileConnection(Semaphore lock, String address, String dir, String file) {
         this.lock = lock;
@@ -36,7 +35,6 @@ public class FileConnection extends Thread {
         this.file = file;
         this.gson = new Gson();
         this.fileContents = new ByteArrayOutputStream();
-        this.progressUpdaterTask = new ProgressUpdaterTask();
     }
 
     public void run() {
@@ -47,15 +45,11 @@ public class FileConnection extends Thread {
                     .addListener(new WebSocketAdapter() {
 
                         public void onConnected(WebSocket websocket, Map<String, List<String>> headers) throws Exception {
-                            Log.i("@@@", "FILE " + file + " CONNECTED");
                             sendFile(conn);
-                            progressUpdaterTask.run();
                         }
 
                         public void onDisconnected(WebSocket websocket, WebSocketFrame serverCloseFrame, WebSocketFrame clientCloseFrame, boolean closedByServer) throws Exception {
-                            Log.i("@@@", "FILE " + file + " DISCONNECTED");
                             lock.release();
-                            progressUpdaterTask.complete();
                         }
 
                         public void onTextMessage(WebSocket websocket, String m) {
