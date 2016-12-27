@@ -39,6 +39,7 @@ func runServer(c *gin.Context) {
 
 	// TODO: Use real dirs
 	ignoreDirs := []string{
+		"C:\\Users\\Brandon\\Music\\AlbumArt_",
 		"C:\\Users\\Brandon\\Music\\Playlists",
 		"C:\\Users\\Brandon\\Music\\iTunes\\Album Artwork",
 		"C:\\Users\\Brandon\\Music\\iTunes\\iTunes Media\\Automatically Add to iTunes",

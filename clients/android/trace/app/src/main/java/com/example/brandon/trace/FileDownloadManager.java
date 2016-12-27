@@ -15,17 +15,14 @@ public class FileDownloadManager extends Thread {
     }
 
     public void run() {
-        int i = 0;
         Semaphore lock = new Semaphore(StorageManager.numConnections);
 
-        while (i < files.size()) {
+        for (String file : files) {
             try {
                 lock.acquire();
 
-                FileConnection conn = new FileConnection(lock, files.get(i));
+                FileConnection conn = new FileConnection(lock, file);
                 conn.start();
-
-                i++;
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

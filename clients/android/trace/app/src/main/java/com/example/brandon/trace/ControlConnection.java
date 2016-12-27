@@ -21,17 +21,14 @@ public class ControlConnection extends Thread {
     private List<String> newFiles;
     private WebSocket conn;
     private Gson gson;
-    private ProgressUpdaterTask progressUpdater;
 
     public ControlConnection(List<String> files) {
         this.files = files;
         this.newFiles = new ArrayList<>();
         this.gson = new Gson();
-        this.progressUpdater = new ProgressUpdaterTask();
     }
 
     public void run() {
-        progressUpdater.run();
 
         try {
             conn = new WebSocketFactory()
