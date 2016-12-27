@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
         FileUtils.fileList.clear();
         FileUtils.fileListAdapter.notifyDataSetChanged();
 
-        ScanFilesTask scanFiles = new ScanFilesTask(getApplicationContext(), StorageManager.storageDir);
+        ScanFilesTask scanFiles = new ScanFilesTask();
         scanFiles.execute();
     }
 

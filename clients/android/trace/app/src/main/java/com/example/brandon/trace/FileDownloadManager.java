@@ -1,7 +1,5 @@
 package com.example.brandon.trace;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 
@@ -10,30 +8,21 @@ import java.util.concurrent.Semaphore;
  */
 public class FileDownloadManager extends Thread {
 
-    private Context context;
     private List<String> files;
-    private String dir;
 
-    public FileDownloadManager(Context context, List<String> files, String dir) {
-        this.context = context;
+    public FileDownloadManager(List<String> files) {
         this.files = files;
-        this.dir = dir;
     }
 
     public void run() {
         int i = 0;
         Semaphore lock = new Semaphore(StorageManager.numConnections);
 
-        SharedPreferences preferences = context.getSharedPreferences(StorageManager.PREFERENCES_FILE, Context.MODE_PRIVATE);
-        String address = preferences.getString(StorageManager.SERVER_ADDRESS_KEY, "");
-
-        String route = address + "/file";
-
         while (i < files.size()) {
             try {
                 lock.acquire();
 
-                FileConnection conn = new FileConnection(lock, route, dir, files.get(i));
+                FileConnection conn = new FileConnection(lock, files.get(i));
                 conn.start();
 
                 i++;

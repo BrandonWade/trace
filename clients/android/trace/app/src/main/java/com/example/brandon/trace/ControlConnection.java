@@ -1,7 +1,5 @@
 package com.example.brandon.trace;
 
-import android.content.Context;
-
 import com.google.gson.Gson;
 import com.neovisionaries.ws.client.WebSocket;
 import com.neovisionaries.ws.client.WebSocketAdapter;
@@ -19,19 +17,13 @@ import java.util.Map;
  */
 public class ControlConnection extends Thread {
 
-    private Context context;
-    private String dir;
-    private String address;
     private List<String> files;
     private List<String> newFiles;
     private WebSocket conn;
     private Gson gson;
     private ProgressUpdaterTask progressUpdater;
 
-    public ControlConnection(Context context, String dir, String address, List<String> files) {
-        this.context = context;
-        this.dir = dir;
-        this.address = address;
+    public ControlConnection(List<String> files) {
         this.files = files;
         this.newFiles = new ArrayList<>();
         this.gson = new Gson();
@@ -44,7 +36,7 @@ public class ControlConnection extends Thread {
         try {
             conn = new WebSocketFactory()
                     .setConnectionTimeout(5000)
-                    .createSocket("ws://" + address)
+                    .createSocket("ws://" + StorageManager.serverAddress)
                     .addListener(new WebSocketAdapter() {
 
                         public void onConnected(WebSocket websocket, Map<String, List<String>> headers) throws Exception {
@@ -64,7 +56,7 @@ public class ControlConnection extends Thread {
                                     newFiles.add(message.File);
                                     break;
                                 case Message.DONE:
-                                    FileDownloadManager fdm = new FileDownloadManager(context, newFiles, dir);
+                                    FileDownloadManager fdm = new FileDownloadManager(newFiles);
                                     fdm.start();
                                     break;
                             }
@@ -78,7 +70,7 @@ public class ControlConnection extends Thread {
 
     private void sendFileList(WebSocket conn) {
         for (String file : files) {
-            String relPath = file.replace(dir, "");
+            String relPath = file.replace(StorageManager.storageDir, "");
             Message message = new Message(Message.LIST, relPath, 0, "");
             conn.sendText(gson.toJson(message));
         }
