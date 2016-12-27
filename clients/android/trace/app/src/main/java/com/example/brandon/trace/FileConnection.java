@@ -41,7 +41,7 @@ public class FileConnection extends Thread {
                     .addListener(new WebSocketAdapter() {
 
                         public void onConnected(WebSocket websocket, Map<String, List<String>> headers) throws Exception {
-                            sendFile(conn);
+                            sendFile(websocket);
                         }
 
                         public void onDisconnected(WebSocket websocket, WebSocketFrame serverCloseFrame, WebSocketFrame clientCloseFrame, boolean closedByServer) throws Exception {
@@ -68,11 +68,16 @@ public class FileConnection extends Thread {
                                     break;
                                 case Message.DONE:
                                     FileUtils.setFileStatus(message.File, FileUtils.STATUS_DOWNLOADED);
+                                    conn.disconnect();
 
-//                                    WriteFileTask writeFile = new WriteFileTask(dir, message.File, fileContents);
-//                                    writeFile.execute();
+                                    WriteFileTask writeFile = new WriteFileTask(StorageManager.storageDir, message.File, fileContents);
+                                    writeFile.execute();
                                     break;
                             }
+                        }
+
+                        public void handleCallbackError(WebSocket websocket, Throwable cause) throws Exception {
+                            cause.printStackTrace();
                         }
                     })
                     .connect();

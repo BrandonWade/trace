@@ -9,7 +9,6 @@ public class FileListItem {
     public int progress;
     public int size;
     public boolean showProgress;
-    public int position;
 
     public FileListItem(String fileName, int size, String status) {
         this.fileName = fileName;

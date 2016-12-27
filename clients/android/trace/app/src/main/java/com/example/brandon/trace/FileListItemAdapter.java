@@ -1,13 +1,10 @@
 package com.example.brandon.trace;
 
-import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.LinearInterpolator;
 import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -50,11 +47,7 @@ public class FileListItemAdapter extends ArrayAdapter<FileListItem> {
         int progress = (int)(100 * ((double)file.progress / (double)file.size));
         holder.mainText.setText(file.fileName);
         holder.subText.setText(file.status);
-
-        ObjectAnimator animation = ObjectAnimator.ofInt(holder.progress, "progress", holder.progress.getProgress(), progress);
-        animation.setDuration(ProgressUpdaterTask.uiUpdatePeriod);
-        animation.setInterpolator(new LinearInterpolator());
-        animation.start();
+        holder.progress.setProgress(progress);
 
         if (!file.showProgress) {
             holder.progress.setVisibility(View.INVISIBLE);
