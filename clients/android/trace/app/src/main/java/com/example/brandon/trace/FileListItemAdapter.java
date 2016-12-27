@@ -44,10 +44,14 @@ public class FileListItemAdapter extends ArrayAdapter<FileListItem> {
         }
 
         FileListItem file = files.get(position);
-        int progress = (int)(100 * ((double)file.progress / (double)file.size));
         holder.mainText.setText(file.fileName);
         holder.subText.setText(file.status);
-        holder.progress.setProgress(progress);
+
+        if (file.progress > -1) {
+            holder.progress.setVisibility(View.VISIBLE);
+            int progress = (int)(100 * ((double)file.progress / (double)file.size));
+            holder.progress.setProgress(progress);
+        }
 
         if (!file.showProgress) {
             holder.progress.setVisibility(View.INVISIBLE);
