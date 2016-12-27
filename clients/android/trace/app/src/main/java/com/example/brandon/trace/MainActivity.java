@@ -3,7 +3,6 @@ package com.example.brandon.trace;
 import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -18,15 +17,13 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
-    private String dir;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        SharedPreferences preferences = getSharedPreferences(Storage.PREFERENCES_FILE, MODE_PRIVATE);
-        dir = preferences.getString(Storage.STORAGE_DIRECTORY_KEY, "");
+        StorageManager storage = StorageManager.getManager(getApplicationContext());
+        storage.retrieve();
 
         // Used to retrieve an external dir
 //        File[] storageDirs = getApplicationContext().getExternalMediaDirs();
@@ -70,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             } else {
                 String[] permissions = { Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE };
-                ActivityCompat.requestPermissions(this, permissions, Storage.PERMISSIONS_READ_WRITE);
+                ActivityCompat.requestPermissions(this, permissions, StorageManager.PERMISSIONS_READ_WRITE);
                 return false;
             }
         } else {
@@ -80,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == Storage.PERMISSIONS_READ_WRITE && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+        if (requestCode == StorageManager.PERMISSIONS_READ_WRITE && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             syncFiles();
         } else {
             super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -104,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
         FileUtils.fileList.clear();
         FileUtils.fileListAdapter.notifyDataSetChanged();
 
-        ScanFilesTask scanFiles = new ScanFilesTask(getApplicationContext(), dir);
+        ScanFilesTask scanFiles = new ScanFilesTask(getApplicationContext(), StorageManager.storageDir);
         scanFiles.execute();
     }
 

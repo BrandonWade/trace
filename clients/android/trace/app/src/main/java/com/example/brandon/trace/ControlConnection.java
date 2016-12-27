@@ -28,9 +28,6 @@ public class ControlConnection extends Thread {
     private Gson gson;
     private ProgressUpdaterTask progressUpdater;
 
-    public static int numConnections = 1;
-    public int numFiles;
-
     public ControlConnection(Context context, String dir, String address, List<String> files) {
         this.context = context;
         this.dir = dir;
@@ -63,13 +60,10 @@ public class ControlConnection extends Thread {
                             Message message = gson.fromJson(m, Message.class);
                             String type = message.Type;
                             switch (type) {
-                                case Message.COUNT:
-                                    numFiles = message.Length;
-                                    break;
                                 case Message.LIST:
                                     newFiles.add(message.File);
                                     break;
-                                case Message.LIST_COMPLETE:
+                                case Message.DONE:
                                     FileDownloadManager fdm = new FileDownloadManager(context, newFiles, dir);
                                     fdm.start();
                                     break;

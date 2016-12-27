@@ -48,8 +48,8 @@ public class ScanFilesTask extends AsyncTask<Void, Void, List<File>> {
             paths.add(file.getAbsolutePath());
         }
 
-        SharedPreferences preferences = context.getSharedPreferences(Storage.PREFERENCES_FILE, Context.MODE_PRIVATE);
-        String address = preferences.getString(Storage.SERVER_ADDRESS_KEY, "");
+        SharedPreferences preferences = context.getSharedPreferences(StorageManager.PREFERENCES_FILE, Context.MODE_PRIVATE);
+        String address = preferences.getString(StorageManager.SERVER_ADDRESS_KEY, "");
 
         ControlConnection conn = new ControlConnection(context, dir, address, paths);
         conn.start();
