@@ -21,17 +21,13 @@ import java.util.concurrent.Semaphore;
 public class FileConnection extends Thread {
 
     private Semaphore lock;
-    private String address;
-    private String dir;
     private String file;
     private WebSocket conn;
     private Gson gson;
     private ByteArrayOutputStream fileContents;
 
-    public FileConnection(Semaphore lock, String address, String dir, String file) {
+    public FileConnection(Semaphore lock, String file) {
         this.lock = lock;
-        this.address = address;
-        this.dir = dir;
         this.file = file;
         this.gson = new Gson();
         this.fileContents = new ByteArrayOutputStream();
@@ -41,7 +37,7 @@ public class FileConnection extends Thread {
         try {
             conn = new WebSocketFactory()
                     .setConnectionTimeout(5000)
-                    .createSocket("ws://" + address)
+                    .createSocket("ws://" + StorageManager.serverAddress + "/file")
                     .addListener(new WebSocketAdapter() {
 
                         public void onConnected(WebSocket websocket, Map<String, List<String>> headers) throws Exception {
@@ -73,8 +69,8 @@ public class FileConnection extends Thread {
                                 case Message.DONE:
                                     FileUtils.setFileStatus(message.File, FileUtils.STATUS_DOWNLOADED);
 
-                                    WriteFileTask writeFile = new WriteFileTask(dir, message.File, fileContents);
-                                    writeFile.execute();
+//                                    WriteFileTask writeFile = new WriteFileTask(dir, message.File, fileContents);
+//                                    writeFile.execute();
                                     break;
                             }
                         }
@@ -86,9 +82,8 @@ public class FileConnection extends Thread {
     }
 
     public void sendFile(WebSocket conn) {
-        String relPath = file.replace(dir, "");
+        String relPath = file.replace(StorageManager.storageDir, "");
         Message message = new Message(Message.NEW, relPath, 0, "");
-        String x = gson.toJson(message);
-        conn.sendText(x);
+        conn.sendText(gson.toJson(message));
     }
 }
