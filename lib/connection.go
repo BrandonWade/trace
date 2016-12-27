@@ -66,6 +66,11 @@ func (c *Connection) Write(message *Message) {
 	c.Conn.WriteJSON(message)
 }
 
+// WriteBinary - writes a binary message to a Connection
+func (c *Connection) WriteBinary(data []byte) {
+	c.Conn.WriteMessage(websocket.BinaryMessage, data)
+}
+
 // Close - close the Connection
 func (c *Connection) Close() {
 	c.Conn.WriteMessage(websocket.CloseNormalClosure, []byte(""))

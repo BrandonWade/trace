@@ -2,7 +2,6 @@ package main
 
 import (
 	"bufio"
-	"encoding/base64"
 	"math"
 	"net/http"
 	"os"
@@ -122,10 +121,8 @@ func sendFile(c *gin.Context) {
 			break
 		}
 
-		// Encode the data segment and send it
-		body := base64.RawStdEncoding.EncodeToString(buff)
-		message := &lib.Message{Type: lib.Part, File: fileName, Length: len(body), Body: body}
-		conn.Write(message)
+		// Send the current file segment
+		conn.WriteBinary(buff)
 	}
 
 	// Send a done message

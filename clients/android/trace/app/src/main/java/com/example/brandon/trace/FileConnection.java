@@ -54,23 +54,24 @@ public class FileConnection extends Thread {
                                     FileUtils.setFileSize(message.File, message.Length);
                                     FileUtils.toggleFileProgress(message.File);
                                     break;
-                                case Message.PART:
-                                    FileUtils.setFileStatus(message.File, FileUtils.STATUS_DOWNLOADING);
-                                    FileUtils.updateFileProgress(message.File);
-
-                                    try {
-                                        fileContents.write(message.extractBody());
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
-                                    }
-                                    break;
                                 case Message.DONE:
                                     FileUtils.setFileStatus(message.File, FileUtils.STATUS_DOWNLOADED);
                                     conn.disconnect();
 
-                                    WriteFileTask writeFile = new WriteFileTask(StorageManager.storageDir, message.File, fileContents);
-                                    writeFile.execute();
+//                                    WriteFileTask writeFile = new WriteFileTask(StorageManager.storageDir, message.File, fileContents);
+//                                    writeFile.execute();
                                     break;
+                            }
+                        }
+
+                        public void onBinaryMessage(WebSocket websocket, byte[] binary) throws Exception {
+                            FileUtils.setFileStatus(file, FileUtils.STATUS_DOWNLOADING);
+                            FileUtils.updateFileProgress(file);
+
+                            try {
+                                fileContents.write(binary);
+                            } catch (IOException e) {
+                                e.printStackTrace();
                             }
                         }
 
