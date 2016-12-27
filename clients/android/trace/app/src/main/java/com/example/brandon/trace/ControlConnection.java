@@ -51,6 +51,7 @@ public class ControlConnection extends Thread {
                             switch (type) {
                                 case Message.LIST:
                                     newFiles.add(message.File);
+                                    FileUtils.addFile(message.File);
                                     break;
                                 case Message.DONE:
                                     FileDownloadManager fdm = new FileDownloadManager(newFiles);

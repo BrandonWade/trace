@@ -1,7 +1,5 @@
 package com.example.brandon.trace;
 
-import android.util.Log;
-
 import com.google.gson.Gson;
 import com.neovisionaries.ws.client.WebSocket;
 import com.neovisionaries.ws.client.WebSocketAdapter;
@@ -53,7 +51,7 @@ public class FileConnection extends Thread {
                             String type = message.Type;
                             switch (type) {
                                 case Message.NEW:
-                                    FileUtils.addFile(message.File, message.Length);
+                                    FileUtils.setFileSize(message.File, message.Length);
                                     FileUtils.toggleFileProgress(message.File);
                                     break;
                                 case Message.PART:

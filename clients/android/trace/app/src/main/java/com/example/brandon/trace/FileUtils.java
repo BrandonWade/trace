@@ -2,7 +2,6 @@ package com.example.brandon.trace;
 
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -11,7 +10,7 @@ import java.util.ArrayList;
  */
 public class FileUtils {
 
-    public static final String STATUS_NONE = "";
+    public static final String STATUS_WAITING = "Waiting";
     public static final String STATUS_DOWNLOADING = "Downloading";
     public static final String STATUS_DOWNLOADED = "Downloaded";
     public static final String STATUS_SAVING = "Saving";
@@ -32,10 +31,10 @@ public class FileUtils {
         return null;
     }
 
-    public static void addFile(final String fileName, final int fileSize) {
+    public static void addFile(final String fileName) {
         Runnable updateUI = new Runnable() {
             @Override public void run() {
-                FileListItem file = new FileListItem(fileName, fileSize, STATUS_NONE);
+                FileListItem file = new FileListItem(fileName, STATUS_WAITING);
                 fileList.add(file);
 
                 fileListAdapter.notifyDataSetChanged();
@@ -52,6 +51,22 @@ public class FileUtils {
 
                 if (file != null) {
                     file.status = status;
+                }
+
+                fileListAdapter.notifyDataSetChanged();
+            }
+        };
+
+        redrawHandler.post(updateUI);
+    }
+
+    public static void setFileSize(final String fileName, final int size) {
+        Runnable updateUI = new Runnable() {
+            @Override public void run() {
+                FileListItem file = findByName(fileName);
+
+                if (file != null) {
+                    file.size = size;
                 }
 
                 fileListAdapter.notifyDataSetChanged();
