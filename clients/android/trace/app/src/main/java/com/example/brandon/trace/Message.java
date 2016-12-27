@@ -7,9 +7,7 @@ import android.util.Base64;
  */
 public class Message {
     public static final String NEW = "new";
-    public static final String COUNT = "count";
     public static final String LIST = "list";
-    public static final String LIST_COMPLETE = "list_complete";
     public static final String PART = "part";
     public static final String DONE = "done";
 

@@ -81,9 +81,6 @@ func runServer(c *gin.Context) {
 
 	waitGroup.Add(len(newFiles))
 
-	countMessage := &lib.Message{Type: lib.Count, File: "", Length: len(newFiles), Body: ""}
-	conn.Write(countMessage)
-
 	// Send the list of new files to the client
 	for _, file := range newFiles {
 		message := &lib.Message{Type: lib.List, File: file.RelPath, Length: 1, Body: ""}
@@ -91,7 +88,7 @@ func runServer(c *gin.Context) {
 	}
 
 	// Indicate the end of the list of new files
-	message := &lib.Message{Type: lib.ListComplete, File: "", Length: -1, Body: ""}
+	message := &lib.Message{Type: lib.Done, File: "", Length: -1, Body: ""}
 	conn.Write(message)
 }
 

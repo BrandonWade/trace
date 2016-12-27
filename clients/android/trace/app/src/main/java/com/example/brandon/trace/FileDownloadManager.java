@@ -22,10 +22,10 @@ public class FileDownloadManager extends Thread {
 
     public void run() {
         int i = 0;
-        Semaphore lock = new Semaphore(ControlConnection.numConnections);
+        Semaphore lock = new Semaphore(StorageManager.numConnections);
 
-        SharedPreferences preferences = context.getSharedPreferences(Storage.PREFERENCES_FILE, Context.MODE_PRIVATE);
-        String address = preferences.getString(Storage.SERVER_ADDRESS_KEY, "");
+        SharedPreferences preferences = context.getSharedPreferences(StorageManager.PREFERENCES_FILE, Context.MODE_PRIVATE);
+        String address = preferences.getString(StorageManager.SERVER_ADDRESS_KEY, "");
 
         String route = address + "/file";
 
