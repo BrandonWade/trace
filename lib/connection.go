@@ -39,6 +39,11 @@ func (c *Connection) Open(context *gin.Context) {
 		log.Println(err)
 	}
 
+	conn.SetPingHandler(func(data string) error {
+		conn.WriteMessage(websocket.PongMessage, []byte{})
+		return nil
+	})
+
 	c.Conn = conn
 }
 
