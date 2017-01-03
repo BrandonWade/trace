@@ -51,7 +51,7 @@ public class FileConnection extends Thread {
                             String type = message.Type;
                             switch (type) {
                                 case Message.NEW:
-                                    FileUtils.setFileSize(message.File, message.Length);
+                                    FileUtils.setFileSize(message.File, (double)message.Length);
                                     FileUtils.toggleFileProgress(message.File);
                                     break;
                                 case Message.DONE:

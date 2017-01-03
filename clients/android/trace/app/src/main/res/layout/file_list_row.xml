@@ -1,14 +1,27 @@
-<LinearLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:weightSum="10">
+    android:layout_height="50dp">
 
     <LinearLayout
-        android:layout_width="0dp"
+        android:id="@+id/row_progress_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:weightSum="1.0">
+
+        <View
+            android:id="@+id/row_progress_complete"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:background="#CCE9F8" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/row_data_layout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_weight="5">
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/row_main_text"
@@ -16,7 +29,7 @@
             android:layout_height="wrap_content"
             android:textColor="#000000"
             android:textSize="16sp"
-            android:ellipsize="end"
+            android:ellipsize="middle"
             android:maxLines="1"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="15dp" />
@@ -34,16 +47,4 @@
 
     </LinearLayout>
 
-    <ProgressBar
-        style="@android:style/Widget.Holo.Light.ProgressBar.Horizontal"
-        android:id="@+id/row_progress"
-        android:layout_width="0dp"
-        android:layout_height="15dp"
-        android:progressTint="#0077ff"
-        android:progressBackgroundTint="#0077ff"
-        android:layout_marginTop="15dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="15dp"
-        android:layout_weight="5" />
-
-</LinearLayout>
+</FrameLayout>

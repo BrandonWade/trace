@@ -2,11 +2,13 @@ package com.example.brandon.trace;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ProgressBar;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -34,9 +36,9 @@ public class FileListItemAdapter extends ArrayAdapter<FileListItem> {
             holder = new FileListItemHolder();
             convertView = inflater.inflate(R.layout.file_list_row, null);
 
+            holder.progress = convertView.findViewById(R.id.row_progress_complete);
             holder.mainText = (TextView)convertView.findViewById(R.id.row_main_text);
             holder.subText = (TextView)convertView.findViewById(R.id.row_sub_text);
-            holder.progress = (ProgressBar)convertView.findViewById(R.id.row_progress);
 
             convertView.setTag(holder);
         } else {
@@ -47,22 +49,17 @@ public class FileListItemAdapter extends ArrayAdapter<FileListItem> {
         holder.mainText.setText(file.fileName);
         holder.subText.setText(file.status);
 
-        if (file.progress > -1) {
-            holder.progress.setVisibility(View.VISIBLE);
-            int progress = (int)(100 * ((double)file.progress / (double)file.size));
-            holder.progress.setProgress(progress);
-        }
-
-        if (!file.showProgress) {
-            holder.progress.setVisibility(View.INVISIBLE);
-        }
+        float progress = (float)(file.progress / file.size);
+        LinearLayout.LayoutParams progressCompleteParams = (LinearLayout.LayoutParams) holder.progress.getLayoutParams();
+        progressCompleteParams.weight = progress;
+        holder.progress.setLayoutParams(progressCompleteParams);
 
         return convertView;
     }
 
     private static class FileListItemHolder {
+        View progress;
         TextView mainText;
         TextView subText;
-        ProgressBar progress;
     }
 }

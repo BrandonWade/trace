@@ -11,7 +11,7 @@ import (
 )
 
 // BufferSize - read / write buffer size
-const BufferSize = 4096
+const BufferSize = 65536
 
 // Connection - used to read from a websocket
 type Connection struct {

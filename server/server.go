@@ -50,6 +50,7 @@ func runServer(c *gin.Context) {
 		"C:\\Users\\Brandon\\Music\\iTunes\\iTunes Library Genius.itdb",
 		"C:\\Users\\Brandon\\Music\\iTunes\\iTunes Library.itl",
 		"C:\\Users\\Brandon\\Music\\iTunes\\iTunes Music Library.xml",
+		".ini",
 	}
 
 	newFiles = []lib.File{}
