@@ -60,7 +60,7 @@ public class FileUtils {
         redrawHandler.post(updateUI);
     }
 
-    public static void setFileSize(final String fileName, final int size) {
+    public static void setFileSize(final String fileName, final double size) {
         Runnable updateUI = new Runnable() {
             @Override public void run() {
                 FileListItem file = findByName(fileName);
