@@ -51,6 +51,10 @@ func runServer(c *gin.Context) {
 		"C:\\Users\\Brandon\\Music\\iTunes\\iTunes Library.itl",
 		"C:\\Users\\Brandon\\Music\\iTunes\\iTunes Music Library.xml",
 		".ini",
+		"Folder.jpg",
+		"AlbumArt",
+		"Small.jpg",
+		"Large.jpg",
 	}
 
 	newFiles = []lib.File{}
