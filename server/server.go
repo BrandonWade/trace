@@ -3,17 +3,12 @@ package main
 import (
 	"bufio"
 	"math"
-	"net/http"
 	"os"
 	"strings"
-	"sync"
 
 	"github.com/BrandonWade/trace/lib"
 	"github.com/gin-gonic/gin"
 )
-
-// The number of goroutines to complete
-var waitGroup sync.WaitGroup
 
 // The list of new files to send to the client
 var newFiles []lib.File
@@ -21,17 +16,17 @@ var newFiles []lib.File
 // TODO: Use real dir
 var dir = "C:\\Users\\Brandon\\Music"
 
+var conn *lib.Connection
+
 func main() {
 	g := gin.Default()
-	g.GET("/", runServer)
+	g.GET("/", syncFiles)
 	g.GET("/file", sendFile)
-	g.GET("/ping", handlePing)
 	g.Run(":8080")
 }
 
-func runServer(c *gin.Context) {
-	conn := lib.NewConnection()
-	defer conn.Close()
+func syncFiles(c *gin.Context) {
+	conn = lib.NewConnection()
 
 	// Open the Connection
 	conn.Open(c)
@@ -57,44 +52,44 @@ func runServer(c *gin.Context) {
 		"Large.jpg",
 	}
 
-	newFiles = []lib.File{}
-	clientFiles := make(map[string]bool)
-	done := false
+	for {
+		newFiles = []lib.File{}
+		clientFiles := make(map[string]bool)
+		done := false
 
-	// Get a list of file names from the client
-	for !done {
-		message := conn.Read()
+		// Get a list of file names from the client
+		for !done {
+			message := conn.Read()
 
-		switch message.Type {
-		case lib.List:
-			relPath := strings.Replace(message.File, "/", "\\", -1)
-			clientFiles[relPath] = true
-		case lib.Done:
-			done = true
+			switch message.Type {
+			case lib.List:
+				relPath := strings.Replace(message.File, "/", "\\", -1)
+				clientFiles[relPath] = true
+			case lib.Done:
+				done = true
+			}
 		}
-	}
 
-	// Get a list of local files
-	localFiles := lib.Scan(dir, ignoreDirs)
+		// Get a list of local files
+		localFiles := lib.Scan(dir, ignoreDirs)
 
-	// Compare the local and client files to build a naive one-way diff
-	for file := range localFiles {
-		if !clientFiles[file] {
-			newFiles = append(newFiles, localFiles[file])
+		// Compare the local and client files to build a naive one-way diff
+		for file := range localFiles {
+			if !clientFiles[file] {
+				newFiles = append(newFiles, localFiles[file])
+			}
 		}
-	}
 
-	waitGroup.Add(len(newFiles))
+		// Send the list of new files to the client
+		for _, file := range newFiles {
+			message := &lib.Message{Type: lib.List, File: file.RelPath, Length: 1, Body: ""}
+			conn.Write(message)
+		}
 
-	// Send the list of new files to the client
-	for _, file := range newFiles {
-		message := &lib.Message{Type: lib.List, File: file.RelPath, Length: 1, Body: ""}
+		// Indicate the end of the list of new files
+		message := &lib.Message{Type: lib.Done, File: "", Length: -1, Body: ""}
 		conn.Write(message)
 	}
-
-	// Indicate the end of the list of new files
-	message := &lib.Message{Type: lib.Done, File: "", Length: -1, Body: ""}
-	conn.Write(message)
 }
 
 // SendFile - sends a file to the client
@@ -133,11 +128,4 @@ func sendFile(c *gin.Context) {
 	// Send a done message
 	message := &lib.Message{Type: lib.Done, File: fileName, Length: 0, Body: ""}
 	conn.Write(message)
-
-	// Indicate that this file has been sent
-	waitGroup.Done()
-}
-
-func handlePing(c *gin.Context) {
-	c.Data(http.StatusOK, gin.MIMEHTML, nil)
 }
