@@ -90,4 +90,8 @@ public class FileConnection extends Thread {
         Message message = new Message(Message.NEW, relPath, 0, "");
         conn.sendText(gson.toJson(message));
     }
+
+    public void disconnect() {
+        conn.disconnect();
+    }
 }

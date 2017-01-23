@@ -17,6 +17,8 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static MenuItem syncButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,9 +38,14 @@ public class MainActivity extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main, menu);
 
-        MenuItem syncButton = menu.findItem(R.id.action_sync);
-        ServerStatusCheck serverStatusCheck = new ServerStatusCheck(this, syncButton);
-        serverStatusCheck.run();
+        syncButton = menu.findItem(R.id.action_sync);
+        toggleSyncButton(ControlConnection.getInstance().isReachable());
+
+        ControlConnection controlConn = ControlConnection.getInstance();
+        if (controlConn.getState() == Thread.State.NEW) {
+            controlConn.setMainActivity(this);
+            controlConn.start();
+        }
 
         return true;
     }
@@ -71,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         } else {
+            syncFiles();
             return true;
         }
     }
@@ -113,5 +121,15 @@ public class MainActivity extends AppCompatActivity {
     public void showSettingsActivity() {
         Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
+    }
+
+    public void toggleSyncButton(final boolean enabled) {
+        this.runOnUiThread(new Runnable() {
+            public void run() {
+                int alpha = enabled ? 255 : 130;
+                syncButton.getIcon().setAlpha(alpha);
+                syncButton.setEnabled(enabled);
+            }
+        });
     }
 }

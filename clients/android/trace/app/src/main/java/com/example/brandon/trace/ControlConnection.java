@@ -1,5 +1,7 @@
 package com.example.brandon.trace;
 
+import android.app.Activity;
+
 import com.google.gson.Gson;
 import com.neovisionaries.ws.client.WebSocket;
 import com.neovisionaries.ws.client.WebSocketAdapter;
@@ -17,32 +19,48 @@ import java.util.Map;
  */
 public class ControlConnection extends Thread {
 
+    private MainActivity mainActivity;
+    private FileDownloadManager fdm;
     private List<String> files;
     private List<String> newFiles;
     private WebSocket conn;
     private Gson gson;
+    private boolean reachable;
 
-    public ControlConnection(List<String> files) {
-        this.files = files;
+    private static ControlConnection controlConn;
+
+    protected ControlConnection() {
+        this.reachable = false;
         this.newFiles = new ArrayList<>();
         this.gson = new Gson();
     }
 
-    public void run() {
+    public static ControlConnection getInstance() {
+        if (controlConn == null) {
+            controlConn = new ControlConnection();
+        }
 
+        return controlConn;
+    }
+
+    public void run() {
         try {
             conn = new WebSocketFactory()
                     .setConnectionTimeout(5000)
                     .createSocket("ws://" + StorageManager.serverAddress)
+                    .setPingInterval(1000)
                     .addListener(new WebSocketAdapter() {
 
                         public void onConnected(WebSocket websocket, Map<String, List<String>> headers) throws Exception {
                             // TODO: Send toast notification indicating connection
-                            sendFileList(conn);
+                            reachable = true;
+                            mainActivity.toggleSyncButton(reachable);
                         }
 
                         public void onDisconnected(WebSocket websocket, WebSocketFrame serverCloseFrame, WebSocketFrame clientCloseFrame, boolean closedByServer) throws Exception {
                             // TODO: Send toast notification indicating disconnection
+                            reachable = false;
+                            mainActivity.toggleSyncButton(reachable);
                         }
 
                         public void onTextMessage(WebSocket websocket, String m) {
@@ -54,7 +72,7 @@ public class ControlConnection extends Thread {
                                     FileUtils.addFile(message.File);
                                     break;
                                 case Message.DONE:
-                                    FileDownloadManager fdm = new FileDownloadManager(newFiles);
+                                    fdm = new FileDownloadManager(newFiles);
                                     fdm.start();
                                     break;
                             }
@@ -66,14 +84,35 @@ public class ControlConnection extends Thread {
         }
     }
 
-    private void sendFileList(WebSocket conn) {
-        for (String file : files) {
-            String relPath = file.replace(StorageManager.storageDir, "");
-            Message message = new Message(Message.LIST, relPath, 0, "");
-            conn.sendText(gson.toJson(message));
-        }
+    public void setMainActivity(MainActivity mainActivity) {
+        this.mainActivity = mainActivity;
+    }
 
-        Message doneMessage = new Message(Message.DONE, "", 0, "");
-        conn.sendText(gson.toJson(doneMessage));
+    public void setFileList(List<String> files) {
+        this.files = files;
+    }
+
+    public boolean isReachable() {
+        return reachable;
+    }
+
+    public void sendFileList() {
+        if (reachable) {
+            if (fdm != null) {
+                fdm.interrupt();
+            }
+
+            newFiles.clear();
+            FileUtils.clearFiles();
+
+            for (String file : files) {
+                String relPath = file.replace(StorageManager.storageDir, "");
+                Message message = new Message(Message.LIST, relPath, 0, "");
+                conn.sendText(gson.toJson(message));
+            }
+
+            Message doneMessage = new Message(Message.DONE, "", 0, "");
+            conn.sendText(gson.toJson(doneMessage));
+        }
     }
 }

@@ -38,7 +38,8 @@ public class ScanFilesTask extends AsyncTask<Void, Void, List<File>> {
             paths.add(file.getAbsolutePath());
         }
 
-        ControlConnection conn = new ControlConnection(paths);
-        conn.start();
+        ControlConnection controlConn = ControlConnection.getInstance();
+        controlConn.setFileList(paths);
+        controlConn.sendFileList();
     }
 }

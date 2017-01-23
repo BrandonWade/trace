@@ -107,4 +107,16 @@ public class FileUtils {
 
         redrawHandler.post(updateUI);
     }
+
+    public static void clearFiles() {
+        Runnable updateUI = new Runnable() {
+            @Override public void run() {
+                fileList.clear();
+
+                fileListAdapter.notifyDataSetChanged();
+            }
+        };
+
+        redrawHandler.post(updateUI);
+    }
 }
