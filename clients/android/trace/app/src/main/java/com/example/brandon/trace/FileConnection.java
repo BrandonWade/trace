@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.concurrent.Semaphore;
 
 /**
- * Contains a WebSocket connection running on a separate thread uses to receive files from the server.
+ * Contains a WebSocket connection running on a separate thread used to receive files from the server.
  */
 public class FileConnection extends Thread {
 

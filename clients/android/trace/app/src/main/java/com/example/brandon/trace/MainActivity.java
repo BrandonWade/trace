@@ -27,6 +27,9 @@ public class MainActivity extends AppCompatActivity {
         StorageManager storage = StorageManager.getManager(getApplicationContext());
         storage.retrieve();
 
+        ControlConnectionManager manager = new ControlConnectionManager();
+        manager.start();
+
         // Used to retrieve an external dir
 //        File[] storageDirs = getApplicationContext().getExternalMediaDirs();
 //        File dir = storageDirs[1];
