@@ -1,6 +1,6 @@
 package com.example.brandon.trace;
 
-import android.app.Activity;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.neovisionaries.ws.client.WebSocket;
@@ -43,7 +43,7 @@ public class ControlConnection extends Thread {
         return controlConn;
     }
 
-    public void run() {
+    public void connect() {
         try {
             conn = new WebSocketFactory()
                     .setConnectionTimeout(5000)
@@ -82,6 +82,10 @@ public class ControlConnection extends Thread {
         } catch (IOException | WebSocketException e) {
             e.printStackTrace();
         }
+    }
+
+    public void run() {
+        connect();
     }
 
     public void setMainActivity(MainActivity mainActivity) {
