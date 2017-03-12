@@ -1,2 +1,4 @@
-server/server.exe
-server/server.exe~
+server/src/server.exe
+server/src/server.exe~
+server/node_modules
+server/npm-debug.log
