@@ -1,10 +1,10 @@
 const path = require('path');
 
 module.exports = {
-  entry: "./ui/index.js",
+  entry: "./app/index.js",
   output: {
     filename: "app.js",
-    path: path.resolve(__dirname, "ui/app")
+    path: path.resolve(__dirname, "app/dist")
   },
   module: {
     loaders: [
