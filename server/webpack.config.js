@@ -1,10 +1,14 @@
 const path = require('path');
+const webpack = require('webpack');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
-  entry: "./app/index.js",
+  entry: {
+      app: './src/app/app.js',
+  },
   output: {
-    filename: "app.js",
-    path: path.resolve(__dirname, "app/dist")
+    filename: '[name].js',
+    path: path.resolve(__dirname, './src/app/dist'),
   },
   module: {
     loaders: [
@@ -12,10 +16,15 @@ module.exports = {
         test: /\.js$/,
         exclude: /(node_modules)/,
         loader: 'babel-loader',
-        query: {
-          presets: ['env']
-        }
-      }
-    ]
-  }
+      },
+      {
+        test: /\.css$/,
+        loader: ExtractTextPlugin.extract({ fallback: 'style-loader', use: ['css-loader?importLoaders=1', 'postcss-loader'] }),
+      },
+    ],
+  },
+  plugins: [
+    new webpack.NoEmitOnErrorsPlugin(),
+    new ExtractTextPlugin('[name].css')
+  ],
 };

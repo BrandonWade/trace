@@ -2,3 +2,4 @@ server/src/server.exe
 server/src/server.exe~
 server/node_modules
 server/npm-debug.log
+server/src/app/dist/
