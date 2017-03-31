@@ -4,8 +4,8 @@ import MenuItem from './menuitem';
 
 const Menu = {
   oninit(vn) {
-    this.title = vn.attrs.title;
-    this.items = vn.attrs.items;
+    this.title = vn.attrs.title || '';
+    this.items = vn.attrs.items || [];
   },
 
   view() {
