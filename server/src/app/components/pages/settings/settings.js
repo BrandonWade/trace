@@ -1,11 +1,14 @@
 import m from 'mithril';
 import stream from 'mithril/stream';
+import SettingsVM from '../../../models/pages/settings';
 import TextBox from '../../forms/textbox/textbox';
 import Button from '../../forms/button/button';
 
+const settingsVM = new SettingsVM();
+
 const Settings = {
-  oninit(vn) {
-    this.syncDir = stream(localStorage.getItem('trace.sync.dir') || '');
+  oninit() {
+    this.vm = settingsVM;
   },
 
   view() {
@@ -14,11 +17,11 @@ const Settings = {
       m(TextBox, {
         description: 'Select a directory to use for syncing files:',
         value: this.syncDir,
-        onchange: e => this.syncDir(e.target.value),
+        onchange: e => this.vm.syncDir(e.target.value),
       }),
       m(Button, {
         value: 'Set',
-        onclick: () => localStorage.setItem('trace.sync.dir', this.syncDir),
+        onclick: () => this.vm.save(),
       }),
     ]);
   },
