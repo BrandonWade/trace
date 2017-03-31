@@ -2,7 +2,7 @@ import m from 'mithril';
 
 const Button = {
   oninit(vn) {
-    this.value = vn.attrs.value || '';
+    this.value = vn.attrs.value;
     this.onclick = vn.attrs.onclick;
   },
 

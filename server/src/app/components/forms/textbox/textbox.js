@@ -2,8 +2,8 @@ import m from 'mithril';
 
 const TextBox = {
   oninit(vn) {
-    this.description = vn.attrs.description || '';
-    this.value = vn.attrs.value || '';
+    this.description = vn.attrs.description;
+    this.value = vn.attrs.value;
     this.onchange = vn.attrs.onchange;
   },
 

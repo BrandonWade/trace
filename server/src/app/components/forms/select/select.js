@@ -2,7 +2,7 @@ import m from 'mithril';
 
 const Select = {
   oninit(vn) {
-    this.description = vn.attrs.description || '';
+    this.description = vn.attrs.description;
     this.options = vn.attrs.options || [];
     this.size = Math.max(this.options.length, 10);
     this.onchange = vn.attrs.onchange;

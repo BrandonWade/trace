@@ -5,7 +5,7 @@
   "main": "webpack.config.js",
   "scripts": {
     "build": ".\\node_modules\\.bin\\webpack",
-    "dev": "webpack-dev-server --content-base .\\src\\app\\dist"
+    "dev": "webpack-dev-server --content-base .\\src\\app\\dist --port=8081"
   },
   "keywords": [],
   "author": "",
