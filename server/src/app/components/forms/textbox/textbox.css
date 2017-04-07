@@ -1,0 +1,12 @@
+.TextBox-Container {
+  display: inline-block;
+  margin-top: var(--group-spacing);
+}
+
+.TextBox-Label {
+  display: block;
+}
+
+.TextBox {
+  width: 100%;
+}

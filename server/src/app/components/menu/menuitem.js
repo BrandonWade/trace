@@ -8,7 +8,7 @@ const MenuItem = {
 
   view() {
     return m('li',
-      m('a.MenuItemLink', { href: this.route, oncreate: m.route.link }, this.text)
+      m('a.MenuItem-Link', { href: this.route, oncreate: m.route.link }, this.text)
     );
   },
 };

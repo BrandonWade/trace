@@ -1,6 +1,7 @@
 import m from 'mithril';
 import prop from 'mithril/stream';
 import MenuItem from './menuitem';
+import './menu.css';
 
 const Menu = {
   oninit(vn) {
@@ -10,8 +11,8 @@ const Menu = {
 
   view() {
     return m('.Menu', [
-      m('h1.MenuHeading', this.title),
-      m('ul.MenuItemList', [
+      m('h1.Menu-Heading', this.title),
+      m('ul.Menu-ItemList', [
         this.items.map(item => {
           return m(MenuItem, { text: item.text, route: item.route });
         }),

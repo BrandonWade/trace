@@ -1,4 +1,5 @@
 import m from 'mithril';
+import './textbox.css';
 
 const TextBox = {
   oninit(vn) {
@@ -8,8 +9,8 @@ const TextBox = {
   },
 
   view() {
-    return m('.TextBoxContainer', [
-      m('label.TextBoxLabel', m.trust(this.description)),
+    return m('.TextBox-Container', [
+      m('label.TextBox-Label', m.trust(this.description)),
       m('input[type=text].TextBox', {
         value: this.value,
         onchange: this.onchange,

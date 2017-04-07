@@ -8,6 +8,10 @@ class Settings {
 
   save() {
     localStorage.setItem('trace.sync.dir', this.syncDir);
+    fetch('/update/sync', {
+      method: 'POST',
+      body: JSON.stringify(this.syncDir),
+    });
   }
 };
 
