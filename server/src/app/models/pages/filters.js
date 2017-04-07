@@ -21,7 +21,12 @@ class Filters {
   }
 
   save() {
-    localStorage.setItem('trace.filters.ignore', JSON.stringify(this.filters()));
+    const filters = JSON.stringify(this.filters());
+    localStorage.setItem('trace.filters.ignore', filters);
+    fetch('/update/filters', {
+      method: 'POST',
+      body: filters,
+    });
   }
 };
 

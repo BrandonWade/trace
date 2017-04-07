@@ -28,7 +28,7 @@ const Filter = {
         options: this.vm.filters(),
         onchange: e => this.vm.selectedFilterIndex(e.target.selectedIndex),
       }),
-      
+
       m(Button, {
         value: 'Remove',
         onclick: () => this.vm.remove(),

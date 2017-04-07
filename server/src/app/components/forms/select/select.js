@@ -1,4 +1,5 @@
 import m from 'mithril';
+import './select.css';
 
 const Select = {
   oninit(vn) {
@@ -9,8 +10,8 @@ const Select = {
   },
 
   view() {
-    return m('.SelectContainer', [
-      m('label.SelectLabel', m.trust(this.description)),
+    return m('.Select-Container', [
+      m('label.Select-Label', m.trust(this.description)),
       m('select.Select', {
         size: this.size,
         multiple: this.multiple,

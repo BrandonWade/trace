@@ -11,57 +11,12 @@ html, body {
   margin: 0;
 }
 
-.Menu {
-  width: 20%;
-  height: 100%;
-  float: left;
-}
-
-.MenuHeading {
-  margin: 0;
-}
-
-.MenuItemList {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.MenuItemLink {
-  padding: 1rem;
-  display: block;
-  text-decoration: none;
-  color: #000000;
-  outline: 0;
-}
-
 .Page {
   height: 100%;
   width: 80%;
   float: right;
 }
 
-.PageHeading {
+.Page-Heading {
   margin: 0;
-}
-
-.TextBoxContainer {
-  display: inline-block;
-  margin-top: var(--group-spacing);
-}
-
-.TextBoxLabel {
-  display: block;
-}
-
-.TextBox {
-  width: 100%;
-}
-
-.SelectContainer {
-  margin-top: var(--group-spacing);
-}
-
-.SelectLabel {
-  display: block;
 }

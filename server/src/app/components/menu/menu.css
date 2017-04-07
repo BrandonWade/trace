@@ -1,0 +1,23 @@
+.Menu {
+  width: 20%;
+  height: 100%;
+  float: left;
+}
+
+.Menu-Heading {
+  margin: 0;
+}
+
+.Menu-ItemList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.MenuItem-Link {
+  padding: 1rem;
+  display: block;
+  text-decoration: none;
+  color: #000000;
+  outline: 0;
+}

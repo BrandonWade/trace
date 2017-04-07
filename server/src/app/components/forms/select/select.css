@@ -1,0 +1,7 @@
+.Select-Container {
+  margin-top: var(--group-spacing);
+}
+
+.Select-Label {
+  display: block;
+}
