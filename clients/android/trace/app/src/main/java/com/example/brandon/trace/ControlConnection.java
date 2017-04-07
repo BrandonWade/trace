@@ -47,7 +47,7 @@ public class ControlConnection extends Thread {
         try {
             conn = new WebSocketFactory()
                     .setConnectionTimeout(5000)
-                    .createSocket("ws://" + StorageManager.serverAddress)
+                    .createSocket("ws://" + StorageManager.serverAddress + "/sync")
                     .setPingInterval(1000)
                     .addListener(new WebSocketAdapter() {
 
