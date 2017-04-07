@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"math"
+	"net/http"
 	"os"
 	"strings"
 
@@ -20,9 +21,20 @@ var conn *lib.Connection
 
 func main() {
 	g := gin.Default()
-	g.GET("/", syncFiles)
+
+	g.LoadHTMLFiles("./app/app.html")
+	g.Static("dist/", "./app/dist")
+
+	g.GET("/", index)
+	g.GET("/sync", syncFiles)
 	g.GET("/file", sendFile)
+	g.POST("/update/sync", updateSyncDir)
+	g.POST("/update/filters", updateFilterList)
 	g.Run(":8080")
+}
+
+func index(c *gin.Context) {
+	c.HTML(http.StatusOK, "app.html", nil)
 }
 
 func syncFiles(c *gin.Context) {
@@ -128,4 +140,10 @@ func sendFile(c *gin.Context) {
 	// Send a done message
 	message := &lib.Message{Type: lib.Done, File: fileName, Length: 0, Body: ""}
 	conn.Write(message)
+}
+
+func updateSyncDir(c *gin.Context) {
+}
+
+func updateFilterList(c *gin.Context) {
 }
