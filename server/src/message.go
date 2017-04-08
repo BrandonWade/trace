@@ -1,4 +1,4 @@
-package lib
+package main
 
 const (
 	// New - used when sending a new file
@@ -11,7 +11,7 @@ const (
 	Done = "done"
 )
 
-// Message - Used to contain information sent over the wire
+// Message - Used to contain information sent over a Connection
 type Message struct {
 	Type   string
 	File   string
