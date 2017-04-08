@@ -2,22 +2,28 @@ package main
 
 import (
 	"bufio"
+	"io/ioutil"
+	"log"
 	"math"
 	"net/http"
 	"os"
 	"strings"
+	"sync"
 
-	"github.com/BrandonWade/trace/lib"
 	"github.com/gin-gonic/gin"
 )
 
 // The list of new files to send to the client
-var newFiles []lib.File
+var newFiles []File
 
-// TODO: Use real dir
-var dir = "C:\\Users\\Brandon\\Music"
+var dir string
+var filters = []string{}
 
-var conn *lib.Connection
+var syncMutex sync.Mutex
+var dirMutex sync.Mutex
+var filterMutex sync.Mutex
+
+var conn *Connection
 
 func main() {
 	g := gin.Default()
@@ -28,44 +34,26 @@ func main() {
 	g.GET("/", index)
 	g.GET("/sync", syncFiles)
 	g.GET("/file", sendFile)
-	g.POST("/update/sync", updateSyncDir)
+	g.POST("/update/dir", updateSyncDir)
 	g.POST("/update/filters", updateFilterList)
 	g.Run(":8080")
 }
 
+// index - Returns the index page to the client to display
 func index(c *gin.Context) {
 	c.HTML(http.StatusOK, "app.html", nil)
 }
 
+// syncFiles - Determine new files on the server
 func syncFiles(c *gin.Context) {
-	conn = lib.NewConnection()
+	conn = NewConnection()
 
 	// Open the Connection
 	conn.Open(c)
 
-	// TODO: Use real dirs
-	ignoreDirs := []string{
-		"C:\\Users\\Brandon\\Music\\AlbumArt_",
-		"C:\\Users\\Brandon\\Music\\Playlists",
-		"C:\\Users\\Brandon\\Music\\iTunes\\Album Artwork",
-		"C:\\Users\\Brandon\\Music\\iTunes\\iTunes Media\\Automatically Add to iTunes",
-		"C:\\Users\\Brandon\\Music\\iTunes\\iTunes Media\\Mobile Applications",
-		"C:\\Users\\Brandon\\Music\\iTunes\\Previous iTunes Libraries",
-		"C:\\Users\\Brandon\\Music\\iTunes\\Ringtones",
-		"C:\\Users\\Brandon\\Music\\iTunes\\sentinel",
-		"C:\\Users\\Brandon\\Music\\iTunes\\iTunes Library Extras.itdb",
-		"C:\\Users\\Brandon\\Music\\iTunes\\iTunes Library Genius.itdb",
-		"C:\\Users\\Brandon\\Music\\iTunes\\iTunes Library.itl",
-		"C:\\Users\\Brandon\\Music\\iTunes\\iTunes Music Library.xml",
-		".ini",
-		"Folder.jpg",
-		"AlbumArt",
-		"Small.jpg",
-		"Large.jpg",
-	}
-
 	for {
-		newFiles = []lib.File{}
+		syncMutex.Lock()
+		newFiles = []File{}
 		clientFiles := make(map[string]bool)
 		done := false
 
@@ -74,16 +62,16 @@ func syncFiles(c *gin.Context) {
 			message := conn.Read()
 
 			switch message.Type {
-			case lib.List:
+			case List:
 				relPath := strings.Replace(message.File, "/", "\\", -1)
 				clientFiles[relPath] = true
-			case lib.Done:
+			case Done:
 				done = true
 			}
 		}
 
 		// Get a list of local files
-		localFiles := lib.Scan(dir, ignoreDirs)
+		localFiles := Scan(dir, filters)
 
 		// Compare the local and client files to build a naive one-way diff
 		for file := range localFiles {
@@ -94,19 +82,19 @@ func syncFiles(c *gin.Context) {
 
 		// Send the list of new files to the client
 		for _, file := range newFiles {
-			message := &lib.Message{Type: lib.List, File: file.RelPath, Length: 1, Body: ""}
+			message := &Message{Type: List, File: file.RelPath, Length: 1, Body: ""}
 			conn.Write(message)
 		}
 
 		// Indicate the end of the list of new files
-		message := &lib.Message{Type: lib.Done, File: "", Length: -1, Body: ""}
-		conn.Write(message)
+		conn.WriteDone()
+		syncMutex.Unlock()
 	}
 }
 
-// SendFile - sends a file to the client
+// sendFile - sends a file to the client
 func sendFile(c *gin.Context) {
-	conn := lib.NewConnection()
+	conn := NewConnection()
 	defer conn.Close()
 
 	conn.Open(c)
@@ -119,15 +107,15 @@ func sendFile(c *gin.Context) {
 	// Notify the client of the new file
 	fileStat, _ := filePtr.Stat()
 	fileSize := fileStat.Size()
-	numParts := math.Ceil(float64(fileSize) / float64(lib.BufferSize))
+	numParts := math.Ceil(float64(fileSize) / float64(BufferSize))
 
-	newMessage := &lib.Message{Type: lib.New, File: fileName, Length: int(numParts), Body: ""}
+	newMessage := &Message{Type: New, File: fileName, Length: int(numParts), Body: ""}
 	conn.Write(newMessage)
 
 	buffer := bufio.NewReader(filePtr)
 
 	for {
-		buff := make([]byte, lib.BufferSize)
+		buff := make([]byte, BufferSize)
 		_, err := buffer.Read(buff)
 		if err != nil {
 			break
@@ -138,12 +126,36 @@ func sendFile(c *gin.Context) {
 	}
 
 	// Send a done message
-	message := &lib.Message{Type: lib.Done, File: fileName, Length: 0, Body: ""}
-	conn.Write(message)
+	conn.WriteDone()
 }
 
+// updateSyncDir - sets the sync directory to the directory received from the client
 func updateSyncDir(c *gin.Context) {
+	body := c.Request.Body
+	newDir, err := ioutil.ReadAll(body)
+	if err != nil {
+		log.Println("Failed to update sync directory.")
+		log.Println(err)
+		return
+	}
+
+	syncMutex.Lock()
+	dir = string(newDir[:])
+	syncMutex.Unlock()
 }
 
+// updateFilterList - sets the filter list to the list received from the client
 func updateFilterList(c *gin.Context) {
+	// body := c.Request.Body
+	// newFilters, err := ioutil.ReadAll(body)
+	//
+	// if err != nil {
+	// 	log.Println("Failed to update filter list.")
+	// 	log.Println(err)
+	// 	return
+	// }
+	//
+	// filterMutex.Lock()
+	// filters = newFilters
+	// filterMutex.Unlock()
 }

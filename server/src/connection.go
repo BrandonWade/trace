@@ -1,4 +1,4 @@
-package lib
+package main
 
 import (
 	"fmt"
@@ -74,6 +74,11 @@ func (c *Connection) Write(message *Message) {
 // WriteBinary - writes a binary message to a Connection
 func (c *Connection) WriteBinary(data []byte) {
 	c.Conn.WriteMessage(websocket.BinaryMessage, data)
+}
+
+// WriteDone - writes a done message to a Connection
+func (c *Connection) WriteDone() {
+	c.Conn.WriteJSON(Message{Type: Done, File: "", Length: 0, Body: ""})
 }
 
 // Close - close the Connection

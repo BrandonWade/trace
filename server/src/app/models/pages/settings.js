@@ -4,11 +4,16 @@ class Settings {
   constructor() {
     const syncDir = localStorage.getItem('trace.sync.dir') || '';
     this.syncDir = stream(syncDir);
+    updateServer();
   }
 
   save() {
     localStorage.setItem('trace.sync.dir', this.syncDir);
-    fetch('/update/sync', {
+    updateServer();
+  }
+
+  updateServer() {
+    fetch('/update/dir', {
       method: 'POST',
       body: JSON.stringify(this.syncDir),
     });

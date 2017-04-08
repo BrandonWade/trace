@@ -1,4 +1,4 @@
-package lib
+package main
 
 import (
 	"os"
@@ -16,11 +16,11 @@ type File struct {
 }
 
 // Scan - Walk a directory and add all files to a map
-func Scan(dir string, ignoreDirs []string) map[string]File {
+func Scan(dir string, filters []string) map[string]File {
 	fileMap := make(map[string]File)
 
 	filepath.Walk(dir, func(path string, file os.FileInfo, err error) error {
-		if !Contains(path, ignoreDirs) {
+		if !Contains(path, filters) {
 			if !file.IsDir() {
 				extension := ""
 				dotPos := strings.LastIndex(file.Name(), ".")

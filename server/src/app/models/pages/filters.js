@@ -2,8 +2,10 @@ import stream from 'mithril/stream';
 
 class Filters {
   constructor() {
-    const filters = JSON.parse(localStorage.getItem('trace.filters.ignore')) || [];
-    this.filters = stream(filters);
+    const filters = localStorage.getItem('trace.filters.ignore') || [];
+    updateServer(filters);
+
+    this.filters = stream(JSON.parse(filters));
     this.newFilter = stream();
     this.selectedFilterIndex = stream();
   }
@@ -23,6 +25,10 @@ class Filters {
   save() {
     const filters = JSON.stringify(this.filters());
     localStorage.setItem('trace.filters.ignore', filters);
+    updateServer(filters)
+  }
+
+  updateServer(filters) {
     fetch('/update/filters', {
       method: 'POST',
       body: filters,
