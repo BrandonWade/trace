@@ -4,18 +4,24 @@ class Settings {
   constructor() {
     const syncDir = localStorage.getItem('trace.sync.dir') || '';
     this.syncDir = stream(syncDir);
-    updateServer();
+    this.updateServer();
   }
 
   save() {
     localStorage.setItem('trace.sync.dir', this.syncDir);
-    updateServer();
+    this.updateServer();
   }
 
   updateServer() {
+    const dir = { dir: this.syncDir };
+    const headers = new Headers({
+      'Content-Type' : 'application/json',
+    });
+
     fetch('/update/dir', {
       method: 'POST',
-      body: JSON.stringify(this.syncDir),
+      headers: headers,
+      body: JSON.stringify(dir),
     });
   }
 };

@@ -18,3 +18,13 @@ type Message struct {
 	Length int
 	Body   string
 }
+
+// SyncDir - Contains a directory sent to the server
+type SyncDir struct {
+	Dir string `json:"dir"`
+}
+
+// FilterList - Contains a list of filters sent to the server
+type FilterList struct {
+	Filters []string `json:"filters"`
+}

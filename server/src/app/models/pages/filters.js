@@ -3,11 +3,10 @@ import stream from 'mithril/stream';
 class Filters {
   constructor() {
     const filters = localStorage.getItem('trace.filters.ignore') || [];
-    updateServer(filters);
-
     this.filters = stream(JSON.parse(filters));
     this.newFilter = stream();
     this.selectedFilterIndex = stream();
+    this.updateServer();
   }
 
   add() {
@@ -25,13 +24,19 @@ class Filters {
   save() {
     const filters = JSON.stringify(this.filters());
     localStorage.setItem('trace.filters.ignore', filters);
-    updateServer(filters)
+    this.updateServer();
   }
 
-  updateServer(filters) {
+  updateServer() {
+    const filters = { filters: this.filters };
+    const headers = new Headers({
+      'Content-Type' : 'application/json',
+    });
+
     fetch('/update/filters', {
       method: 'POST',
-      body: filters,
+      headers: headers,
+      body: JSON.stringify(filters),
     });
   }
 };

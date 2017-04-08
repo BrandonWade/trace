@@ -2,7 +2,6 @@ package main
 
 import (
 	"bufio"
-	"io/ioutil"
 	"log"
 	"math"
 	"net/http"
@@ -53,6 +52,8 @@ func syncFiles(c *gin.Context) {
 
 	for {
 		syncMutex.Lock()
+		dirMutex.Lock()
+		filterMutex.Lock()
 		newFiles = []File{}
 		clientFiles := make(map[string]bool)
 		done := false
@@ -88,12 +89,15 @@ func syncFiles(c *gin.Context) {
 
 		// Indicate the end of the list of new files
 		conn.WriteDone()
+		filterMutex.Lock()
+		dirMutex.Lock()
 		syncMutex.Unlock()
 	}
 }
 
 // sendFile - sends a file to the client
 func sendFile(c *gin.Context) {
+	dirMutex.Lock()
 	conn := NewConnection()
 	defer conn.Close()
 
@@ -127,35 +131,35 @@ func sendFile(c *gin.Context) {
 
 	// Send a done message
 	conn.WriteDone()
+	dirMutex.Unlock()
 }
 
 // updateSyncDir - sets the sync directory to the directory received from the client
 func updateSyncDir(c *gin.Context) {
-	body := c.Request.Body
-	newDir, err := ioutil.ReadAll(body)
+	newDir := &SyncDir{}
+	err := c.Bind(newDir)
 	if err != nil {
-		log.Println("Failed to update sync directory.")
+		log.Println("Failed to bind sync directory.")
 		log.Println(err)
 		return
 	}
 
 	syncMutex.Lock()
-	dir = string(newDir[:])
+	dir = newDir.Dir
 	syncMutex.Unlock()
 }
 
 // updateFilterList - sets the filter list to the list received from the client
 func updateFilterList(c *gin.Context) {
-	// body := c.Request.Body
-	// newFilters, err := ioutil.ReadAll(body)
-	//
-	// if err != nil {
-	// 	log.Println("Failed to update filter list.")
-	// 	log.Println(err)
-	// 	return
-	// }
-	//
-	// filterMutex.Lock()
-	// filters = newFilters
-	// filterMutex.Unlock()
+	newFilters := &FilterList{}
+	err := c.Bind(newFilters)
+	if err != nil {
+		log.Println("Failed to update filter list.")
+		log.Println(err)
+		return
+	}
+
+	filterMutex.Lock()
+	filters = newFilters.Filters
+	filterMutex.Unlock()
 }
