@@ -21,7 +21,7 @@ class Settings {
     fetch('/update/dir', {
       method: 'POST',
       headers: headers,
-      body: JSON.stringify(dir),
+      body: dir,
     });
   }
 };
