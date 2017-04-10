@@ -18,7 +18,6 @@ var newFiles []File
 var dir string
 var filters = []string{}
 
-var syncMutex sync.Mutex
 var dirMutex sync.Mutex
 var filterMutex sync.Mutex
 
@@ -51,9 +50,6 @@ func syncFiles(c *gin.Context) {
 	conn.Open(c)
 
 	for {
-		syncMutex.Lock()
-		dirMutex.Lock()
-		filterMutex.Lock()
 		newFiles = []File{}
 		clientFiles := make(map[string]bool)
 		done := false
@@ -89,15 +85,11 @@ func syncFiles(c *gin.Context) {
 
 		// Indicate the end of the list of new files
 		conn.WriteDone()
-		filterMutex.Lock()
-		dirMutex.Lock()
-		syncMutex.Unlock()
 	}
 }
 
 // sendFile - sends a file to the client
 func sendFile(c *gin.Context) {
-	dirMutex.Lock()
 	conn := NewConnection()
 	defer conn.Close()
 
@@ -131,7 +123,6 @@ func sendFile(c *gin.Context) {
 
 	// Send a done message
 	conn.WriteDone()
-	dirMutex.Unlock()
 }
 
 // updateSyncDir - sets the sync directory to the directory received from the client
@@ -144,9 +135,11 @@ func updateSyncDir(c *gin.Context) {
 		return
 	}
 
-	syncMutex.Lock()
+	newDir.Dir = strings.Replace(newDir.Dir, "\\\\", "\\", -1)
+
+	dirMutex.Lock()
 	dir = newDir.Dir
-	syncMutex.Unlock()
+	dirMutex.Unlock()
 }
 
 // updateFilterList - sets the filter list to the list received from the client
