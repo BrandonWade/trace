@@ -135,8 +135,6 @@ func updateSyncDir(c *gin.Context) {
 		return
 	}
 
-	// newDir.Dir = strings.Replace(newDir.Dir, "\\\\", "\\", -1)
-
 	dirMutex.Lock()
 	dir = newDir.Dir
 	dirMutex.Unlock()
