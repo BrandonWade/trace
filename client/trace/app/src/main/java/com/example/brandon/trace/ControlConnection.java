@@ -1,7 +1,5 @@
 package com.example.brandon.trace;
 
-import android.util.Log;
-
 import com.google.gson.Gson;
 import com.neovisionaries.ws.client.WebSocket;
 import com.neovisionaries.ws.client.WebSocketAdapter;
