@@ -1,9 +1,6 @@
-import stream from 'mithril/stream';
-
 class Settings {
   constructor() {
-    const syncDir = localStorage.getItem('trace.sync.dir') || '';
-    this.syncDir = stream(syncDir);
+    this.syncDir = localStorage.getItem('trace.sync.dir') || '';
     this.updateServer();
   }
 
@@ -21,7 +18,7 @@ class Settings {
     fetch('/update/dir', {
       method: 'POST',
       headers: headers,
-      body: dir,
+      body: JSON.stringify(dir),
     });
   }
 };
