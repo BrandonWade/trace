@@ -16,8 +16,8 @@ const Settings = {
       m('h1.PageHeading', 'Settings'),
       m(TextBox, {
         description: 'Select a directory to use for syncing files:',
-        value: this.syncDir,
-        onchange: e => this.vm.syncDir(e.target.value),
+        value: this.vm.syncDir,
+        onchange: e => this.vm.syncDir = e.target.value,
       }),
       m(Button, {
         value: 'Set',

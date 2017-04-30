@@ -1,5 +1,4 @@
 import m from 'mithril';
-import stream from 'mithril/stream';
 import FiltersVM from '../../../models/pages/filters';
 import TextBox from '../../forms/textbox/textbox';
 import Button from '../../forms/button/button';
@@ -17,7 +16,7 @@ const Filter = {
       m('h1.PageHeading', 'Filters'),
       m(TextBox, {
         description: 'New filter:',
-        onchange: e => this.vm.newFilter(e.target.value),
+        onchange: e => this.vm.newFilter = e.target.value,
       }),
       m(Button, {
         value: 'Add',
@@ -25,8 +24,8 @@ const Filter = {
       }),
       m(Select, {
         description: 'Existing filters:',
-        options: this.vm.filters(),
-        onchange: e => this.vm.selectedFilterIndex(e.target.selectedIndex),
+        options: this.vm.filters,
+        onchange: e => this.vm.selectedFilterIndex = e.target.selectedIndex,
       }),
 
       m(Button, {
