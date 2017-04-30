@@ -51,14 +51,14 @@ public class FileConnection extends Thread {
                             String type = message.Type;
                             switch (type) {
                                 case Message.NEW:
-                                    FileUtils.setFileSize(message.File, (double)message.Length);
-                                    FileUtils.toggleFileProgress(message.File);
+                                    FileUtils.setFileSize(file, (double)message.Length);
+                                    FileUtils.toggleFileProgress(file);
                                     break;
                                 case Message.DONE:
-                                    FileUtils.setFileStatus(message.File, FileUtils.STATUS_DOWNLOADED);
+                                    FileUtils.setFileStatus(file, FileUtils.STATUS_DOWNLOADED);
                                     conn.disconnect();
 
-//                                    WriteFileTask writeFile = new WriteFileTask(StorageManager.storageDir, message.File, fileContents);
+//                                    WriteFileTask writeFile = new WriteFileTask(StorageManager.storageDir, file, fileContents);
 //                                    writeFile.execute();
                                     break;
                             }
