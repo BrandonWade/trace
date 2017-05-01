@@ -57,10 +57,10 @@ public class FileConnection extends Thread {
                                     break;
                                 case Message.DONE:
                                     FileUtils.setFileStatus(file, FileUtils.STATUS_DOWNLOADED);
-                                    conn.disconnect(); // TODO: Pass into WFT below, trigger there instead
 
-                                    WriteFileTask writeFile = new WriteFileTask(StorageManager.storageDir, file, fileContents, conn);
-                                    writeFile.execute();
+                                    conn.disconnect();
+//                                    WriteFileTask writeFile = new WriteFileTask(StorageManager.storageDir, file, fileContents, conn);
+//                                    writeFile.execute();
                                     break;
                             }
                         }

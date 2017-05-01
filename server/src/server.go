@@ -15,12 +15,15 @@ import (
 // The list of new files to send to the client
 var newFiles []File
 
+// The sync directory and list of filters
 var dir string
 var filters = []string{}
 
+// Mutexes to prevent variable updates during a sync
 var dirMutex sync.Mutex
 var filterMutex sync.Mutex
 
+// The connection to the client
 var conn *Connection
 
 func main() {
@@ -42,11 +45,9 @@ func index(c *gin.Context) {
 	c.HTML(http.StatusOK, "app.html", nil)
 }
 
-// syncFiles - Determine new files on the server
+// syncFiles - Calculate new files on the server
 func syncFiles(c *gin.Context) {
 	conn = NewConnection()
-
-	// Open the Connection
 	conn.Open(c)
 
 	for {
@@ -68,7 +69,11 @@ func syncFiles(c *gin.Context) {
 		}
 
 		// Get a list of local files
+		dirMutex.Lock()
+		filterMutex.Lock()
 		localFiles := Scan(dir, filters)
+		filterMutex.Unlock()
+		dirMutex.Unlock()
 
 		// Compare the local and client files to build a naive one-way diff
 		for file := range localFiles {
@@ -97,8 +102,10 @@ func sendFile(c *gin.Context) {
 	fileMessage := conn.Read()
 	fileName := fileMessage.File
 
+	dirMutex.Lock();
 	filePtr, _ := os.Open(dir + fileName)
 	defer filePtr.Close()
+	dirMutex.Unlock();
 
 	// Notify the client of the new file
 	fileStat, _ := filePtr.Stat()
