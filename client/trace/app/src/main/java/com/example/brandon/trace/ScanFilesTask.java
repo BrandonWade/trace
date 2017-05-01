@@ -11,6 +11,12 @@ import java.util.List;
  */
 public class ScanFilesTask extends AsyncTask<Void, Void, List<File>> {
 
+    private MainActivity mainActivity;
+
+    public ScanFilesTask(MainActivity mainActivity) {
+        this.mainActivity = mainActivity;
+    }
+
     @Override
     protected List<File> doInBackground(Void... params) {
         return getFiles(new File(StorageManager.storageDir));
@@ -39,6 +45,7 @@ public class ScanFilesTask extends AsyncTask<Void, Void, List<File>> {
         }
 
         ControlConnection controlConn = ControlConnection.getInstance();
+        controlConn.setMainActivity(mainActivity);
         controlConn.setFileList(paths);
         controlConn.sendFileList();
     }

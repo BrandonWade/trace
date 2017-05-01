@@ -70,7 +70,7 @@ public class ControlConnection extends Thread {
                                     FileUtils.addFile(message.File);
                                     break;
                                 case Message.DONE:
-                                    fdm = new FileDownloadManager(newFiles);
+                                    fdm = new FileDownloadManager(newFiles, mainActivity);
                                     fdm.start();
                                     break;
                             }

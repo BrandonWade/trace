@@ -103,11 +103,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void syncFiles() {
-        Toast.makeText(getApplicationContext(), R.string.message_syncing, Toast.LENGTH_SHORT).show();
+        showToast(R.string.message_syncing);
+        toggleSyncButton(false);
         FileUtils.fileList.clear();
         FileUtils.fileListAdapter.notifyDataSetChanged();
 
-        ScanFilesTask scanFiles = new ScanFilesTask();
+        ScanFilesTask scanFiles = new ScanFilesTask(this);
         scanFiles.execute();
     }
 
@@ -127,6 +128,14 @@ public class MainActivity extends AppCompatActivity {
                 int alpha = enabled ? 255 : 130;
                 syncButton.getIcon().setAlpha(alpha);
                 syncButton.setEnabled(enabled);
+            }
+        });
+    }
+
+    public void showToast(final int message) {
+        this.runOnUiThread(new Runnable() {
+            public void run() {
+                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
             }
         });
     }
