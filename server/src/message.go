@@ -11,12 +11,18 @@ const (
 	Done = "done"
 )
 
-// Message - Used to contain information sent over a Connection
+// Message - Contains information sent over a Connection
 type Message struct {
 	Type   string
 	File   string
 	Length int
 	Body   string
+}
+
+// Settings - Contains information used when syncing
+type Settings struct {
+	Dir     string
+	Filters []string
 }
 
 // SyncDir - Contains a directory sent to the server
