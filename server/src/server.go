@@ -10,23 +10,26 @@ import (
 	"sync"
 
 	"github.com/gin-gonic/gin"
+	"github.com/nanobox-io/golang-scribble"
 )
+
+// The directory used to hold temporary information for Trace
+var settingsDir = os.TempDir() + "\\trace"
 
 // The list of new files to send to the client
 var newFiles []File
 
 // The sync directory and list of filters
-var dir string
-var filters = []string{}
+var settings Settings
 
-// Mutexes to prevent variable updates during a sync
-var dirMutex sync.Mutex
-var filterMutex sync.Mutex
+// Mutex to prevent variable updates during a sync
+var settingsMutex sync.Mutex
 
 // The connection to the client
 var conn *Connection
 
 func main() {
+	readSettings()
 	g := gin.Default()
 
 	g.LoadHTMLFiles("./app/app.html")
@@ -38,6 +41,41 @@ func main() {
 	g.POST("/update/dir", updateSyncDir)
 	g.POST("/update/filters", updateFilterList)
 	g.Run(":8080")
+}
+
+// readSettings - read the settings file from the database if it exists
+func readSettings() {
+	db, err := scribble.New(settingsDir, nil)
+	if err != nil {
+		log.Println("Failed to create settings database driver")
+		log.Println(err)
+	}
+
+	if _, err := os.Stat(settingsDir + "\\settings\\settings.json"); os.IsNotExist(err) {
+		settings = Settings{}
+		return
+	}
+
+	if err = db.Read("settings", "settings", &settings); err != nil {
+		log.Println("Failed to read settings from database")
+		log.Println(err)
+	}
+}
+
+// writeSettings - write the settings file to the database
+func writeSettings() {
+	_ = os.Mkdir(settingsDir, 0700)
+
+	db, err := scribble.New(settingsDir, nil)
+	if err != nil {
+		log.Println("Failed to create settings database driver")
+		log.Println(err)
+	}
+
+	if err := db.Write("settings", "settings", settings); err != nil {
+		log.Println("Failed to save settings to database")
+		log.Println(err)
+	}
 }
 
 // index - Returns the index page to the client to display
@@ -69,11 +107,9 @@ func syncFiles(c *gin.Context) {
 		}
 
 		// Get a list of local files
-		dirMutex.Lock()
-		filterMutex.Lock()
-		localFiles := Scan(dir, filters)
-		filterMutex.Unlock()
-		dirMutex.Unlock()
+		settingsMutex.Lock()
+		localFiles := Scan(settings.Dir, settings.Filters)
+		settingsMutex.Unlock()
 
 		// Compare the local and client files to build a naive one-way diff
 		for file := range localFiles {
@@ -102,10 +138,10 @@ func sendFile(c *gin.Context) {
 	fileMessage := conn.Read()
 	fileName := fileMessage.File
 
-	dirMutex.Lock();
-	filePtr, _ := os.Open(dir + fileName)
+	settingsMutex.Lock()
+	filePtr, _ := os.Open(settings.Dir + fileName)
 	defer filePtr.Close()
-	dirMutex.Unlock();
+	settingsMutex.Unlock()
 
 	// Notify the client of the new file
 	fileStat, _ := filePtr.Stat()
@@ -142,9 +178,10 @@ func updateSyncDir(c *gin.Context) {
 		return
 	}
 
-	dirMutex.Lock()
-	dir = newDir.Dir
-	dirMutex.Unlock()
+	settingsMutex.Lock()
+	settings.Dir = newDir.Dir
+	writeSettings()
+	settingsMutex.Unlock()
 }
 
 // updateFilterList - sets the filter list to the list received from the client
@@ -157,7 +194,8 @@ func updateFilterList(c *gin.Context) {
 		return
 	}
 
-	filterMutex.Lock()
-	filters = newFilters.Filters
-	filterMutex.Unlock()
+	settingsMutex.Lock()
+	settings.Filters = newFilters.Filters
+	writeSettings()
+	settingsMutex.Unlock()
 }
