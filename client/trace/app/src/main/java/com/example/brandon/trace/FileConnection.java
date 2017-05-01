@@ -6,6 +6,7 @@ import com.neovisionaries.ws.client.WebSocketAdapter;
 import com.neovisionaries.ws.client.WebSocketException;
 import com.neovisionaries.ws.client.WebSocketFactory;
 import com.neovisionaries.ws.client.WebSocketFrame;
+import com.neovisionaries.ws.client.WebSocketState;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -56,10 +57,10 @@ public class FileConnection extends Thread {
                                     break;
                                 case Message.DONE:
                                     FileUtils.setFileStatus(file, FileUtils.STATUS_DOWNLOADED);
-                                    conn.disconnect();
+                                    conn.disconnect(); // TODO: Pass into WFT below, trigger there instead
 
-//                                    WriteFileTask writeFile = new WriteFileTask(StorageManager.storageDir, file, fileContents);
-//                                    writeFile.execute();
+                                    WriteFileTask writeFile = new WriteFileTask(StorageManager.storageDir, file, fileContents, conn);
+                                    writeFile.execute();
                                     break;
                             }
                         }
@@ -93,5 +94,9 @@ public class FileConnection extends Thread {
 
     public void disconnect() {
         conn.disconnect();
+    }
+
+    public boolean isDisconnected() {
+        return (conn != null && conn.getState() == WebSocketState.CLOSED);
     }
 }

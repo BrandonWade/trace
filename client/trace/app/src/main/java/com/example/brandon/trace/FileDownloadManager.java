@@ -1,5 +1,7 @@
 package com.example.brandon.trace;
 
+import android.widget.Toast;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Semaphore;
@@ -11,10 +13,12 @@ public class FileDownloadManager extends Thread {
 
     private List<String> files;
     private List<FileConnection> fileConnections;
+    private MainActivity mainActivity;
 
-    public FileDownloadManager(List<String> files) {
+    public FileDownloadManager(List<String> files, MainActivity mainActivity) {
         this.files = files;
         this.fileConnections = new ArrayList<>();
+        this.mainActivity = mainActivity;
     }
 
     public void run() {
@@ -37,6 +41,15 @@ public class FileDownloadManager extends Thread {
                 e.printStackTrace();
             }
         }
+
+        while (fileConnections.size() > 0) {
+            if (fileConnections.get(0).isDisconnected()) {
+                fileConnections.remove(0);
+            }
+        }
+
+        mainActivity.toggleSyncButton(true);
+        mainActivity.showToast(R.string.message_sync_complete);
     }
 
     public void cancel() {
