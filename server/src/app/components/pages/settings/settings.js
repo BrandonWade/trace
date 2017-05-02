@@ -1,5 +1,4 @@
 import m from 'mithril';
-import stream from 'mithril/stream';
 import SettingsVM from '../../../models/pages/settings';
 import TextBox from '../../forms/textbox/textbox';
 import Button from '../../forms/button/button';
@@ -14,15 +13,17 @@ const Settings = {
   view() {
     return m('.SettingsPage', [
       m('h1.PageHeading', 'Settings'),
-      m(TextBox, {
-        description: 'Select a directory to use for syncing files:',
-        value: this.vm.syncDir,
-        onchange: e => this.vm.syncDir = e.target.value,
-      }),
-      m(Button, {
-        value: 'Set',
-        onclick: () => this.vm.save(),
-      }),
+      m('div', [
+        m(TextBox, {
+          description: 'Select a directory to use for syncing files:',
+          onchange: e => this.vm.newSyncDir = e.target.value,
+        }),
+        m(Button, {
+          value: 'Set',
+          onclick: () => this.vm.save(),
+        }),
+      ]),
+      m('p', `Current directory: ${this.vm.syncDir}`)
     ]);
   },
 };
