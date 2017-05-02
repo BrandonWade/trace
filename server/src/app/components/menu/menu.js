@@ -1,5 +1,4 @@
 import m from 'mithril';
-import prop from 'mithril/stream';
 import MenuItem from './menuitem';
 import './menu.css';
 
