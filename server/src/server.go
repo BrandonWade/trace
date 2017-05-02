@@ -8,6 +8,7 @@ import (
 	"math"
 	"net/http"
 	"os"
+	"strconv"
 	"strings"
 	"sync"
 
@@ -108,7 +109,7 @@ func syncFiles(c *gin.Context) {
 			message := conn.Read()
 
 			switch message.Type {
-			case List:
+			case New:
 				relPath := strings.Replace(message.File, "/", "\\", -1)
 				clientFiles[relPath] = true
 			case Done:
@@ -130,7 +131,7 @@ func syncFiles(c *gin.Context) {
 
 		// Send the list of new files to the client
 		for _, file := range newFiles {
-			message := &Message{Type: List, File: file.RelPath, Length: 1, Body: ""}
+			message := &Message{Type: New, File: file.RelPath, Body: ""}
 			conn.Write(message)
 		}
 
@@ -158,7 +159,7 @@ func sendFile(c *gin.Context) {
 	fileSize := fileStat.Size()
 	numParts := math.Ceil(float64(fileSize) / float64(BufferSize))
 
-	newMessage := &Message{Type: New, File: fileName, Length: int(numParts), Body: ""}
+	newMessage := &Message{Type: New, File: fileName, Body: strconv.Itoa(int(numParts))}
 	conn.Write(newMessage)
 
 	buffer := bufio.NewReader(filePtr)

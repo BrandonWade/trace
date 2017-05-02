@@ -65,7 +65,7 @@ public class ControlConnection extends Thread {
                             Message message = gson.fromJson(m, Message.class);
                             String type = message.Type;
                             switch (type) {
-                                case Message.LIST:
+                                case Message.NEW:
                                     newFiles.add(message.File);
                                     FileUtils.addFile(message.File);
                                     break;
@@ -109,11 +109,11 @@ public class ControlConnection extends Thread {
 
             for (String file : files) {
                 String relPath = file.replace(StorageManager.storageDir, "");
-                Message message = new Message(Message.LIST, relPath, 0, "");
+                Message message = new Message(Message.NEW, relPath, "");
                 conn.sendText(gson.toJson(message));
             }
 
-            Message doneMessage = new Message(Message.DONE, "", 0, "");
+            Message doneMessage = new Message(Message.DONE, "", "");
             conn.sendText(gson.toJson(doneMessage));
         }
     }
