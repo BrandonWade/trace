@@ -1,10 +1,8 @@
 class Filters {
   constructor() {
-    const filters = localStorage.getItem('trace.filters.ignore') || '[]';
-    this.filters = JSON.parse(filters);
+    this.filters = window.settings.Filters;
     this.newFilter = '';
     this.selectedFilterIndex = -1;
-    this.updateServer();
   }
 
   add() {
@@ -20,18 +18,12 @@ class Filters {
   }
 
   save() {
-    const filters = JSON.stringify(this.filters);
-    localStorage.setItem('trace.filters.ignore', filters);
-    this.updateServer();
-  }
-
-  updateServer() {
     const filters = { filters: this.filters };
     const headers = new Headers({
       'Content-Type' : 'application/json',
     });
 
-    fetch('/update/filters', {
+    fetch('/settings/update/filters', {
       method: 'POST',
       headers: headers,
       body: JSON.stringify(filters),
