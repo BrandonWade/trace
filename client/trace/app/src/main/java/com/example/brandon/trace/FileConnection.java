@@ -52,7 +52,7 @@ public class FileConnection extends Thread {
                             String type = message.Type;
                             switch (type) {
                                 case Message.NEW:
-                                    FileUtils.setFileSize(file, (double)message.Length);
+                                    FileUtils.setFileSize(file, Double.parseDouble(message.Body));
                                     FileUtils.toggleFileProgress(file);
                                     break;
                                 case Message.DONE:
@@ -88,7 +88,7 @@ public class FileConnection extends Thread {
 
     public void sendFile(WebSocket conn) {
         String relPath = file.replace(StorageManager.storageDir, "");
-        Message message = new Message(Message.NEW, relPath, 0, "");
+        Message message = new Message(Message.NEW, relPath, "");
         conn.sendText(gson.toJson(message));
     }
 

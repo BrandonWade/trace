@@ -78,7 +78,7 @@ func (c *Connection) WriteBinary(data []byte) {
 
 // WriteDone - writes a done message to a Connection
 func (c *Connection) WriteDone() {
-	c.Conn.WriteJSON(&Message{Type: Done, File: "", Length: 0, Body: ""})
+	c.Conn.WriteJSON(&Message{Type: Done, File: "", Body: ""})
 }
 
 // Close - close the Connection

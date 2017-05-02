@@ -4,10 +4,7 @@ const (
 	// New - used when sending a new file
 	New = "new"
 
-	// List - used when sending the file as part of a list
-	List = "list"
-
-	// Done - used when there are no more file parts to send
+	// Done - used to indicate the end of a series of messages
 	Done = "done"
 )
 
@@ -15,7 +12,6 @@ const (
 type Message struct {
 	Type   string
 	File   string
-	Length int
 	Body   string
 }
 
