@@ -2,6 +2,8 @@ package main
 
 import (
 	"bufio"
+	"encoding/json"
+	"html/template"
 	"log"
 	"math"
 	"net/http"
@@ -32,14 +34,14 @@ func main() {
 	readSettings()
 	g := gin.Default()
 
-	g.LoadHTMLFiles("./app/app.html")
+	g.LoadHTMLFiles("./app/app.tmpl")
 	g.Static("dist/", "./app/dist")
 
 	g.GET("/", index)
 	g.GET("/sync", syncFiles)
 	g.GET("/file", sendFile)
-	g.POST("/update/dir", updateSyncDir)
-	g.POST("/update/filters", updateFilterList)
+	g.POST("/settings/update/dir", updateSyncDir)
+	g.POST("/settings/update/filters", updateFilterList)
 	g.Run(":8080")
 }
 
@@ -80,7 +82,15 @@ func writeSettings() {
 
 // index - Returns the index page to the client to display
 func index(c *gin.Context) {
-	c.HTML(http.StatusOK, "app.html", nil)
+	settingsBytes, err := json.Marshal(settings)
+	if err != nil {
+		log.Println("Failed to marshal settings struct")
+		log.Println(err)
+	}
+
+	c.HTML(http.StatusOK, "app.tmpl", gin.H{
+		"settings": template.URL(string(settingsBytes)),
+	})
 }
 
 // syncFiles - Calculate new files on the server
