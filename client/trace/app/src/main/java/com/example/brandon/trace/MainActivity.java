@@ -39,8 +39,6 @@ public class MainActivity extends AppCompatActivity {
         inflater.inflate(R.menu.main, menu);
 
         confirmButton = menu.findItem(R.id.action_confirm);
-        UIUtils.toggleConfirmButton(false);
-
         syncButton = menu.findItem(R.id.action_sync);
         UIUtils.toggleSyncButton(ControlConnection.getInstance().isReachable());
 
@@ -111,7 +109,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void syncFiles() {
-        UIUtils.showToast(R.string.message_syncing);
+        UIUtils.showToast(R.string.message_syncing, UIUtils.SHORT_TOAST_DURATION);
+        UIUtils.toggleConfirmButton(false);
         UIUtils.toggleSyncButton(false);
         FileUtils.fileList.clear();
         FileUtils.fileListAdapter.notifyDataSetChanged();

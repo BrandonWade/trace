@@ -10,10 +10,13 @@ public class UIUtils {
 
     private static MainActivity mainActivity;
 
+    public static final int SHORT_TOAST_DURATION = 1000;
+
     public static void setMainActivity(MainActivity main) {
         mainActivity = main;
     }
 
+    // TODO: Disable checkboxes when syncing
     public static void toggleConfirmButton(final boolean enabled) {
         mainActivity.runOnUiThread(new Runnable() {
             public void run() {
@@ -34,12 +37,12 @@ public class UIUtils {
         });
     }
 
-    public static void showToast(final int message) {
+    public static void showToast(final int message, final int duration) {
         mainActivity.runOnUiThread(new Runnable() {
             public void run() {
                 final Toast toast = Toast.makeText(mainActivity.getApplicationContext(), message, Toast.LENGTH_SHORT);
 
-                CountDownTimer toastTimer = new CountDownTimer(1000, 1000) {
+                CountDownTimer toastTimer = new CountDownTimer(duration, duration) {
                     @Override
                     public void onTick(long millisUntilFinished) {}
 

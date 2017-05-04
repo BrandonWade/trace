@@ -46,14 +46,16 @@ public class ControlConnection extends Thread {
 
                         public void onConnected(WebSocket websocket, Map<String, List<String>> headers) throws Exception {
                             reachable = true;
+                            UIUtils.toggleConfirmButton(reachable && FileUtils.getSelectedFiles().size() > 0);
                             UIUtils.toggleSyncButton(reachable);
-                            UIUtils.showToast(R.string.message_connected_to_server);
+                            UIUtils.showToast(R.string.message_connected_to_server, UIUtils.SHORT_TOAST_DURATION);
                         }
 
                         public void onDisconnected(WebSocket websocket, WebSocketFrame serverCloseFrame, WebSocketFrame clientCloseFrame, boolean closedByServer) throws Exception {
                             reachable = false;
+                            UIUtils.toggleConfirmButton(reachable && FileUtils.getSelectedFiles().size() > 0);
                             UIUtils.toggleSyncButton(reachable);
-                            UIUtils.showToast(R.string.message_disconnected_from_server);
+                            UIUtils.showToast(R.string.message_disconnected_from_server, UIUtils.SHORT_TOAST_DURATION);
                         }
 
                         public void onTextMessage(WebSocket websocket, String m) {
@@ -64,8 +66,9 @@ public class ControlConnection extends Thread {
                                     FileUtils.addFile(message.File);
                                     break;
                                 case Message.DONE:
+                                    UIUtils.toggleConfirmButton(FileUtils.fileList.size() > 0);
                                     UIUtils.toggleSyncButton(true);
-                                    UIUtils.showToast(R.string.message_sync_complete);
+                                    UIUtils.showToast(R.string.message_sync_complete, UIUtils.SHORT_TOAST_DURATION);
                                     break;
                             }
                         }

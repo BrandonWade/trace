@@ -10,6 +10,8 @@ public class FileListItem {
     public double progress;
     public boolean showProgress;
     public boolean selected;
+    public boolean enabled;
+    public boolean selectable;
 
     public FileListItem(String fileName, String status) {
         this.fileName = fileName;
@@ -17,6 +19,8 @@ public class FileListItem {
         this.size = -1;
         this.progress = 0;
         this.showProgress = false;
-        this.selected = false;
+        this.selected = true;
+        this.enabled = true;
+        this.selectable = true;
     }
 }
