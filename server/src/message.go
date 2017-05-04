@@ -10,9 +10,9 @@ const (
 
 // Message - Contains information sent over a Connection
 type Message struct {
-	Type   string
-	File   string
-	Body   string
+	Type string
+	File string
+	Body string
 }
 
 // Settings - Contains information used when syncing

@@ -2,8 +2,10 @@ package com.example.brandon.trace;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Contains utility functions for updating the file display.
@@ -16,7 +18,7 @@ public class FileUtils {
     public static final String STATUS_SAVING = "Saving";
     public static final String STATUS_COMPLETE = "Complete";
 
-    public static ArrayList<FileListItem> fileList;
+    public static List<FileListItem> fileList;
     public static FileListItemAdapter fileListAdapter;
 
     private static Handler redrawHandler = new Handler(Looper.getMainLooper());
@@ -29,6 +31,18 @@ public class FileUtils {
         }
 
         return null;
+    }
+
+    public static List<String> getSelectedFiles() {
+        List<String> selectedFiles = new ArrayList<>();
+
+        for (FileListItem file: fileList) {
+            if (file.selected) {
+                selectedFiles.add(file.fileName);
+            }
+        }
+
+        return selectedFiles;
     }
 
     public static void addFile(final String fileName) {

@@ -1,6 +1,7 @@
 package com.example.brandon.trace;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -10,12 +11,6 @@ import java.util.List;
  * Asynchronously scans files in a specified directory.
  */
 public class ScanFilesTask extends AsyncTask<Void, Void, List<File>> {
-
-    private MainActivity mainActivity;
-
-    public ScanFilesTask(MainActivity mainActivity) {
-        this.mainActivity = mainActivity;
-    }
 
     @Override
     protected List<File> doInBackground(Void... params) {
@@ -45,7 +40,6 @@ public class ScanFilesTask extends AsyncTask<Void, Void, List<File>> {
         }
 
         ControlConnection controlConn = ControlConnection.getInstance();
-        controlConn.setMainActivity(mainActivity);
         controlConn.setFileList(paths);
         controlConn.sendFileList();
     }

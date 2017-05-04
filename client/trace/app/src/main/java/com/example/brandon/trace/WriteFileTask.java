@@ -15,13 +15,11 @@ public class WriteFileTask extends AsyncTask<Void, Void, Void> {
     private String path;
     private String fileName;
     private ByteArrayOutputStream contents;
-    private WebSocket conn;
 
-    public WriteFileTask(String path, String fileName, ByteArrayOutputStream contents, WebSocket conn) {
+    public WriteFileTask(String path, String fileName, ByteArrayOutputStream contents) {
         this.path = path;
         this.fileName = fileName;
         this.contents = contents;
-        this.conn = conn;
     }
 
     @Override
@@ -59,6 +57,5 @@ public class WriteFileTask extends AsyncTask<Void, Void, Void> {
         super.onPostExecute(aVoid);
         FileUtils.setFileStatus(fileName, FileUtils.STATUS_COMPLETE);
         FileUtils.toggleFileProgress(fileName);
-        conn.disconnect();
     }
 }
