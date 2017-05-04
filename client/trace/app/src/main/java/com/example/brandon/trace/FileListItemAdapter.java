@@ -61,6 +61,8 @@ public class FileListItemAdapter extends ArrayAdapter<FileListItem> {
 
         FileListItem file = files.get(position);
         holder.selected.setChecked(file.selected);
+        holder.selected.setClickable(file.enabled);
+        holder.selected.setVisibility(file.selectable ? View.VISIBLE : View.INVISIBLE);
         holder.mainText.setText(file.fileName);
         holder.subText.setText(file.status);
 

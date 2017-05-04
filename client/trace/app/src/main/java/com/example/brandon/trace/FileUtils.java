@@ -122,6 +122,39 @@ public class FileUtils {
         redrawHandler.post(updateUI);
     }
 
+    public static void setFileEnabled(final String fileName, final boolean enabled) {
+        Runnable updateUI = new Runnable() {
+            @Override public void run() {
+                FileListItem file = findByName(fileName);
+
+                if (file != null) {
+                    file.enabled = enabled;
+                }
+
+                fileListAdapter.notifyDataSetChanged();
+            }
+        };
+
+        redrawHandler.post(updateUI);
+    }
+
+    public static void setFileSelectable(final String fileName, final boolean selectable) {
+        Runnable updateUI = new Runnable() {
+            @Override public void run() {
+                FileListItem file = findByName(fileName);
+
+                if (file != null) {
+                    file.enabled = selectable;
+                    file.selectable = selectable;
+                }
+
+                fileListAdapter.notifyDataSetChanged();
+            }
+        };
+
+        redrawHandler.post(updateUI);
+    }
+
     public static void clearFiles() {
         Runnable updateUI = new Runnable() {
             @Override public void run() {

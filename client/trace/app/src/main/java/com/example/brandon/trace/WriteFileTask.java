@@ -1,8 +1,7 @@
 package com.example.brandon.trace;
 
 import android.os.AsyncTask;
-
-import com.neovisionaries.ws.client.WebSocket;
+import android.util.Log;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -45,6 +44,8 @@ public class WriteFileTask extends AsyncTask<Void, Void, Void> {
             outputStream.flush();
             outputStream.close();
             contents.close();
+
+            FileUtils.setFileSelectable(fileName, false);
         } catch (Exception e) {
             e.printStackTrace();
         }
