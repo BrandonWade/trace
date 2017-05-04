@@ -7,11 +7,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Adapter used to inflate a list of files.
@@ -19,9 +22,9 @@ import java.util.ArrayList;
 public class FileListItemAdapter extends ArrayAdapter<FileListItem> {
 
     private LayoutInflater inflater;
-    private ArrayList<FileListItem> files;
+    private List<FileListItem> files;
 
-    public FileListItemAdapter(Context context, int layoutResourceID, ArrayList<FileListItem> files) {
+    public FileListItemAdapter(Context context, int layoutResourceID, List<FileListItem> files) {
         super(context, layoutResourceID, files);
 
         this.inflater = LayoutInflater.from(context);
@@ -29,7 +32,7 @@ public class FileListItemAdapter extends ArrayAdapter<FileListItem> {
     }
 
     @Override
-    public @NonNull View getView(int position, View convertView, @NonNull ViewGroup parent) {
+    public @NonNull View getView(final int position, View convertView, @NonNull ViewGroup parent) {
         FileListItemHolder holder;
 
         if (convertView == null) {
@@ -37,6 +40,7 @@ public class FileListItemAdapter extends ArrayAdapter<FileListItem> {
             convertView = inflater.inflate(R.layout.file_list_row, null);
 
             holder.progress = convertView.findViewById(R.id.row_progress_complete);
+            holder.selected = (CheckBox)convertView.findViewById(R.id.row_checkbox);
             holder.mainText = (TextView)convertView.findViewById(R.id.row_main_text);
             holder.subText = (TextView)convertView.findViewById(R.id.row_sub_text);
 
@@ -45,7 +49,18 @@ public class FileListItemAdapter extends ArrayAdapter<FileListItem> {
             holder = (FileListItemHolder)convertView.getTag();
         }
 
+        holder.selected.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                files.get(position).selected = isChecked;
+                boolean enabled = ControlConnection.getInstance().isReachable() && FileUtils.getSelectedFiles().size() > 0;
+                UIUtils.toggleConfirmButton(enabled);
+            }
+
+        });
+
         FileListItem file = files.get(position);
+        holder.selected.setChecked(file.selected);
         holder.mainText.setText(file.fileName);
         holder.subText.setText(file.status);
 
@@ -59,6 +74,7 @@ public class FileListItemAdapter extends ArrayAdapter<FileListItem> {
 
     private static class FileListItemHolder {
         View progress;
+        CheckBox selected;
         TextView mainText;
         TextView subText;
     }

@@ -13,16 +13,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static MenuItem syncButton;
+    public MenuItem confirmButton;
+    public MenuItem syncButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        UIUtils.setMainActivity(this);
 
         StorageManager storage = StorageManager.getManager(getApplicationContext());
         storage.retrieve();
@@ -36,12 +38,14 @@ public class MainActivity extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main, menu);
 
+        confirmButton = menu.findItem(R.id.action_confirm);
+        UIUtils.toggleConfirmButton(false);
+
         syncButton = menu.findItem(R.id.action_sync);
-        toggleSyncButton(ControlConnection.getInstance().isReachable());
+        UIUtils.toggleSyncButton(ControlConnection.getInstance().isReachable());
 
         ControlConnection controlConn = ControlConnection.getInstance();
         if (controlConn.getState() == Thread.State.NEW) {
-            controlConn.setMainActivity(this);
             controlConn.start();
         }
 
@@ -51,6 +55,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.action_confirm:
+                FileDownloadManager fdm = new FileDownloadManager(FileUtils.getSelectedFiles());
+                fdm.start();
+                return true;
             case R.id.action_sync:
                 isStoragePermissionGranted();
                 return true;
@@ -103,12 +111,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void syncFiles() {
-        showToast(R.string.message_syncing);
-        toggleSyncButton(false);
+        UIUtils.showToast(R.string.message_syncing);
+        UIUtils.toggleSyncButton(false);
         FileUtils.fileList.clear();
         FileUtils.fileListAdapter.notifyDataSetChanged();
 
-        ScanFilesTask scanFiles = new ScanFilesTask(this);
+        ScanFilesTask scanFiles = new ScanFilesTask();
         scanFiles.execute();
     }
 
@@ -120,23 +128,5 @@ public class MainActivity extends AppCompatActivity {
     public void showSettingsActivity() {
         Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
-    }
-
-    public void toggleSyncButton(final boolean enabled) {
-        this.runOnUiThread(new Runnable() {
-            public void run() {
-                int alpha = enabled ? 255 : 130;
-                syncButton.getIcon().setAlpha(alpha);
-                syncButton.setEnabled(enabled);
-            }
-        });
-    }
-
-    public void showToast(final int message) {
-        this.runOnUiThread(new Runnable() {
-            public void run() {
-                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 }

@@ -8,7 +8,6 @@ import com.neovisionaries.ws.client.WebSocketFactory;
 import com.neovisionaries.ws.client.WebSocketFrame;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -17,10 +16,7 @@ import java.util.Map;
  */
 public class ControlConnection extends Thread {
 
-    private MainActivity mainActivity;
-    private FileDownloadManager fdm;
     private List<String> files;
-    private List<String> newFiles;
     private WebSocket conn;
     private Gson gson;
     private boolean reachable;
@@ -29,7 +25,6 @@ public class ControlConnection extends Thread {
 
     protected ControlConnection() {
         this.reachable = false;
-        this.newFiles = new ArrayList<>();
         this.gson = new Gson();
     }
 
@@ -50,15 +45,15 @@ public class ControlConnection extends Thread {
                     .addListener(new WebSocketAdapter() {
 
                         public void onConnected(WebSocket websocket, Map<String, List<String>> headers) throws Exception {
-                            // TODO: Send toast notification indicating connection
                             reachable = true;
-                            mainActivity.toggleSyncButton(reachable);
+                            UIUtils.toggleSyncButton(reachable);
+                            UIUtils.showToast(R.string.message_connected_to_server);
                         }
 
                         public void onDisconnected(WebSocket websocket, WebSocketFrame serverCloseFrame, WebSocketFrame clientCloseFrame, boolean closedByServer) throws Exception {
-                            // TODO: Send toast notification indicating disconnection
                             reachable = false;
-                            mainActivity.toggleSyncButton(reachable);
+                            UIUtils.toggleSyncButton(reachable);
+                            UIUtils.showToast(R.string.message_disconnected_from_server);
                         }
 
                         public void onTextMessage(WebSocket websocket, String m) {
@@ -66,12 +61,11 @@ public class ControlConnection extends Thread {
                             String type = message.Type;
                             switch (type) {
                                 case Message.NEW:
-                                    newFiles.add(message.File);
                                     FileUtils.addFile(message.File);
                                     break;
                                 case Message.DONE:
-                                    fdm = new FileDownloadManager(newFiles, mainActivity);
-                                    fdm.start();
+                                    UIUtils.toggleSyncButton(true);
+                                    UIUtils.showToast(R.string.message_sync_complete);
                                     break;
                             }
                         }
@@ -86,10 +80,6 @@ public class ControlConnection extends Thread {
         connect();
     }
 
-    public void setMainActivity(MainActivity mainActivity) {
-        this.mainActivity = mainActivity;
-    }
-
     public void setFileList(List<String> files) {
         this.files = files;
     }
@@ -100,11 +90,6 @@ public class ControlConnection extends Thread {
 
     public void sendFileList() {
         if (reachable) {
-            if (fdm != null) {
-                fdm.interrupt();
-            }
-
-            newFiles.clear();
             FileUtils.clearFiles();
 
             for (String file : files) {
