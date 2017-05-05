@@ -59,8 +59,8 @@ public class FileConnection extends Thread {
                                     FileUtils.setFileStatus(file, FileUtils.STATUS_DOWNLOADED);
                                     conn.disconnect();
 
-//                                    WriteFileTask writeFile = new WriteFileTask(StorageManager.storageDir, file, fileContents);
-//                                    writeFile.execute();
+                                    WriteFileTask writeFile = new WriteFileTask(StorageManager.storageDir, file, fileContents);
+                                    writeFile.execute();
                                     break;
                             }
                         }

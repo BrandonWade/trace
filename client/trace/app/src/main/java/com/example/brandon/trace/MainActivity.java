@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_confirm:
-                FileDownloadManager fdm = new FileDownloadManager(FileUtils.getSelectedFiles());
+                FileDownloadManager fdm = new FileDownloadManager();
                 fdm.start();
                 return true;
             case R.id.action_sync:

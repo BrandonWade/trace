@@ -1,7 +1,6 @@
 package com.example.brandon.trace;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -44,8 +43,6 @@ public class WriteFileTask extends AsyncTask<Void, Void, Void> {
             outputStream.flush();
             outputStream.close();
             contents.close();
-
-            FileUtils.setFileSelectable(fileName, false);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -56,6 +53,8 @@ public class WriteFileTask extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
+        FileUtils.setFileEnabled(fileName, false);
+        FileUtils.setFileSelectable(fileName, false);
         FileUtils.setFileStatus(fileName, FileUtils.STATUS_COMPLETE);
         FileUtils.toggleFileProgress(fileName);
     }
