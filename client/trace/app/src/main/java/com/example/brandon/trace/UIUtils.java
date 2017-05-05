@@ -16,7 +16,7 @@ public class UIUtils {
         mainActivity = main;
     }
 
-    // TODO: Disable checkboxes when syncing
+    // TODO: Disable checkboxes when downloading (may need to color)
     public static void toggleConfirmButton(final boolean enabled) {
         mainActivity.runOnUiThread(new Runnable() {
             public void run() {

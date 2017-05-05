@@ -2,7 +2,6 @@ package com.example.brandon.trace;
 
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,12 +32,12 @@ public class FileUtils {
         return null;
     }
 
-    public static List<String> getSelectedFiles() {
-        List<String> selectedFiles = new ArrayList<>();
+    public static List<FileListItem> getSelectedFiles() {
+        List<FileListItem> selectedFiles = new ArrayList<>();
 
         for (FileListItem file: fileList) {
             if (file.selected) {
-                selectedFiles.add(file.fileName);
+                selectedFiles.add(file);
             }
         }
 
@@ -128,6 +127,7 @@ public class FileUtils {
                 FileListItem file = findByName(fileName);
 
                 if (file != null) {
+                    file.selected = enabled;
                     file.enabled = enabled;
                 }
 
@@ -144,7 +144,6 @@ public class FileUtils {
                 FileListItem file = findByName(fileName);
 
                 if (file != null) {
-                    file.enabled = selectable;
                     file.selectable = selectable;
                 }
 

@@ -9,15 +9,14 @@ import java.util.concurrent.Semaphore;
  */
 public class FileDownloadManager extends Thread {
 
-    private List<String> files;
     private List<FileConnection> fileConnections;
 
-    public FileDownloadManager(List<String> files) {
-        this.files = files;
+    public FileDownloadManager() {
         this.fileConnections = new ArrayList<>();
     }
 
     public void run() {
+        List<FileListItem> files = FileUtils.getSelectedFiles();
         Semaphore lock = new Semaphore(StorageManager.numConnections);
 
         for (int i = 0; i < files.size(); i++) {
@@ -29,7 +28,7 @@ public class FileDownloadManager extends Thread {
             try {
                 lock.acquire();
 
-                FileConnection conn = new FileConnection(lock, files.get(i));
+                FileConnection conn = new FileConnection(lock, files.get(i).fileName);
                 conn.start();
 
                 fileConnections.add(conn);
