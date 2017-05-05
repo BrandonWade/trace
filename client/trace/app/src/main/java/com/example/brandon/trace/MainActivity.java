@@ -24,8 +24,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        UIUtils.setMainActivity(this);
-
         StorageManager storage = StorageManager.getManager(getApplicationContext());
         storage.retrieve();
 
@@ -40,6 +38,8 @@ public class MainActivity extends AppCompatActivity {
 
         confirmButton = menu.findItem(R.id.action_confirm);
         syncButton = menu.findItem(R.id.action_sync);
+
+        UIUtils.setMainActivity(this);
         UIUtils.toggleSyncButton(ControlConnection.getInstance().isReachable());
 
         ControlConnection controlConn = ControlConnection.getInstance();

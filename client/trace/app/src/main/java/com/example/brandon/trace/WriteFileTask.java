@@ -53,6 +53,7 @@ public class WriteFileTask extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
+        FileUtils.setFileChecked(fileName, false);
         FileUtils.setFileEnabled(fileName, false);
         FileUtils.setFileSelectable(fileName, false);
         FileUtils.setFileStatus(fileName, FileUtils.STATUS_COMPLETE);

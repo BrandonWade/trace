@@ -9,7 +9,7 @@ public class FileListItem {
     public double size;
     public double progress;
     public boolean showProgress;
-    public boolean selected;
+    public boolean checked;
     public boolean enabled;
     public boolean selectable;
 
@@ -19,7 +19,7 @@ public class FileListItem {
         this.size = -1;
         this.progress = 0;
         this.showProgress = false;
-        this.selected = true;
+        this.checked = true;
         this.enabled = true;
         this.selectable = true;
     }

@@ -32,11 +32,11 @@ public class FileUtils {
         return null;
     }
 
-    public static List<FileListItem> getSelectedFiles() {
+    public static List<FileListItem> getCheckedFiles() {
         List<FileListItem> selectedFiles = new ArrayList<>();
 
         for (FileListItem file: fileList) {
-            if (file.selected) {
+            if (file.checked) {
                 selectedFiles.add(file);
             }
         }
@@ -49,7 +49,6 @@ public class FileUtils {
             @Override public void run() {
                 FileListItem file = new FileListItem(fileName, STATUS_WAITING);
                 fileList.add(file);
-
                 fileListAdapter.notifyDataSetChanged();
             }
         };
@@ -64,9 +63,9 @@ public class FileUtils {
 
                 if (file != null) {
                     file.status = status;
+                    fileListAdapter.notifyDataSetChanged();
                 }
 
-                fileListAdapter.notifyDataSetChanged();
             }
         };
 
@@ -80,9 +79,8 @@ public class FileUtils {
 
                 if (file != null) {
                     file.size = size;
+                    fileListAdapter.notifyDataSetChanged();
                 }
-
-                fileListAdapter.notifyDataSetChanged();
             }
         };
 
@@ -96,9 +94,8 @@ public class FileUtils {
 
                 if (file != null) {
                     file.progress++;
+                    fileListAdapter.notifyDataSetChanged();
                 }
-
-                fileListAdapter.notifyDataSetChanged();
             }
         };
 
@@ -112,9 +109,23 @@ public class FileUtils {
 
                 if (file != null) {
                     file.showProgress = !file.showProgress;
+                    fileListAdapter.notifyDataSetChanged();
                 }
+            }
+        };
 
-                fileListAdapter.notifyDataSetChanged();
+        redrawHandler.post(updateUI);
+    }
+
+    public static void setFileChecked(final String fileName, final boolean checked) {
+        Runnable updateUI = new Runnable() {
+            @Override public void run() {
+                FileListItem file = findByName(fileName);
+
+                if (file != null) {
+                    file.checked = checked;
+                    fileListAdapter.notifyDataSetChanged();
+                }
             }
         };
 
@@ -127,11 +138,9 @@ public class FileUtils {
                 FileListItem file = findByName(fileName);
 
                 if (file != null) {
-                    file.selected = enabled;
                     file.enabled = enabled;
+                    fileListAdapter.notifyDataSetChanged();
                 }
-
-                fileListAdapter.notifyDataSetChanged();
             }
         };
 
@@ -145,9 +154,8 @@ public class FileUtils {
 
                 if (file != null) {
                     file.selectable = selectable;
+                    fileListAdapter.notifyDataSetChanged();
                 }
-
-                fileListAdapter.notifyDataSetChanged();
             }
         };
 
@@ -158,7 +166,6 @@ public class FileUtils {
         Runnable updateUI = new Runnable() {
             @Override public void run() {
                 fileList.clear();
-
                 fileListAdapter.notifyDataSetChanged();
             }
         };
