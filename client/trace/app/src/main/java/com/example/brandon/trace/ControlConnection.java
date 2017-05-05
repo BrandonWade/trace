@@ -46,14 +46,14 @@ public class ControlConnection extends Thread {
 
                         public void onConnected(WebSocket websocket, Map<String, List<String>> headers) throws Exception {
                             reachable = true;
-                            UIUtils.toggleConfirmButton(reachable && FileUtils.getSelectedFiles().size() > 0);
+                            UIUtils.toggleConfirmButton(reachable && FileUtils.getCheckedFiles().size() > 0);
                             UIUtils.toggleSyncButton(reachable);
                             UIUtils.showToast(R.string.message_connected_to_server, UIUtils.SHORT_TOAST_DURATION);
                         }
 
                         public void onDisconnected(WebSocket websocket, WebSocketFrame serverCloseFrame, WebSocketFrame clientCloseFrame, boolean closedByServer) throws Exception {
                             reachable = false;
-                            UIUtils.toggleConfirmButton(reachable && FileUtils.getSelectedFiles().size() > 0);
+                            UIUtils.toggleConfirmButton(reachable && FileUtils.getCheckedFiles().size() > 0);
                             UIUtils.toggleSyncButton(reachable);
                             UIUtils.showToast(R.string.message_disconnected_from_server, UIUtils.SHORT_TOAST_DURATION);
                         }

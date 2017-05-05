@@ -1,5 +1,7 @@
 package com.example.brandon.trace;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Semaphore;
@@ -16,8 +18,12 @@ public class FileDownloadManager extends Thread {
     }
 
     public void run() {
-        List<FileListItem> files = FileUtils.getSelectedFiles();
+        List<FileListItem> files = FileUtils.getCheckedFiles();
         Semaphore lock = new Semaphore(StorageManager.numConnections);
+
+        for (FileListItem file : FileUtils.fileList) {
+            FileUtils.setFileEnabled(file.fileName, false);
+        }
 
         for (int i = 0; i < files.size(); i++) {
             if (this.isInterrupted()) {
@@ -35,6 +41,10 @@ public class FileDownloadManager extends Thread {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+        }
+
+        for (FileListItem file : FileUtils.fileList) {
+            FileUtils.setFileEnabled(file.fileName, file.selectable);
         }
     }
 

@@ -52,15 +52,15 @@ public class FileListItemAdapter extends ArrayAdapter<FileListItem> {
         holder.selected.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                files.get(position).selected = isChecked;
-                boolean enabled = ControlConnection.getInstance().isReachable() && FileUtils.getSelectedFiles().size() > 0;
+                files.get(position).checked = isChecked;
+                boolean enabled = ControlConnection.getInstance().isReachable() && FileUtils.getCheckedFiles().size() > 0;
                 UIUtils.toggleConfirmButton(enabled);
             }
 
         });
 
         FileListItem file = files.get(position);
-        holder.selected.setChecked(file.selected);
+        holder.selected.setChecked(file.checked);
         holder.selected.setClickable(file.enabled);
         holder.selected.setVisibility(file.selectable ? View.VISIBLE : View.INVISIBLE);
         holder.mainText.setText(file.fileName);

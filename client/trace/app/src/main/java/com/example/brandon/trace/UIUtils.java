@@ -8,7 +8,7 @@ import android.widget.Toast;
  */
 public class UIUtils {
 
-    private static MainActivity mainActivity;
+    public static MainActivity mainActivity;
 
     public static final int SHORT_TOAST_DURATION = 1000;
 
@@ -16,13 +16,12 @@ public class UIUtils {
         mainActivity = main;
     }
 
-    // TODO: Disable checkboxes when downloading (may need to color)
     public static void toggleConfirmButton(final boolean enabled) {
         mainActivity.runOnUiThread(new Runnable() {
             public void run() {
-                int alpha = enabled ? 255 : 130;
-                mainActivity.confirmButton.getIcon().setAlpha(alpha);
-                mainActivity.confirmButton.setEnabled(enabled);
+            int alpha = enabled ? 255 : 130;
+            mainActivity.confirmButton.getIcon().setAlpha(alpha);
+            mainActivity.confirmButton.setEnabled(enabled);
             }
         });
     }
