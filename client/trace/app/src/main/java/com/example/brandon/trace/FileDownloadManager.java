@@ -1,7 +1,5 @@
 package com.example.brandon.trace;
 
-import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Semaphore;
@@ -11,15 +9,30 @@ import java.util.concurrent.Semaphore;
  */
 public class FileDownloadManager extends Thread {
 
+    private boolean downloading;
     private List<FileConnection> fileConnections;
 
-    public FileDownloadManager() {
+    private static FileDownloadManager fdm;
+
+    protected FileDownloadManager() {
+        this.downloading = false;
         this.fileConnections = new ArrayList<>();
     }
 
-    public void run() {
+    public static FileDownloadManager getInstance() {
+        if (fdm == null) {
+            fdm = new FileDownloadManager();
+        }
+
+        return fdm;
+    }
+
+    public void download() {
         List<FileListItem> files = FileUtils.getCheckedFiles();
         Semaphore lock = new Semaphore(StorageManager.numConnections);
+
+        UIUtils.toggleConfirmButton(false);
+        downloading = true;
 
         for (FileListItem file : FileUtils.fileList) {
             FileUtils.setFileEnabled(file.fileName, false);
@@ -43,9 +56,24 @@ public class FileDownloadManager extends Thread {
             }
         }
 
+        try {
+            lock.acquire(StorageManager.numConnections);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         for (FileListItem file : FileUtils.fileList) {
             FileUtils.setFileEnabled(file.fileName, file.selectable);
         }
+
+        downloading = false;
+        boolean enabled = ControlConnection.getInstance().isReachable() && !downloading && FileUtils.getCheckedFiles().size() > 0;
+        UIUtils.toggleConfirmButton(enabled);
+        lock.release(StorageManager.numConnections);
+    }
+
+    public void run() {
+        download();
     }
 
     public void cancel() {
@@ -54,5 +82,9 @@ public class FileDownloadManager extends Thread {
                 conn.disconnect();
             }
         }
+    }
+
+    public boolean isDownloading() {
+        return downloading;
     }
 }
