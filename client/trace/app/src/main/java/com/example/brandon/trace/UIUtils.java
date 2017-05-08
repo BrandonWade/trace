@@ -1,6 +1,7 @@
 package com.example.brandon.trace;
 
 import android.os.CountDownTimer;
+import android.util.Log;
 import android.widget.Toast;
 
 /**

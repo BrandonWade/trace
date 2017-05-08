@@ -53,7 +53,10 @@ public class FileListItemAdapter extends ArrayAdapter<FileListItem> {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 files.get(position).checked = isChecked;
-                boolean enabled = ControlConnection.getInstance().isReachable() && FileUtils.getCheckedFiles().size() > 0;
+                boolean enabled = ControlConnection.getInstance().isReachable() &&
+                                  !FileDownloadManager.getInstance().isDownloading() &&
+                                  FileUtils.getCheckedFiles().size() > 0;
+
                 UIUtils.toggleConfirmButton(enabled);
             }
 

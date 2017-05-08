@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
         syncButton = menu.findItem(R.id.action_sync);
 
         UIUtils.setMainActivity(this);
+        UIUtils.toggleConfirmButton(false);
         UIUtils.toggleSyncButton(ControlConnection.getInstance().isReachable());
 
         ControlConnection controlConn = ControlConnection.getInstance();
@@ -54,8 +55,13 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_confirm:
-                FileDownloadManager fdm = new FileDownloadManager();
-                fdm.start();
+                if (FileDownloadManager.getInstance().getState() == Thread.State.NEW) {
+                    FileDownloadManager.getInstance().start();
+                } else {
+                    FileDownloadManager.getInstance().download();
+                }
+
+                UIUtils.toggleConfirmButton(false);
                 return true;
             case R.id.action_sync:
                 isStoragePermissionGranted();
