@@ -1,6 +1,6 @@
 class Filters {
   constructor() {
-    this.filters = window.settings.Filters;
+    this.filters = window.settings.Filters || [];
     this.newFilter = '';
     this.selectedFilterIndex = -1;
   }

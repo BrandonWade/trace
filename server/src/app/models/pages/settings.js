@@ -1,6 +1,6 @@
 class Settings {
   constructor() {
-    this.syncDir = window.settings.Dir;
+    this.syncDir = window.settings.Dir || '';
     this.newSyncDir = this.syncDir;
   }
 
