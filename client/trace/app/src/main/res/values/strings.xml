@@ -10,6 +10,7 @@
     <string name="message_sync_complete">Sync complete</string>
     <string name="message_connected_to_server">Connected to server</string>
     <string name="message_disconnected_from_server">Disconnected from server</string>
+    <string name="message_no_directory_set">No directory set</string>
 
     <string name="desc_set_address">Enter the server address and port that the client will be connecting to:</string>
     <string name="desc_set_directory">Enter the directory that will be used to store incoming files:</string>

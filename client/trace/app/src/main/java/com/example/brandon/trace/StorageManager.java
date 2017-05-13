@@ -44,7 +44,7 @@ public class StorageManager {
     }
 
     public void retrieve() {
-        serverAddress = preferences.getString(SERVER_ADDRESS_KEY, "192.168.0.7:8080");
+        serverAddress = preferences.getString(SERVER_ADDRESS_KEY, "");
         storageDir = preferences.getString(STORAGE_DIRECTORY_KEY, "");
         numConnections = preferences.getInt(NUM_CONNECTIONS_KEY, 1);
     }

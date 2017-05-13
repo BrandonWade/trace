@@ -13,6 +13,10 @@ public class ScanFilesTask extends AsyncTask<Void, Void, List<File>> {
 
     @Override
     protected List<File> doInBackground(Void... params) {
+        if (StorageManager.storageDir.equals("")) {
+            return null;
+        }
+
         return getFiles(new File(StorageManager.storageDir));
     }
 
@@ -33,7 +37,15 @@ public class ScanFilesTask extends AsyncTask<Void, Void, List<File>> {
 
     @Override
     protected void onPostExecute(List<File> files) {
+        if (files == null) {
+            UIUtils.toggleConfirmButton(UIUtils.canConfirmDownload());
+            UIUtils.toggleSyncButton(true);
+            UIUtils.showToast(R.string.message_no_directory_set, UIUtils.LONG_TOAST_DURATION);
+            return;
+        }
+
         List<String> paths = new ArrayList<>();
+
         for (File file : files) {
             paths.add(file.getAbsolutePath());
         }

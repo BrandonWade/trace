@@ -37,6 +37,10 @@ public class ControlConnection extends Thread {
     }
 
     public void connect() {
+        if (StorageManager.serverAddress.equals("")) {
+            return;
+        }
+
         try {
             conn = new WebSocketFactory()
                     .setConnectionTimeout(5000)
@@ -46,8 +50,7 @@ public class ControlConnection extends Thread {
 
                         public void onConnected(WebSocket websocket, Map<String, List<String>> headers) throws Exception {
                             reachable = true;
-                            boolean enabled = reachable && !FileDownloadManager.getInstance().isDownloading() && FileUtils.getCheckedFiles().size() > 0;
-                            UIUtils.toggleConfirmButton(enabled);
+                            UIUtils.toggleConfirmButton(UIUtils.canConfirmDownload());
                             UIUtils.toggleSyncButton(reachable);
                             UIUtils.showToast(R.string.message_connected_to_server, UIUtils.SHORT_TOAST_DURATION);
                         }
@@ -67,8 +70,7 @@ public class ControlConnection extends Thread {
                                     FileUtils.addFile(message.File);
                                     break;
                                 case Message.DONE:
-                                    boolean enabled = reachable && !FileDownloadManager.getInstance().isDownloading() && FileUtils.getCheckedFiles().size() > 0;
-                                    UIUtils.toggleConfirmButton(enabled);
+                                    UIUtils.toggleConfirmButton(UIUtils.canConfirmDownload());
                                     UIUtils.toggleSyncButton(true);
                                     UIUtils.showToast(R.string.message_sync_complete, UIUtils.SHORT_TOAST_DURATION);
                                     break;
