@@ -57,8 +57,7 @@ public class FileDownloadManager extends Thread {
         }
 
         downloading = false;
-        boolean enabled = ControlConnection.getInstance().isReachable() && !downloading && FileUtils.getCheckedFiles().size() > 0;
-        UIUtils.toggleConfirmButton(enabled);
+        UIUtils.toggleConfirmButton(UIUtils.canConfirmDownload());
         lock.release(StorageManager.numConnections);
     }
 
