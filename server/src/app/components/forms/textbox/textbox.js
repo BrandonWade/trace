@@ -6,17 +6,15 @@ class TextBox extends Component {
     super(props);
 
     this.state = {
-      description: props.description,
       value: props.value,
-      handleChange: props.handleChange,
     };
   }
 
   render() {
     return (
       <div className={ 'TextBox-Container' }>
-        <label className={ 'TextBox-Label' }>{ this.state.description }</label>
-        <input type='text' className={ 'TextBox' } value={ this.state.value } onChange={ this.state.handleChange } />
+        <label className={ 'TextBox-Label' }>{ this.props.description }</label>
+        <input type='text' className={ 'TextBox' } value={ this.state.value } onChange={ this.props.handleChange } />
       </div>
     );
   }

@@ -2,9 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { HashRouter, Switch, Route } from 'react-router-dom';
 import Menu from './components/menu/menu';
-import Home from './components/containers/home/home';
-import Settings from './components/containers/settings/settings';
-import Filters from './components/containers/filters/filters';
+import Home from './containers/home/home';
+import Settings from './containers/settings/settings';
+import Filters from './containers/filters/filters';
 import './app.css';
 
 const menuItems = [
