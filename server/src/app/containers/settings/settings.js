@@ -12,17 +12,15 @@ class Settings extends Component {
     };
   }
 
-  updateState(value, field) {
+  updateState(value, field, callback = () => {}) {
     this.setState({
       ...this.state,
-      field: value,
-    });
+      [field]: value,
+    }, callback);
   }
 
   save() {
-    this.updateState(this.newSyncDir, 'syncDir');
-
-    const dir = { dir: this.syncDir };
+    const dir = { dir: this.state.newSyncDir };
     const headers = new Headers({
       'Content-Type' : 'application/json',
     });
@@ -40,7 +38,7 @@ class Settings extends Component {
         <h1 className={ 'Page-Heading' }>Settings</h1>
         <section className={ 'Page-Section' }>
           <TextBox description={ 'Select a directory to use for syncing files:' } handleChange={ e => this.updateState(e.target.value, 'newSyncDir') } />
-          <Button value={ 'Set' } handleClick={ () => this.save() } />
+          <Button value={ 'Set' } handleClick={ () => this.updateState(this.state.newSyncDir, 'syncDir', this.save) } />
           <p>{ `Current directory: ${this.state.syncDir}` }</p>
         </section>
       </div>
