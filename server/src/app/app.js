@@ -1,34 +1,47 @@
-import m from 'mithril';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { HashRouter, Switch, Route } from 'react-router-dom';
 import Menu from './components/menu/menu';
-import Home from './components/pages/home/home';
-import Settings from './components/pages/settings/settings';
-import Filters from './components/pages/filters/filters';
+import Home from './components/containers/home/home';
+import Settings from './components/containers/settings/settings';
+import Filters from './components/containers/filters/filters';
 import './app.css';
 
-const body = document.body;
 const menuItems = [
   {
     text: 'Home',
-    route: '/',
+    path: '/',
+    component: Home,
   },
   {
     text: 'Settings',
-    route: '/settings',
+    path: '/settings',
+    component: Settings,
   },
   {
     text: 'Filters',
-    route: '/filters',
+    path: '/filters',
+    component: Filters,
   },
 ];
 
-m.render(body, [
-  m(Menu, { title: 'Trace', items: menuItems }),
-  m('.Page', { id: 'PageContainer' }),
-]);
+const App = () => (
+  <HashRouter>
+    <div id={ 'container' }>
+      <Menu title={ 'Trace' } items={ menuItems } />
+      <Switch>
+        {
+          menuItems.map((item, index) => {
+            return <Route exact key={ index } path={ item.path } component={ item.component } />;
+          })
+        }
+      </Switch>
+    </div>
+  </HashRouter>
+);
 
-const page = document.getElementById('PageContainer');
-m.route(page, '/', {
-  '/': Home,
-  '/settings': Settings,
-  '/filters': Filters,
-});
+const root = document.getElementById('root');
+ReactDOM.render(
+  <App />,
+  root
+);

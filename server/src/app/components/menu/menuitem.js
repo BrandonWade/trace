@@ -1,16 +1,23 @@
-import m from 'mithril';
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 
-const MenuItem = {
-  oninit(vn) {
-    this.text = vn.attrs.text;
-    this.route = vn.attrs.route;
-  },
+class MenuItem extends Component {
+  constructor(props) {
+    super(props);
 
-  view() {
-    return m('li',
-      m('a.MenuItem-Link', { href: this.route, oncreate: m.route.link }, this.text)
+    this.state = {
+      text: props.text,
+      path: props.path,
+    };
+  }
+
+  render() {
+    return (
+      <li>
+        <Link className={ 'MenuItem-Link' } to={ this.state.path }>{ this.state.text }</Link>
+      </li>
     );
-  },
+  }
 };
 
 export default MenuItem;

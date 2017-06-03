@@ -1,23 +1,31 @@
-import m from 'mithril';
+import React, { Component } from 'react';
 import MenuItem from './menuitem';
 import './menu.css';
 
-const Menu = {
-  oninit(vn) {
-    this.title = vn.attrs.title || '';
-    this.items = vn.attrs.items || [];
-  },
+class Menu extends Component {
+  constructor(props) {
+    super(props);
 
-  view() {
-    return m('.Menu', [
-      m('h1.Menu-Heading', this.title),
-      m('ul.Menu-ItemList', [
-        this.items.map(item => {
-          return m(MenuItem, { text: item.text, route: item.route });
-        }),
-      ]),
-    ]);
-  },
+    this.state = {
+      title: props.title || '',
+      items: props.items || [],
+    };
+  }
+
+  render() {
+    return (
+      <div className={ 'Menu' }>
+        <h1 className={ 'Menu-Heading' }>{ this.state.title }</h1>
+        <ul className={ 'Menu-ItemList' }>
+          {
+            this.state.items.map((item, index) => {
+              return <MenuItem key={ index } text={ item.text } path={ item.path } />;
+            })
+          }
+        </ul>
+      </div>
+    );
+  }
 };
 
 export default Menu;
