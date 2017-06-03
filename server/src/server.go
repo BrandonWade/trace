@@ -6,8 +6,10 @@ import (
 	"html/template"
 	"log"
 	"math"
+	"net"
 	"net/http"
 	"os"
+	"regexp"
 	"strconv"
 	"strings"
 	"sync"
@@ -91,6 +93,7 @@ func index(c *gin.Context) {
 
 	c.HTML(http.StatusOK, "app.tmpl", gin.H{
 		"settings": template.URL(string(settingsBytes)),
+		"ip": getLocalIP(),
 	})
 }
 
@@ -177,6 +180,26 @@ func sendFile(c *gin.Context) {
 
 	// Send a done message
 	conn.WriteDone()
+}
+
+// getLocalIP - returns the local IP address (192.168.X.X)
+func getLocalIP() string {
+	addrs, err := net.InterfaceAddrs()
+	if err != nil {
+		log.Println("Failed to retrieve network interface addresses.")
+		log.Println(err)
+		return ""
+	}
+
+	re := regexp.MustCompile("192\\.168\\.\\d\\d?\\d?\\.\\d\\d?\\d?")
+	for _, addr := range addrs {
+		ip := re.FindString(addr.String())
+		if ip != "" {
+			return ip
+		}
+	}
+
+	return ""
 }
 
 // updateSyncDir - sets the sync directory to the directory received from the client

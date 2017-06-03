@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import TextBox from '../../forms/textbox/textbox';
-import Button from '../../forms/button/button';
-import Select from '../../forms/select/select';
+import TextBox from '../../components/forms/textbox/textbox';
+import Button from '../../components/forms/button/button';
+import Select from '../../components/forms/select/select';
 
 class Filters extends Component {
   constructor(props) {
