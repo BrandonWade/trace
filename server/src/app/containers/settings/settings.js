@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import TextBox from '../../forms/textbox/textbox';
-import Button from '../../forms/button/button';
+import TextBox from '../../components/forms/textbox/textbox';
+import Button from '../../components/forms/button/button';
 
 class Settings extends Component {
   constructor(props) {

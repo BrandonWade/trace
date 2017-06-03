@@ -5,7 +5,10 @@
   </head>
   <body>
     <div id="root"></div>
-    <script>var settings = JSON.parse('{{ .settings }}')</script>
+    <script>
+      var settings = JSON.parse('{{ .settings }}');
+      var ip = '{{ .ip }}';
+    </script>
     <script src="dist/app.js"></script>
   </body>
 </html>
