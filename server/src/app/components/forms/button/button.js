@@ -1,14 +1,20 @@
-import m from 'mithril';
+import React, { Component } from 'react';
 
-const Button = {
-  oninit(vn) {
-    this.value = vn.attrs.value;
-    this.onclick = vn.attrs.onclick;
-  },
+class Button extends Component {
+  constructor(props) {
+    super(props);
 
-  view() {
-    return m('Button.Button', { onclick: this.onclick }, this.value);
-  },
+    this.state = {
+      value: props.value,
+      handleClick: props.handleClick,
+    };
+  }
+
+  render() {
+    return (
+      <button onClick={ this.state.handleClick }>{ this.state.value }</button>
+    );
+  }
 };
 
 export default Button;

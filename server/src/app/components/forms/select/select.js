@@ -1,26 +1,32 @@
-import m from 'mithril';
+import React, { Component } from 'react';
 import './select.css';
 
-const Select = {
-  oninit(vn) {
-    this.description = vn.attrs.description;
-    this.options = vn.attrs.options || [];
-    this.size = Math.max(this.options.length, 10);
-    this.onchange = vn.attrs.onchange;
-  },
+class Select extends Component {
+  constructor(props) {
+    super(props);
 
-  view() {
-    return m('.Select-Container', [
-      m('label.Select-Label', m.trust(this.description)),
-      m('select.Select', {
-        size: this.size,
-        multiple: this.multiple,
-        onchange: this.onchange,
-      }, [
-        this.options.map(option => m('option', option))
-      ]),
-    ]);
-  },
+    this.state = {
+      description: props.description,
+      options: props.options || [],
+      size: Math.max(props.options.length, 10),
+      handleChange: props.handleChange,
+    };
+  }
+
+  render() {
+    return (
+      <div className={ 'Select-Container' }>
+        <label className={ 'Select-Label' }>{ this.state.description }</label>
+        <select className={ 'Select' } size={ this.state.size } multiple={ this.state.multiple } onChange={ this.state.handleChange }>
+          {
+            this.state.options.map((option, index) => {
+              return <option key={ index }>{ option }</option>;
+            })
+          }
+        </select>
+      </div>
+    );
+  }
 };
 
 export default Select;

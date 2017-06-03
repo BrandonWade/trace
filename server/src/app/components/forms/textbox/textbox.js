@@ -1,22 +1,25 @@
-import m from 'mithril';
+import React, { Component } from 'react';
 import './textbox.css';
 
-const TextBox = {
-  oninit(vn) {
-    this.description = vn.attrs.description;
-    this.value = vn.attrs.value;
-    this.onchange = vn.attrs.onchange;
-  },
+class TextBox extends Component {
+  constructor(props) {
+    super(props);
 
-  view() {
-    return m('.TextBox-Container', [
-      m('label.TextBox-Label', m.trust(this.description)),
-      m('input[type=text].TextBox', {
-        value: this.value,
-        onchange: this.onchange,
-      }),
-    ]);
-  },
+    this.state = {
+      description: props.description,
+      value: props.value,
+      handleChange: props.handleChange,
+    };
+  }
+
+  render() {
+    return (
+      <div className={ 'TextBox-Container' }>
+        <label className={ 'TextBox-Label' }>{ this.state.description }</label>
+        <input type='text' className={ 'TextBox' } value={ this.state.value } onChange={ this.state.handleChange } />
+      </div>
+    );
+  }
 };
 
 export default TextBox;

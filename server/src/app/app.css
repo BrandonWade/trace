@@ -6,7 +6,7 @@
   lost-utility: edit;
 }
 
-html, body {
+html, body, #root, #container {
   height: 100%;
   margin: 0;
 }
