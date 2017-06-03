@@ -29,13 +29,15 @@ const App = () => (
   <HashRouter>
     <div id={ 'container' }>
       <Menu title={ 'Trace' } items={ menuItems } />
-      <Switch>
-        {
-          menuItems.map((item, index) => {
-            return <Route exact key={ index } path={ item.path } component={ item.component } />;
-          })
-        }
-      </Switch>
+      <div className={ 'Page' }>
+        <Switch>
+          {
+            menuItems.map((item, index) => {
+              return <Route exact key={ index } path={ item.path } component={ item.component } />;
+            })
+          }
+        </Switch>
+      </div>
     </div>
   </HashRouter>
 );
