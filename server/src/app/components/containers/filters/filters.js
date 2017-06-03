@@ -56,10 +56,14 @@ class Filters extends Component {
     return (
       <div className={ 'FiltersPage' }>
         <h1 className={ 'Page-Heading' }>Filters</h1>
-        <TextBox description={ 'New filter:' } handleChange={ e => this.updateState(e.target.value, 'newFilter') } />
-        <Button value={ 'Add' } handleClick={ () => this.add() } />
-        <Select description={ 'Existing filters:' } options={ this.state.filters } handleChange={ e => this.updateState(e.target.selectedIndex, 'selectedFilterIndex') } />
-        <Button value={ 'Remove' } handleClick={ () => this.remove() } />
+        <section className={ 'Page-Section' }>
+          <TextBox description={ 'New filter:' } handleChange={ e => this.updateState(e.target.value, 'newFilter') } />
+          <Button value={ 'Add' } handleClick={ () => this.add() } />
+        </section>
+        <section className={ 'Page-Section' }>
+          <Select description={ 'Existing filters:' } options={ this.state.filters } handleChange={ e => this.updateState(e.target.selectedIndex, 'selectedFilterIndex') } />
+          <Button value={ 'Remove' } handleClick={ () => this.remove() } />
+        </section>
       </div>
     );
   }

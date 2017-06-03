@@ -38,11 +38,11 @@ class Settings extends Component {
     return (
       <div className={ 'SettingsPage' }>
         <h1 className={ 'Page-Heading' }>Settings</h1>
-        <div>
+        <section className={ 'Page-Section' }>
           <TextBox description={ 'Select a directory to use for syncing files:' } handleChange={ e => this.updateState(e.target.value, 'newSyncDir') } />
           <Button value={ 'Set' } handleClick={ () => this.save() } />
           <p>{ `Current directory: ${this.state.syncDir}` }</p>
-        </div>
+        </section>
       </div>
     );
   }
