@@ -20,3 +20,7 @@ html, body, #root, #container {
 .Page-Heading {
   margin: 0;
 }
+
+.Page-Section {
+  margin-top: 25px;
+}
