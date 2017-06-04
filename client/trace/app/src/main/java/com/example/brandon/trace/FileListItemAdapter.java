@@ -62,7 +62,7 @@ public class FileListItemAdapter extends ArrayAdapter<FileListItem> {
         holder.selected.setChecked(file.checked);
         holder.selected.setClickable(file.enabled);
         holder.selected.setVisibility(file.selectable ? View.VISIBLE : View.INVISIBLE);
-        holder.mainText.setText(file.fileName);
+        holder.mainText.setText(file.displayName);
         holder.subText.setText(file.status);
 
         float progress = (float)(file.progress / file.size);

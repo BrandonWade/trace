@@ -5,6 +5,7 @@ package com.example.brandon.trace;
  */
 public class FileListItem {
     public String fileName;
+    public String displayName;
     public String status;
     public double size;
     public double progress;
@@ -13,8 +14,9 @@ public class FileListItem {
     public boolean enabled;
     public boolean selectable;
 
-    public FileListItem(String fileName, String status) {
+    public FileListItem(String fileName, String displayName, String status) {
         this.fileName = fileName;
+        this.displayName = displayName;
         this.status = status;
         this.size = -1;
         this.progress = 0;
