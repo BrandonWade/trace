@@ -1,20 +1,29 @@
 :root {
   --group-spacing: 1.5rem;
+  --background-color: #242722;
+  --text-color: #E9F4FE;
+  --font: 1.2rem helvetica, sans-serif;
 }
 
 * {
-  lost-utility: edit;
+  /*lost-utility: edit;*/
 }
 
 html, body, #root, #container {
   height: 100%;
   margin: 0;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  font: var(--font);
 }
 
 .Page {
+  width: calc(100% - var(--menu-width));
   height: 100%;
-  width: 80%;
-  float: right;
+  padding: 25px;
+  box-sizing: border-box;
+  display: inline-block;
+  position: absolute;
 }
 
 .Page-Heading {
