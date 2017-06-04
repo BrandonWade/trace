@@ -1,6 +1,4 @@
 :root {
-  --border-color: #111413;
-  --hover-color: #2F332C;
   --menu-width: 300px;
 }
 
@@ -10,7 +8,7 @@
   box-sizing: border-box;
   display: inline-block;
   background-color: var(--background-color);
-  border-right: 1px solid var(--border-color);
+  border-right: 1px solid var(--background-color-dark);
 }
 
 .Menu-Heading {
@@ -25,7 +23,7 @@
 }
 
 .MenuItem {
-  border-top: 1px solid var(--border-color);
+  border-top: 1px solid var(--background-color-dark);
 }
 
 .MenuItem:hover {
@@ -33,7 +31,7 @@
 }
 
 .MenuItem:last-child {
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--background-color-dark);
 }
 
 .MenuItem-Link {

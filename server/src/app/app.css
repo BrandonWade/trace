@@ -1,8 +1,13 @@
 :root {
   --group-spacing: 1.5rem;
-  --background-color: #242722;
-  --text-color: #E9F4FE;
   --font: 1.2rem helvetica, sans-serif;
+
+  --background-color: #242722;
+  --background-color-dark: #111413;
+  --hover-color: #2F332C;
+  --text-color: #E9F4FE;
+
+  --component-border-radius: 3px;
 }
 
 * {

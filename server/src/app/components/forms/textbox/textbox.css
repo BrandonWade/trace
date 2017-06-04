@@ -9,5 +9,12 @@
 
 .TextBox {
   width: 100%;
+  padding: 10px;
+  margin-top: 5px;
   box-sizing: border-box;
+  border: 0px;
+  border-radius: var(--component-border-radius);
+  color: var(--text-color);
+  background-color: var(--background-color-dark);
+  font: var(--font);
 }
