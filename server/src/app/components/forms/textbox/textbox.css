@@ -1,5 +1,6 @@
 .TextBox-Container {
   display: inline-block;
+  margin-right: 10px;
 }
 
 .TextBox-Label {
@@ -8,4 +9,5 @@
 
 .TextBox {
   width: 100%;
+  box-sizing: border-box;
 }
