@@ -3,6 +3,7 @@
 }
 
 .Button {
+  min-width: 100px;
   border: 1px solid var(--background-color-light);
   font: var(--font);
   color: var(--text-color);

@@ -39,6 +39,8 @@ class Settings extends Component {
         <section className={ 'Page-Section' }>
           <TextBox description={ 'Select a directory to use for syncing files:' } handleChange={ e => this.updateState(e.target.value, 'newSyncDir') } />
           <Button value={ 'Set' } handleClick={ () => this.updateState(this.state.newSyncDir, 'syncDir', this.save) } />
+        </section>
+        <section className={ 'Page-Section' }>
           <p>{ `Current directory: ${this.state.syncDir}` }</p>
         </section>
       </div>

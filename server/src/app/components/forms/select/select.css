@@ -3,7 +3,7 @@
 }
 
 .Select {
-  border: 0px;
+  border: 1px solid #000000;
   margin: 5px 0 10px;
   padding: 10px;
   border-radius: var(--component-border-radius);
