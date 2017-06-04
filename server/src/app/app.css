@@ -20,7 +20,7 @@ html, body, #root, #container {
 .Page {
   width: calc(100% - var(--menu-width));
   height: 100%;
-  padding: 25px;
+  padding: 30px;
   box-sizing: border-box;
   display: inline-block;
   position: absolute;
