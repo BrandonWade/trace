@@ -1,17 +1,15 @@
 :root {
   --group-spacing: 1.5rem;
-  --font: 1.2rem helvetica, sans-serif;
+  --font: 1.15rem helvetica, sans-serif;
 
+  --text-color: #E9F4FE;
   --background-color: #242722;
   --background-color-dark: #111413;
-  --hover-color: #2F332C;
-  --text-color: #E9F4FE;
+  --background-hover-color-dark: #2F332C;
+  --background-color-light: #44EDE7;
+  --background-hover-color-light: #49FFF5;
 
   --component-border-radius: 3px;
-}
-
-* {
-  /*lost-utility: edit;*/
 }
 
 html, body, #root, #container {

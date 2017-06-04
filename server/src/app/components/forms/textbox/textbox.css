@@ -12,9 +12,13 @@
   padding: 10px;
   margin-top: 5px;
   box-sizing: border-box;
-  border: 0px;
-  border-radius: var(--component-border-radius);
+  font: var(--font);
   color: var(--text-color);
   background-color: var(--background-color-dark);
-  font: var(--font);
+  border: 1px solid var(--background-color-dark);
+  border-radius: var(--component-border-radius);
+}
+
+.TextBox:focus {
+  border: 1px solid var(--background-color-light);
 }

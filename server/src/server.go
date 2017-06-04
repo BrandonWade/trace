@@ -18,6 +18,8 @@ import (
 	"github.com/nanobox-io/golang-scribble"
 )
 
+const TRACE_PORT = ":8080"
+
 // The directory used to hold temporary information for Trace
 var settingsDir = os.TempDir() + "\\trace"
 
@@ -45,7 +47,7 @@ func main() {
 	g.GET("/file", sendFile)
 	g.POST("/settings/update/dir", updateSyncDir)
 	g.POST("/settings/update/filters", updateFilterList)
-	g.Run(":8080")
+	g.Run(TRACE_PORT)
 }
 
 // readSettings - read the settings file from the database if it exists
@@ -195,7 +197,7 @@ func getLocalIP() string {
 	for _, addr := range addrs {
 		ip := re.FindString(addr.String())
 		if ip != "" {
-			return ip
+			return ip + TRACE_PORT
 		}
 	}
 

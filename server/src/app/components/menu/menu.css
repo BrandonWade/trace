@@ -27,7 +27,7 @@
 }
 
 .MenuItem:hover {
-  background-color: var(--hover-color);
+  background-color: var(--background-hover-color-dark);
 }
 
 .MenuItem:last-child {
