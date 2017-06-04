@@ -1,3 +1,13 @@
 .Select-Label {
   display: block;
 }
+
+.Select {
+  border: 0px;
+  margin: 5px 0 10px;
+  padding: 10px;
+  border-radius: var(--component-border-radius);
+  background-color: var(--background-color-dark);
+  color: var(--text-color);
+  font: var(--font);
+}

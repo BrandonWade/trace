@@ -1,0 +1,19 @@
+:root {
+  --hover-color: #2F332C;
+
+  --component-button-padding: 10px 20px;
+  --component-button-hover-color: #171C1A;
+}
+
+.Button {
+  border: 0px;
+  color: var(--text-color);
+  background-color: var(--background-color-dark);
+  font: var(--font);
+  padding: var(--component-button-padding);
+  border-radius: var(--component-border-radius);
+}
+
+.Button:hover {
+  background-color: var(--component-button-hover-color);
+}

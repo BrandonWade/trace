@@ -13,7 +13,7 @@ class Button extends Component {
 
   render() {
     return (
-      <button onClick={ this.state.handleClick }>{ this.state.value }</button>
+      <button className={ 'Button' } onClick={ this.state.handleClick }>{ this.state.value }</button>
     );
   }
 };
