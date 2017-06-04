@@ -9,13 +9,14 @@
 
 .TextBox {
   width: 100%;
+  min-width: 600px;
   padding: 10px;
   margin-top: 5px;
   box-sizing: border-box;
   font: var(--font);
   color: var(--text-color);
   background-color: var(--background-color-dark);
-  border: 1px solid var(--background-color-dark);
+  border: 1px solid #000000;
   border-radius: var(--component-border-radius);
 }
 
