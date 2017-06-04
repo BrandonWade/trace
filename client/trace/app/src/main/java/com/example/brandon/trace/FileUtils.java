@@ -47,7 +47,8 @@ public class FileUtils {
     public static void addFile(final String fileName) {
         Runnable updateUI = new Runnable() {
             @Override public void run() {
-                FileListItem file = new FileListItem(fileName, STATUS_WAITING);
+                String displayName = fileName.substring(fileName.lastIndexOf("\\") + 1);
+                FileListItem file = new FileListItem(fileName, displayName, STATUS_WAITING);
                 fileList.add(file);
                 fileListAdapter.notifyDataSetChanged();
             }
