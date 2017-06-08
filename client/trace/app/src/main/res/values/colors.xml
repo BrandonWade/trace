@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#3F51B5</color>
+    <color name="colorPrimary">#242722</color>
+    <color name="colorPrimaryDark">#111413</color>
+    <color name="colorAccent">#44EDE7</color>
+    <color name="textColorLight">#E9F4FE</color>
+    <color name="textColorDark">#111413</color>
+    <color name="downloadBarColor">#36938B</color>
 </resources>

@@ -38,6 +38,6 @@
   padding: 1rem;
   display: block;
   text-decoration: none;
-  color: var(--text-color);
+  color: var(--text-color-light);
   outline: 0;
 }

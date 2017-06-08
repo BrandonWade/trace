@@ -2,7 +2,8 @@
   --group-spacing: 1.5rem;
   --font: 1.15rem helvetica, sans-serif;
 
-  --text-color: #E9F4FE;
+  --text-color-light: #E9F4FE;
+  --text-color-dark: #111413;
   --background-color: #242722;
   --background-color-dark: #111413;
   --background-hover-color-dark: #2F332C;
@@ -16,7 +17,7 @@ html, body, #root, #container {
   height: 100%;
   margin: 0;
   background-color: var(--background-color);
-  color: var(--text-color);
+  color: var(--text-color-light);
   font: var(--font);
 }
 

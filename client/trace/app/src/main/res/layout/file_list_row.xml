@@ -13,7 +13,7 @@
             android:id="@+id/row_progress_complete"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:background="#CCE9F8" />
+            android:background="@color/downloadBarColor" />
 
     </LinearLayout>
 
@@ -35,25 +35,25 @@
             android:id="@+id/row_main_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="#000000"
             android:textSize="16sp"
             android:ellipsize="middle"
             android:maxLines="1"
             android:layout_marginTop="15dp"
             android:layout_marginStart="40dp"
-            android:layout_marginEnd="10dp" />
+            android:layout_marginEnd="10dp"
+            android:textColor="@color/textColorLight" />
 
         <TextView
             android:id="@+id/row_sub_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="#000000"
             android:textSize="12sp"
             android:ellipsize="end"
             android:maxLines="1"
             android:layout_marginBottom="10dp"
             android:layout_marginStart="40dp"
-            android:layout_marginEnd="10dp" />
+            android:layout_marginEnd="10dp"
+            android:textColor="@color/textColorLight" />
 
     </LinearLayout>
 
