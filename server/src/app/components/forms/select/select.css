@@ -8,6 +8,6 @@
   padding: 10px;
   border-radius: var(--component-border-radius);
   background-color: var(--background-color-dark);
-  color: var(--text-color);
+  color: var(--text-color-light);
   font: var(--font);
 }

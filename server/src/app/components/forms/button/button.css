@@ -6,7 +6,7 @@
   min-width: 100px;
   border: 1px solid var(--background-color-light);
   font: var(--font);
-  color: var(--text-color);
+  color: var(--text-color-dark);
   background-color: var(--background-color-light);
   padding: var(--component-button-padding);
   border-radius: var(--component-border-radius);
