@@ -58,9 +58,9 @@ public class FileConnection extends Thread {
                                 case Message.DONE:
                                     FileUtils.setFileStatus(file, FileUtils.STATUS_DOWNLOADED);
 
-                                    conn.disconnect();
-//                                    WriteFileTask writeFile = new WriteFileTask(StorageManager.storageDir, file, fileContents, websocket);
-//                                    writeFile.execute();
+//                                    conn.disconnect();
+                                    WriteFileTask writeFile = new WriteFileTask(StorageManager.storageDir, file, fileContents, websocket);
+                                    writeFile.execute();
                                     break;
                             }
                         }
