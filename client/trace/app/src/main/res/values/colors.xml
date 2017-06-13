@@ -6,4 +6,5 @@
     <color name="textColorLight">#E9F4FE</color>
     <color name="textColorDark">#111413</color>
     <color name="downloadBarColor">#36938B</color>
+    <color name="menuColor">#2F332C</color>
 </resources>
