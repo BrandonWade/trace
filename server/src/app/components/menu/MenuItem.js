@@ -14,7 +14,7 @@ class MenuItem extends Component {
   render() {
     return (
       <li className={ 'MenuItem' }>
-        <Link className={ 'MenuItem-Link' } to={ this.state.path }>{ this.state.text }</Link>
+        <Link className={ 'MenuItem-link' } to={ this.state.path }>{ this.state.text }</Link>
       </li>
     );
   }

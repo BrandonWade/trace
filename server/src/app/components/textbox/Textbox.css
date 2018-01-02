@@ -1,9 +1,9 @@
-.TextBox-Container {
+.TextBox-wrapper {
   display: inline-block;
   margin-right: 10px;
 }
 
-.TextBox-Label {
+.TextBox-label {
   display: block;
 }
 

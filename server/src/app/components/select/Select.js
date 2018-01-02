@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import './select.css';
+import './Select.css';
 
 class Select extends Component {
   constructor(props) {
@@ -12,8 +12,8 @@ class Select extends Component {
 
   render() {
     return (
-      <div className={ 'Select-Container' }>
-        <label className={ 'Select-Label' }>{ this.props.description }</label>
+      <div className={ 'Select-wrapper' }>
+        <label className={ 'Select-label' }>{ this.props.description }</label>
         <select className={ 'Select' } size={ this.state.size } multiple={ this.props.multiple } onChange={ this.props.handleChange }>
           {
             this.props.options.map((option, index) => {

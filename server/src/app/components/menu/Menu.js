@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import MenuItem from './menuitem';
-import './menu.css';
+import MenuItem from './MenuItem';
+import './Menu.css';
 
 class Menu extends Component {
   constructor(props) {
@@ -15,8 +15,8 @@ class Menu extends Component {
   render() {
     return (
       <div className={ 'Menu' }>
-        <h1 className={ 'Menu-Heading' }>{ this.state.title }</h1>
-        <ul className={ 'Menu-ItemList' }>
+        <h1 className={ 'Menu-heading' }>{ this.state.title }</h1>
+        <ul className={ 'Menu-itemList' }>
           {
             this.state.items.map((item, index) => {
               return <MenuItem key={ index } text={ item.text } path={ item.path } />;
