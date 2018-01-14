@@ -1,35 +1,25 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import TextBox from '../components/textbox/Textbox';
 import Button from '../components/button/Button';
+import {
+    fetchAction,
+    interfaceAction,
+    UPDATE_NEW_DIR,
+    SET_SYNC_DIR,
+    SAVE_SETTINGS,
+} from '../actions/index';
 
 class Settings extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            syncDir: window.settings.Dir || '',
-            newSyncDir: window.settings.Dir || '',
-        };
+        this.setSyncDir = this.setSyncDir.bind(this);
     }
 
-    updateState(value, field, callback = () => {}) {
-        this.setState({
-            ...this.state,
-            [field]: value,
-        }, callback);
-    }
-
-    save() {
-        const dir = {dir: this.state.newSyncDir};
-        const headers = new Headers({
-            'Content-Type' : 'application/json',
-        });
-
-        fetch('/settings/update/dir', {
-            method: 'POST',
-            headers: headers,
-            body: JSON.stringify(dir),
-        });
+    setSyncDir() {
+        this.props.setSyncDir(this.props.newDir);
+        this.props.saveDir(this.props.syncDir);
     }
 
     render() {
@@ -37,17 +27,38 @@ class Settings extends Component {
             <div className={'SettingsPage'}>
                 <h1 className={'Page-heading'}>Settings</h1>
                 <section className={'Page-section'}>
-                    <TextBox description={'Select a directory to use for syncing files:'}
-                             handleChange={e => this.updateState(e.target.value, 'newSyncDir')} />
+                    <TextBox description={'Enter a directory to use for syncing files:'}
+                             handleChange={this.props.updateNewDir} />
                     <Button value={'Set'}
-                            handleClick={() => this.updateState(this.state.newSyncDir, 'syncDir', this.save)} />
+                            handleClick={this.setSyncDir} />
                 </section>
                 <section className={'Page-section'}>
-                    <p>{`Current directory: ${this.state.syncDir}`}</p>
+                    <p>{`Current directory: ${this.props.syncDir}`}</p>
                 </section>
             </div>
         );
     }
 };
 
-export default Settings;
+const mapStateToProps = (state) => {
+    return {
+        syncDir: state.syncDir,
+        newDir: state.newDir,
+    };
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        updateNewDir(evt) {
+            dispatch(interfaceAction(UPDATE_NEW_DIR, evt.target.value));
+        },
+        setSyncDir(dir) {
+            dispatch(interfaceAction(SET_SYNC_DIR, dir));
+        },
+        saveDir(dir) {
+            dispatch(fetchAction(SAVE_SETTINGS, {dir}));
+        },
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Settings);
