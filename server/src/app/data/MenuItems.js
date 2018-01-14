@@ -2,7 +2,7 @@ import Home from '../pages/Home';
 import Settings from '../pages/Settings';
 import Filters from '../pages/Filters';
 
-export default menuItems = [
+const menuItems = [
     {
         text: 'Home',
         path: '/',
@@ -19,3 +19,5 @@ export default menuItems = [
         component: Filters,
     },
 ];
+
+export default menuItems;

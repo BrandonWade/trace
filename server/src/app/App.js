@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 import { HashRouter, Switch, Route } from 'react-router-dom';
 import Menu from './components/menu/Menu';
 import MenuItems from './data/MenuItems';
