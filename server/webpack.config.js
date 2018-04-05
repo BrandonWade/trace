@@ -1,30 +1,37 @@
 const path = require('path');
 const webpack = require('webpack');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const MiniCSSExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
-  entry: {
-      app: ['babel-polyfill', './src/app/index.js'],
-  },
-  output: {
-    filename: '[name].js',
-    path: path.resolve(__dirname, './src/app/dist'),
-  },
-  module: {
-    loaders: [
-      {
-        test: /\.js$/,
-        exclude: /(node_modules)/,
-        loader: 'babel-loader',
-      },
-      {
-        test: /\.css$/,
-        loader: ExtractTextPlugin.extract({ fallback: 'style-loader', use: ['css-loader?importLoaders=1'] }),
-      },
+    mode: 'development',
+    entry: {
+        app: ['babel-polyfill', './src/app/index.js'],
+    },
+    output: {
+        filename: '[name].js',
+        path: path.resolve(__dirname, './src/app/dist'),
+    },
+    module: {
+        rules: [
+            {
+                test: /\.js$/,
+                exclude: /(node_modules)/,
+                loader: 'babel-loader',
+            },
+            {
+                test: /\.css$/,
+                use: [
+                    MiniCSSExtractPlugin.loader,
+                    'css-loader',
+                ],
+            },
+        ],
+    },
+    plugins: [
+        new webpack.NoEmitOnErrorsPlugin(),
+        new MiniCSSExtractPlugin({
+            filename: '[name].css',
+            chunkFilename: '[id].css',
+        }),
     ],
-  },
-  plugins: [
-    new webpack.NoEmitOnErrorsPlugin(),
-    new ExtractTextPlugin('[name].css')
-  ],
 };
