@@ -4,7 +4,7 @@ import reducer from '../reducers/index';
 import rootSaga from '../sagas/root';
 
 const sagaMiddleware = createSagaMiddleware();
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION__ || compose;
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const enhancer = composeEnhancers(applyMiddleware(sagaMiddleware));
 
 export default function configureStore(initialState) {

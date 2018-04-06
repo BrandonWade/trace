@@ -13,7 +13,7 @@
         "react/jsx-indent": [2, 4],
         "react/jsx-indent-props": [2, 4],
         "react/jsx-no-bind": "error",
-        "react/jsx-tag-spacing": [1, {"closingSlash": "never", "beforeSelfClosing": "always", "afterOpening": "never", "beforeCLosing": "never"}],
+        "react/jsx-tag-spacing": [1, {"closingSlash": "never", "beforeSelfClosing": "always", "afterOpening": "never", "beforeClosing": "never"}],
         "react/prop-types": "off"
     },
     "globals": {
