@@ -38,39 +38,47 @@ class Filters extends Component {
     }
 
     save() {
-        const filters = {filters: this.state.filters};
+        const filters = { filters: this.state.filters };
         const headers = new Headers({
-            'Content-Type' : 'application/json',
+            'Content-Type': 'application/json',
         });
 
         fetch('/settings/update/filters', {
             method: 'POST',
-            headers: headers,
+            headers,
             body: JSON.stringify(filters),
         });
     }
 
     render() {
         return (
-            <div className={'FiltersPage'}>
-                <h1 className={'Page-heading'}>Filters</h1>
-                <section className={'Page-section'}>
-                    <TextBox description={'New filter:'}
-                             handleChange={e => this.updateState(e.target.value, 'newFilter')} />
-                    <Button value={'Add'}
-                            handleClick={() => this.add()} />
+            <div className='FiltersPage'>
+                <h1 className='Page-heading'>Filters</h1>
+                <section className='Page-section'>
+                    <TextBox
+                        description='New filter:'
+                        handleChange={e => this.updateState(e.target.value, 'newFilter')}
+                    />
+                    <Button
+                        value='Add'
+                        handleClick={() => this.add()}
+                    />
                 </section>
-                <section className={'Page-section'}>
-                    <Select description={'Existing filters:'}
-                            options={this.state.filters}
-                            multiple={this.props.multiple}
-                            handleChange={e => this.updateState(e.target.selectedIndex, 'selectedFilterIndex')} />
-                    <Button value={'Remove'}
-                            handleClick={() => this.remove()} />
+                <section className='Page-section'>
+                    <Select
+                        description='Existing filters:'
+                        options={this.state.filters}
+                        multiple={this.props.multiple}
+                        handleChange={e => this.updateState(e.target.selectedIndex, 'selectedFilterIndex')}
+                    />
+                    <Button
+                        value='Remove'
+                        handleClick={() => this.remove()}
+                    />
                 </section>
             </div>
         );
     }
-};
+}
 
 export default Filters;

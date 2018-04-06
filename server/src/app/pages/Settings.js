@@ -24,21 +24,25 @@ class Settings extends Component {
 
     render() {
         return (
-            <div className={'SettingsPage'}>
-                <h1 className={'Page-heading'}>Settings</h1>
-                <section className={'Page-section'}>
-                    <TextBox description={'Enter a directory to use for syncing files:'}
-                             handleChange={this.props.updateNewDir} />
-                    <Button value={'Set'}
-                            handleClick={this.setSyncDir} />
+            <div className='SettingsPage'>
+                <h1 className='Page-heading'>Settings</h1>
+                <section className='Page-section'>
+                    <TextBox
+                        description='Enter a directory to use for syncing files:'
+                        handleChange={this.props.updateNewDir}
+                    />
+                    <Button
+                        value='Set'
+                        handleClick={this.setSyncDir}
+                    />
                 </section>
-                <section className={'Page-section'}>
+                <section className='Page-section'>
                     <p>{`Current directory: ${this.props.syncDir}`}</p>
                 </section>
             </div>
         );
     }
-};
+}
 
 const mapStateToProps = (state) => {
     return {
@@ -56,7 +60,7 @@ const mapDispatchToProps = (dispatch) => {
             dispatch(interfaceAction(SET_SYNC_DIR, dir));
         },
         saveDir(dir) {
-            dispatch(fetchAction(SAVE_SETTINGS, {dir}));
+            dispatch(fetchAction(SAVE_SETTINGS, { dir }));
         },
     };
 };

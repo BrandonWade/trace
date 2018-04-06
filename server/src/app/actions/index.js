@@ -10,11 +10,11 @@ export function fetchAction(action, data) {
         type: action,
         data,
     };
-};
+}
 
 export function interfaceAction(action, data) {
     return {
         type: action,
-        data,        
+        data,
     };
-};
+}

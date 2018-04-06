@@ -1,18 +1,13 @@
-:root {
-  --component-button-padding: 10px 20px;
-}
-
 .Button {
   min-width: 100px;
-  border: 1px solid var(--background-color-light);
   font: var(--font);
-  color: var(--text-color-dark);
+  color: #111413;
+  border: none;
   background-color: var(--background-color-light);
-  padding: var(--component-button-padding);
+  padding: 10px 20px;
   border-radius: var(--component-border-radius);
 }
 
 .Button:hover {
-  border: 1px solid var(--background-hover-color-light);
   background-color: var(--background-hover-color-light);
 }
