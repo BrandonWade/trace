@@ -9,7 +9,7 @@ import {
 function* saveSettings(action) {
     yield put(fetchAction(SAVING_SETTINGS));
 
-    const headers = new Headers.Headers({
+    const headers = new Headers({
         'Content-Type': 'application/json',
     });
 
