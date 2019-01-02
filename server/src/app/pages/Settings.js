@@ -19,7 +19,7 @@ class Settings extends Component {
 
     setSyncDir() {
         this.props.setSyncDir(this.props.newDir);
-        this.props.saveDir(this.props.syncDir);
+        this.props.saveDir(this.props.newDir);
     }
 
     render() {

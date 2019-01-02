@@ -2,8 +2,6 @@ package main
 
 import (
 	"bufio"
-	"encoding/json"
-	"html/template"
 	"log"
 	"math"
 	"net"
@@ -21,7 +19,7 @@ import (
 const TRACE_PORT = ":8080"
 
 // The directory used to hold temporary information for Trace
-var settingsDir = os.TempDir() + "\\trace"
+var settingsDir = os.TempDir() + "/trace"
 
 // The list of new files to send to the client
 var newFiles []File
@@ -58,7 +56,7 @@ func readSettings() {
 		log.Println(err)
 	}
 
-	if _, err := os.Stat(settingsDir + "\\settings\\settings.json"); os.IsNotExist(err) {
+	if _, err := os.Stat(settingsDir + "/settings/settings.json"); os.IsNotExist(err) {
 		settings = Settings{}
 		return
 	}
@@ -87,15 +85,9 @@ func writeSettings() {
 
 // index - Returns the index page to the client to display
 func index(c *gin.Context) {
-	settingsBytes, err := json.Marshal(settings)
-	if err != nil {
-		log.Println("Failed to marshal settings struct")
-		log.Println(err)
-	}
-
 	c.HTML(http.StatusOK, "app.tmpl", gin.H{
-		"settings": template.URL(string(settingsBytes)),
-		"ip": getLocalIP(),
+		"settings": settings,
+		"ip":       getLocalIP(),
 	})
 }
 

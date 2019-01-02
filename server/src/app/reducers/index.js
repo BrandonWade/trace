@@ -5,13 +5,7 @@ import {
     SAVED_SETTINGS,
 } from '../actions/index';
 
-const initialState = {
-    syncDir: window.settings.Dir || '',
-    newDir: '',
-    savingSettings: false,
-};
-
-export default (state = initialState, action) => {
+export default (state, action) => {
     switch (action.type) {
         case UPDATE_NEW_DIR:
             return {

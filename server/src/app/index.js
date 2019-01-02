@@ -4,7 +4,11 @@ import { Provider } from 'react-redux';
 import configureStore from './store/configureStore';
 import App from './App';
 
-const initialState = {};
+const initialState = {
+    syncDir: window.settings.Dir || '',
+    newDir: '',
+    savingSettings: false,
+};
 
 const store = configureStore(initialState);
 

@@ -1,6 +1,8 @@
 package com.example.brandon.trace;
 
+import android.content.Context;
 import android.os.AsyncTask;
+import android.os.Environment;
 
 import com.neovisionaries.ws.client.WebSocket;
 
@@ -39,7 +41,7 @@ public class WriteFileTask extends AsyncTask<Void, Void, Void> {
             // Create any folders needed as listed in the file path
             String fullPath = file.getAbsolutePath();
             File folders = new File(fullPath.substring(0, fullPath.lastIndexOf("/")));
-            folders.mkdirs();
+            boolean x = folders.mkdirs();
 
             FileOutputStream outputStream = new FileOutputStream(file);
 
